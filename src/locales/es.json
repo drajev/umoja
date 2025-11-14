@@ -1,0 +1,45 @@
+{
+  "common": {
+    "welcome": "Bienvenido",
+    "cancel": "Cancelar",
+    "close": "Cerrar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "submit": "Enviar",
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "copied": "Copiado al portapapeles"
+  },
+  "wallet": {
+    "connect": "Conectar Billetera",
+    "disconnect": "Desconectar",
+    "connected": "Billetera Conectada",
+    "address": "Dirección",
+    "balance": "Balance",
+    "copyAddress": "Copiar Dirección"
+  },
+  "navigation": {
+    "home": "Inicio",
+    "styleguide": "Guía de Estilo",
+    "menu": "Menú",
+    "navigationMenu": "Menú de navegación"
+  },
+  "auth": {
+    "account": "Cuenta",
+    "manageAccountSettings": "Administra la configuración de tu cuenta",
+    "profile": "Perfil",
+    "settings": "Configuración",
+    "logout": "Cerrar sesión",
+    "guest": "Invitado",
+    "login": "Iniciar sesión",
+    "signUp": "Registrarse"
+  },
+  "header": {
+    "theme": "Tema",
+    "language": "Idioma"
+  }
+}

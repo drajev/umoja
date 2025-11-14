@@ -1,0 +1,45 @@
+{
+  "common": {
+    "welcome": "Welcome",
+    "cancel": "Cancel",
+    "close": "Close",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "next": "Next",
+    "submit": "Submit",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "copied": "Copied to clipboard"
+  },
+  "wallet": {
+    "connect": "Connect Wallet",
+    "disconnect": "Disconnect",
+    "connected": "Wallet Connected",
+    "address": "Address",
+    "balance": "Balance",
+    "copyAddress": "Copy Address"
+  },
+  "navigation": {
+    "home": "Home",
+    "styleguide": "Styleguide",
+    "menu": "Menu",
+    "navigationMenu": "Navigation menu"
+  },
+  "auth": {
+    "account": "Account",
+    "manageAccountSettings": "Manage your account settings",
+    "profile": "Profile",
+    "settings": "Settings",
+    "logout": "Logout",
+    "guest": "Guest",
+    "login": "Login",
+    "signUp": "Sign Up"
+  },
+  "header": {
+    "theme": "Theme",
+    "language": "Language"
+  }
+}

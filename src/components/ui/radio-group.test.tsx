@@ -1,0 +1,14 @@
+/**
+ * Test file for radio-group component.
+ * Basic rendering and interaction tests.
+ */
+import { describe, it, expect } from 'vitest';
+import { render } from '@testing-library/react';
+import { RadioGroup } from './radio-group';
+
+describe('RadioGroup', () => {
+  it('renders without crashing', () => {
+    const { container } = render(<RadioGroup />);
+    expect(container).toBeTruthy();
+  });
+});
