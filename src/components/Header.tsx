@@ -38,6 +38,7 @@ import {
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { routes } from "@/routes";
 import { ConnectWallet } from "./ConnectWallet";
+import LogoIcon from '@/assets/logo.svg?react';
 
 export const Header = () => {
   const navigate = useNavigate();
@@ -75,7 +76,7 @@ export const Header = () => {
             {sidebarOpen ? "←" : "☰"}
           </Button>
           <Link to={routes.home} className="flex items-center gap-2">
-            <img src="/logo.svg" alt="umoja Logo" width={32} height={32} />
+            <LogoIcon width="32" height="32" className="text-foreground" />
             <Text className="text-lg font-semibold">umoja</Text>
           </Link>
         </div>
