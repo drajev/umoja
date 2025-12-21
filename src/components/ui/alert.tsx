@@ -1,7 +1,7 @@
-import * as React from "react"
-import { cva, type VariantProps } from "class-variance-authority"
+import { type HTMLAttributes, type Ref } from "react";
+import { cva, type VariantProps } from "class-variance-authority";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 const alertVariants = cva(
   "relative w-full rounded-lg border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground",
@@ -16,11 +16,13 @@ const alertVariants = cva(
     defaultVariants: {
       variant: "default",
     },
-  }
-)
+  },
+);
 
-interface AlertProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof alertVariants> {
-  ref?: React.Ref<HTMLDivElement>
+interface AlertProps
+  extends HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof alertVariants> {
+  ref?: Ref<HTMLDivElement>;
 }
 
 const Alert = ({ className, variant, ref, ...props }: AlertProps) => (
@@ -30,11 +32,11 @@ const Alert = ({ className, variant, ref, ...props }: AlertProps) => (
     className={cn(alertVariants({ variant }), className)}
     {...props}
   />
-)
-Alert.displayName = "Alert"
+);
+Alert.displayName = "Alert";
 
-interface AlertTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
-  ref?: React.Ref<HTMLHeadingElement>
+interface AlertTitleProps extends HTMLAttributes<HTMLHeadingElement> {
+  ref?: Ref<HTMLHeadingElement>;
 }
 
 const AlertTitle = ({ className, ref, ...props }: AlertTitleProps) => (
@@ -43,20 +45,24 @@ const AlertTitle = ({ className, ref, ...props }: AlertTitleProps) => (
     className={cn("mb-1 font-medium leading-none tracking-tight", className)}
     {...props}
   />
-)
-AlertTitle.displayName = "AlertTitle"
+);
+AlertTitle.displayName = "AlertTitle";
 
-interface AlertDescriptionProps extends React.HTMLAttributes<HTMLParagraphElement> {
-  ref?: React.Ref<HTMLParagraphElement>
+interface AlertDescriptionProps extends HTMLAttributes<HTMLParagraphElement> {
+  ref?: Ref<HTMLParagraphElement>;
 }
 
-const AlertDescription = ({ className, ref, ...props }: AlertDescriptionProps) => (
+const AlertDescription = ({
+  className,
+  ref,
+  ...props
+}: AlertDescriptionProps) => (
   <div
     ref={ref}
     className={cn("text-sm [&_p]:leading-relaxed", className)}
     {...props}
   />
-)
-AlertDescription.displayName = "AlertDescription"
+);
+AlertDescription.displayName = "AlertDescription";
 
-export { Alert, AlertTitle, AlertDescription }
+export { Alert, AlertTitle, AlertDescription };

@@ -2,11 +2,11 @@
  * Login page component.
  * Allows users to authenticate with email and password.
  */
-import { Link } from 'react-router-dom';
-import { useCreateForm } from '@/lib/forms/createForm';
-import { loginSchema, type LoginFormData } from '@/schemas/authSchemas';
-import { useLoginHandler } from '@/queries/auth/auth';
-import { Button } from '@/components/ui/button';
+import { useActionState } from "react";
+import { Link } from "react-router-dom";
+import { loginSchema } from "@/schemas/authSchemas";
+import { useLoginHandler } from "@/queries/auth/auth";
+import { Button } from "@/components/ui/button";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -14,7 +14,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
+} from "@/components/ui/breadcrumb";
 import {
   Card,
   CardContent,
@@ -22,30 +22,34 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { routes } from '@/routes';
+} from "@/components/ui/card";
+
+import { Input } from "@/components/ui/input";
+import { routes } from "@/routes";
 
 export const Login = () => {
   const { handleLogin } = useLoginHandler();
-  const form = useCreateForm(loginSchema, {
-    defaultValues: {
-      email: '',
-      password: '',
-    },
-  });
 
-  const handleSubmit = form.handleSubmit(async (data: LoginFormData) => {
-    await handleLogin(data);
-  });
+  const [error, submitAction, isPending] = useActionState(
+    async (_previousState: string | null, formData: FormData) => {
+      const email = formData.get("email") as string;
+      const password = formData.get("password") as string;
+
+      const result = loginSchema.safeParse({ email, password });
+
+      if (!result.success) {
+        return result.error.errors[0]?.message || "Validation failed";
+      }
+
+      try {
+        await handleLogin(result.data);
+        return null;
+      } catch (err) {
+        return err instanceof Error ? err.message : "Login failed";
+      }
+    },
+    null,
+  );
 
   return (
     <div className="flex min-h-screen flex-col p-4">
@@ -68,57 +72,61 @@ export const Login = () => {
         <Card className="w-full max-w-md">
           <CardHeader className="space-y-1">
             <CardTitle className="text-2xl">Login</CardTitle>
-            <CardDescription>Enter your email and password to access your account</CardDescription>
+            <CardDescription>
+              Enter your email and password to access your account
+            </CardDescription>
           </CardHeader>
           <CardContent>
-            <Form {...form}>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <FormField
-                  control={form.control}
+            <form action={submitAction} className="space-y-4">
+              <div className="space-y-2">
+                <label htmlFor="email" className="text-sm font-medium">
+                  Email
+                </label>
+                <Input
+                  id="email"
                   name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email</FormLabel>
-                      <FormControl>
-                        <Input type="email" placeholder="name@example.com" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  type="email"
+                  placeholder="name@example.com"
+                  required
                 />
+              </div>
 
-                <FormField
-                  control={form.control}
+              <div className="space-y-2">
+                <label htmlFor="password" className="text-sm font-medium">
+                  Password
+                </label>
+                <Input
+                  id="password"
                   name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Password</FormLabel>
-                      <FormControl>
-                        <Input type="password" placeholder="••••••••" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  type="password"
+                  placeholder="••••••••"
+                  required
                 />
+              </div>
 
-                <div className="flex items-center justify-end">
-                  <Link
-                    to={routes.forgotPassword}
-                    className="text-sm text-muted-foreground hover:text-primary underline-offset-4 hover:underline"
-                  >
-                    Forgot password?
-                  </Link>
+              <div className="flex items-center justify-end">
+                <Link
+                  to={routes.forgotPassword}
+                  className="text-sm text-muted-foreground hover:text-primary underline-offset-4 hover:underline"
+                >
+                  Forgot password?
+                </Link>
+              </div>
+
+              {error && (
+                <div className="text-sm font-medium text-destructive">
+                  {error}
                 </div>
+              )}
 
-                <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
-                  {form.formState.isSubmitting ? 'Validating...' : 'Login'}
-                </Button>
-              </form>
-            </Form>
+              <Button type="submit" className="w-full" disabled={isPending}>
+                {isPending ? "Validating..." : "Login"}
+              </Button>
+            </form>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
             <div className="text-sm text-center text-muted-foreground">
-              Don&apos;t have an account?{' '}
+              Don&apos;t have an account?{" "}
               <Link
                 to={routes.register}
                 className="text-primary hover:underline underline-offset-4"

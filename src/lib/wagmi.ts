@@ -13,8 +13,18 @@
  * - Add additional wallet connectors if needed
  */
 import { getDefaultConfig } from "@rainbow-me/rainbowkit";
+import {
+  baseAccount,
+  rainbowWallet,
+  metaMaskWallet,
+  walletConnectWallet,
+  safeWallet,
+} from "@rainbow-me/rainbowkit/wallets";
 import { mainnet, sepolia, polygon, arbitrum, optimism } from "wagmi/chains";
 import { http } from "wagmi";
+
+// Disable Coinbase analytics/telemetry which is often blocked by ad-blockers
+baseAccount.preference = { telemetry: false };
 
 // Supported chains configuration
 const chains = [mainnet, sepolia, polygon, arbitrum, optimism] as const;
@@ -41,7 +51,7 @@ const projectId = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID;
 if (!projectId) {
   console.warn(
     "VITE_WALLETCONNECT_PROJECT_ID is not set. WalletConnect may not work properly. " +
-      "Get a project ID at https://cloud.walletconnect.com/"
+      "Get a project ID at https://cloud.walletconnect.com/",
   );
 }
 
@@ -51,4 +61,16 @@ export const wagmiConfig = getDefaultConfig({
   chains,
   transports,
   ssr: true, // Enable SSR support for Next.js compatibility
+  wallets: [
+    {
+      groupName: "Popular",
+      wallets: [
+        safeWallet,
+        rainbowWallet,
+        baseAccount,
+        metaMaskWallet,
+        walletConnectWallet,
+      ],
+    },
+  ],
 });
