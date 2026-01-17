@@ -2,8 +2,9 @@
  * Test file for input-otp component.
  * Basic rendering and interaction tests.
  */
-import { describe, it, expect } from 'vitest';
+
 import { render } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from './input-otp';
 
 describe('InputOTP', () => {
@@ -14,7 +15,7 @@ describe('InputOTP', () => {
           <InputOTPSlot index={0} />
           <InputOTPSlot index={1} />
         </InputOTPGroup>
-      </InputOTP>
+      </InputOTP>,
     );
     expect(container).toBeTruthy();
   });

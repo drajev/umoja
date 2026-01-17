@@ -1,3 +1,4 @@
+import type { HTMLAttributes, Ref } from 'react';
 /**
  * Typography components for consistent text styling.
  * Provides heading and text variants following design system patterns.
@@ -12,13 +13,12 @@
  * - Modify heading sizes in Heading component
  * - Add utility classes for specific typography needs
  */
-import * as React from 'react';
 import { cn } from '@/lib/utils';
 
-export interface HeadingProps extends React.HTMLAttributes<HTMLHeadingElement> {
+export interface HeadingProps extends HTMLAttributes<HTMLHeadingElement> {
   level?: 1 | 2 | 3 | 4 | 5 | 6;
   as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
-  ref?: React.Ref<HTMLHeadingElement>
+  ref?: Ref<HTMLHeadingElement>;
 }
 
 const Heading = ({ level = 1, as, className, ref, ...props }: HeadingProps) => {
@@ -42,13 +42,19 @@ const Heading = ({ level = 1, as, className, ref, ...props }: HeadingProps) => {
 };
 Heading.displayName = 'Heading';
 
-export interface TextProps extends React.HTMLAttributes<HTMLParagraphElement> {
+export interface TextProps extends HTMLAttributes<HTMLParagraphElement> {
   variant?: 'body' | 'small' | 'muted' | 'lead';
   as?: 'p' | 'span' | 'div';
-  ref?: React.Ref<HTMLParagraphElement>
+  ref?: Ref<HTMLParagraphElement>;
 }
 
-const Text = ({ variant = 'body', as: Component = 'p', className, ref, ...props }: TextProps) => {
+const Text = ({
+  variant = 'body',
+  as: Component = 'p',
+  className,
+  ref,
+  ...props
+}: TextProps) => {
   const variantClasses = {
     body: 'text-base',
     small: 'text-sm',

@@ -1,66 +1,78 @@
-/**
- * Test file for useLoadingStore.
- * Tests loading state management functionality.
- */
-import { describe, it, expect, beforeEach } from 'vitest';
-import { renderHook, act } from '@testing-library/react';
-import { useLoadingStore } from '@/stores/useLoadingStore';
+import { act, renderHook } from '@testing-library/react';
+import { beforeEach, describe, expect, it } from 'vitest';
 
+import { useLoadingStore } from '@/stores';
+
+/**
+ * Tests for useLoadingStore.
+ * Tests loading state management with the new actions pattern.
+ */
 describe('useLoadingStore', () => {
   beforeEach(() => {
-    // Clear all loading states before each test
-    useLoadingStore.getState().clearLoading();
+    // Reset store to initial state before each test
+    useLoadingStore.getState().actions.resetStore();
   });
 
   it('initializes with empty loading states', () => {
     const { result } = renderHook(() => useLoadingStore());
-    expect(result.current.hasAnyLoading()).toBe(false);
+    expect(result.current.loadingStates).toEqual({});
+    expect(result.current.actions.hasAnyLoading()).toBe(false);
   });
 
-  it('sets and gets loading state', () => {
+  it('sets loading state correctly', () => {
     const { result } = renderHook(() => useLoadingStore());
 
     act(() => {
-      result.current.setLoading('test-key', true);
+      result.current.actions.setLoading('test-key', true);
     });
 
-    expect(result.current.isLoading('test-key')).toBe(true);
-    expect(result.current.hasAnyLoading()).toBe(true);
+    expect(result.current.actions.isLoading('test-key')).toBe(true);
+    expect(result.current.actions.hasAnyLoading()).toBe(true);
   });
 
-  it('clears specific loading state', () => {
+  it('handles multiple loading states', () => {
     const { result } = renderHook(() => useLoadingStore());
 
     act(() => {
-      result.current.setLoading('key1', true);
-      result.current.setLoading('key2', true);
+      result.current.actions.setLoading('key1', true);
+      result.current.actions.setLoading('key2', true);
     });
 
-    expect(result.current.hasAnyLoading()).toBe(true);
+    expect(result.current.actions.hasAnyLoading()).toBe(true);
 
     act(() => {
-      result.current.clearLoading('key1');
+      result.current.actions.clearLoading('key1');
     });
 
-    expect(result.current.isLoading('key1')).toBe(false);
-    expect(result.current.isLoading('key2')).toBe(true);
-    expect(result.current.hasAnyLoading()).toBe(true);
+    expect(result.current.actions.isLoading('key1')).toBe(false);
+    expect(result.current.actions.isLoading('key2')).toBe(true);
+    expect(result.current.actions.hasAnyLoading()).toBe(true);
   });
 
   it('clears all loading states', () => {
     const { result } = renderHook(() => useLoadingStore());
 
     act(() => {
-      result.current.setLoading('key1', true);
-      result.current.setLoading('key2', true);
+      result.current.actions.setLoading('key1', true);
+      result.current.actions.setLoading('key2', true);
     });
 
-    expect(result.current.hasAnyLoading()).toBe(true);
+    expect(result.current.actions.hasAnyLoading()).toBe(true);
 
     act(() => {
-      result.current.clearLoading();
+      result.current.actions.clearLoading();
     });
 
-    expect(result.current.hasAnyLoading()).toBe(false);
+    expect(result.current.actions.hasAnyLoading()).toBe(false);
+  });
+
+  it('uses auto-generated selectors correctly', () => {
+    act(() => {
+      useLoadingStore.getState().actions.setLoading('test-key', true);
+    });
+
+    const { result } = renderHook(() => useLoadingStore.use.loadingStates());
+
+    expect(result.current).toEqual({ 'test-key': true });
   });
 });

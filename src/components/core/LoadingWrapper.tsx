@@ -7,11 +7,11 @@
  *     <YourContent />
  *   </LoadingWrapper>
  */
-import { type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Spinner } from '@/components/ui/spinner';
-import { useLoadingStore } from '@/stores/useLoadingStore';
 import { cn } from '@/lib/utils';
+import { useLoadingStore } from '@/stores';
 
 interface LoadingWrapperProps {
   children: ReactNode;
@@ -35,16 +35,15 @@ export const LoadingWrapper = ({
   showSpinner = true,
 }: LoadingWrapperProps) => {
   // Use loading key from store if provided, otherwise use local loading state
-  const storeIsLoading = useLoadingStore((state) =>
-    loadingKey ? state.isLoading(loadingKey) : false,
-  );
-  const isLoading = loadingKey ? storeIsLoading : localLoading ?? false;
+  const { isLoading: checkIsLoading } = useLoadingStore.use.actions();
+  const storeIsLoading = loadingKey ? checkIsLoading(loadingKey) : false;
+  const isLoading = loadingKey ? storeIsLoading : (localLoading ?? false);
 
   if (isLoading) {
     if (useSkeleton) {
       return (
         <div className={cn('space-y-2', className)}>
-          {Array.from({ length: skeletonCount }).map((_, i) => (
+          {Array.from({ length: skeletonCount }, (_, i) => (
             <Skeleton key={i} className="h-4 w-full" />
           ))}
         </div>

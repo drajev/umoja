@@ -2,8 +2,9 @@
  * Test file for breadcrumb component.
  * Basic rendering and interaction tests.
  */
-import { describe, it, expect } from 'vitest';
+
 import { render } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
 import { Breadcrumb } from './breadcrumb';
 
 describe('Breadcrumb', () => {

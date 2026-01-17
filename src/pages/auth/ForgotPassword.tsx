@@ -2,12 +2,9 @@
  * Forgot Password page component.
  * Allows users to request a password reset email.
  */
-import { Link } from 'react-router-dom';
 import { useState } from 'react';
-import { useCreateForm } from '@/lib/forms/createForm';
-import { forgotPasswordSchema, type ForgotPasswordFormData } from '@/schemas/authSchemas';
-import { useForgotPasswordHandler } from '@/queries/auth/auth';
-import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -16,6 +13,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -33,7 +31,15 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Text } from '@/components/ui/typography';
+import { useCreateForm } from '@/lib/forms/createForm';
+import { useForgotPasswordHandler } from '@/queries/auth/auth';
 import { routes } from '@/routes';
+import {
+  type ForgotPasswordFormData,
+  forgotPasswordSchema,
+} from '@/schemas/authSchemas';
+import styles from '@/styles/modules/auth.module.css';
 
 export const ForgotPassword = () => {
   const [isSuccess, setIsSuccess] = useState(false);
@@ -44,14 +50,16 @@ export const ForgotPassword = () => {
     },
   });
 
-  const handleSubmit = form.handleSubmit(async (data: ForgotPasswordFormData) => {
-    await handleForgotPassword({ email: data.email });
-    setIsSuccess(true);
-    form.reset();
-  });
+  const handleSubmit = form.handleSubmit(
+    async (data: ForgotPasswordFormData) => {
+      await handleForgotPassword({ email: data.email });
+      setIsSuccess(true);
+      form.reset();
+    },
+  );
 
   const breadcrumb = (
-    <div className="container mx-auto mb-6">
+    <div className={styles.breadcrumbContainer}>
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -76,22 +84,25 @@ export const ForgotPassword = () => {
 
   if (isSuccess) {
     return (
-      <div className="flex min-h-screen flex-col p-4">
+      <div className={styles.page}>
         {breadcrumb}
-        <div className="flex flex-1 items-center justify-center">
-          <Card className="w-full max-w-md">
-            <CardHeader className="space-y-1">
-              <CardTitle className="text-2xl">Check your email</CardTitle>
+        <div className={styles.content}>
+          <Card className={styles.card}>
+            <CardHeader className={styles.cardHeader}>
+              <CardTitle className={styles.cardTitle}>
+                Check your email
+              </CardTitle>
               <CardDescription>
                 We&apos;ve sent a password reset link to your email address
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">
-                If an account exists with that email, you will receive a password reset link.
-              </p>
+              <Text variant="small" className="text-muted-foreground">
+                If an account exists with that email, you will receive a
+                password reset link.
+              </Text>
             </CardContent>
-            <CardFooter className="flex flex-col space-y-4">
+            <CardFooter className={styles.footer}>
               <Link to={routes.login} className="w-full">
                 <Button variant="outline" className="w-full">
                   Back to Login
@@ -105,19 +116,20 @@ export const ForgotPassword = () => {
   }
 
   return (
-    <div className="flex min-h-screen flex-col p-4">
+    <div className={styles.page}>
       {breadcrumb}
-      <div className="flex flex-1 items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl">Forgot Password</CardTitle>
+      <div className={styles.content}>
+        <Card className={styles.card}>
+          <CardHeader className={styles.cardHeader}>
+            <CardTitle className={styles.cardTitle}>Forgot Password</CardTitle>
             <CardDescription>
               Enter your email address and we&apos;ll send you a reset link
             </CardDescription>
           </CardHeader>
+
           <CardContent>
             <Form {...form}>
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form onSubmit={handleSubmit} className={styles.form}>
                 <FormField
                   control={form.control}
                   name="email"
@@ -125,24 +137,32 @@ export const ForgotPassword = () => {
                     <FormItem>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
-                        <Input type="email" placeholder="name@example.com" {...field} />
+                        <Input
+                          type="email"
+                          placeholder="name@example.com"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
 
-                <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
-                  {form.formState.isSubmitting ? 'Validating...' : 'Send Reset Link'}
+                <Button
+                  type="submit"
+                  className={styles.submitButton}
+                  disabled={form.formState.isSubmitting}
+                >
+                  {form.formState.isSubmitting
+                    ? 'Validating...'
+                    : 'Send Reset Link'}
                 </Button>
               </form>
             </Form>
           </CardContent>
-          <CardFooter className="flex flex-col space-y-4">
-            <Link
-              to={routes.login}
-              className="text-sm text-center text-muted-foreground hover:text-primary underline-offset-4 hover:underline"
-            >
+
+          <CardFooter className={styles.footer}>
+            <Link to={routes.login} className={styles.link}>
               Back to Login
             </Link>
           </CardFooter>

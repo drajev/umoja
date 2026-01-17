@@ -11,9 +11,10 @@
  * - Add translation function
  * - Add language detection
  */
-import { useLanguageStore } from '@/stores/useLanguageStore';
+
 import enMessages from '@/locales/en.json';
 import esMessages from '@/locales/es.json';
+import { useLanguageStore } from '@/stores';
 
 const messages = {
   en: enMessages,
@@ -34,7 +35,8 @@ const getNestedValue = (obj: Record<string, unknown>, path: string): string => {
 };
 
 export const useLanguage = () => {
-  const { language, setLanguage } = useLanguageStore();
+  const language = useLanguageStore.use.language();
+  const { setLanguage } = useLanguageStore.use.actions();
 
   const t = (key: string): string => {
     const currentMessages = messages[language] || messages.en;

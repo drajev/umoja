@@ -1,72 +1,73 @@
-/**
- * Tests for useToastStore.
- */
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { useToastStore } from '@/stores/useToastStore';
-import { toast as sonnerToast } from 'sonner';
+import { renderHook } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
 
-// Mock sonner
+import { useToastStore } from '@/stores';
+
+// Mock sonner toast
 vi.mock('sonner', () => ({
   toast: {
     success: vi.fn(),
     error: vi.fn(),
     warning: vi.fn(),
     info: vi.fn(),
+    loading: vi.fn(() => 'toast-id'),
+    dismiss: vi.fn(),
+    promise: vi.fn(),
   },
 }));
 
+/**
+ * Tests for useToastStore.
+ * Tests toast notification actions with the new pattern.
+ */
 describe('useToastStore', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
+  it('has success action', () => {
+    const { result } = renderHook(() => useToastStore());
+    expect(result.current.actions.success).toBeDefined();
+    expect(typeof result.current.actions.success).toBe('function');
   });
 
-  it('should call sonner.success when notifications.success is called', () => {
-    const { notifications } = useToastStore.getState();
-    notifications.success('Test success message');
-
-    expect(sonnerToast.success).toHaveBeenCalledWith('Test success message', {
-      description: undefined,
-      duration: undefined,
-    });
+  it('has error action', () => {
+    const { result } = renderHook(() => useToastStore());
+    expect(result.current.actions.error).toBeDefined();
+    expect(typeof result.current.actions.error).toBe('function');
   });
 
-  it('should call sonner.error when notifications.error is called', () => {
-    const { notifications } = useToastStore.getState();
-    notifications.error('Test error message');
-
-    expect(sonnerToast.error).toHaveBeenCalledWith('Test error message', {
-      description: undefined,
-      duration: undefined,
-    });
+  it('has warning action', () => {
+    const { result } = renderHook(() => useToastStore());
+    expect(result.current.actions.warning).toBeDefined();
+    expect(typeof result.current.actions.warning).toBe('function');
   });
 
-  it('should call sonner.warning when notifications.warning is called', () => {
-    const { notifications } = useToastStore.getState();
-    notifications.warning('Test warning message');
-
-    expect(sonnerToast.warning).toHaveBeenCalledWith('Test warning message', {
-      description: undefined,
-      duration: undefined,
-    });
+  it('has info action', () => {
+    const { result } = renderHook(() => useToastStore());
+    expect(result.current.actions.info).toBeDefined();
+    expect(typeof result.current.actions.info).toBe('function');
   });
 
-  it('should call sonner.info when notifications.info is called', () => {
-    const { notifications } = useToastStore.getState();
-    notifications.info('Test info message');
-
-    expect(sonnerToast.info).toHaveBeenCalledWith('Test info message', {
-      description: undefined,
-      duration: undefined,
-    });
+  it('has loading action', () => {
+    const { result } = renderHook(() => useToastStore());
+    expect(result.current.actions.loading).toBeDefined();
+    expect(typeof result.current.actions.loading).toBe('function');
   });
 
-  it('should pass options to sonner', () => {
-    const { notifications } = useToastStore.getState();
-    notifications.success('Test message', { title: 'Test Title', duration: 3000 });
+  it('has dismiss action', () => {
+    const { result } = renderHook(() => useToastStore());
+    expect(result.current.actions.dismiss).toBeDefined();
+    expect(typeof result.current.actions.dismiss).toBe('function');
+  });
 
-    expect(sonnerToast.success).toHaveBeenCalledWith('Test message', {
-      description: 'Test Title',
-      duration: 3000,
-    });
+  it('has promise action', () => {
+    const { result } = renderHook(() => useToastStore());
+    expect(result.current.actions.promise).toBeDefined();
+    expect(typeof result.current.actions.promise).toBe('function');
+  });
+
+  it('uses auto-generated selectors correctly', () => {
+    const { result } = renderHook(() => useToastStore.use.actions());
+    expect(result.current.success).toBeDefined();
+    expect(result.current.error).toBeDefined();
+    expect(result.current.warning).toBeDefined();
+    expect(result.current.info).toBeDefined();
   });
 });

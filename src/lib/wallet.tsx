@@ -14,12 +14,13 @@
  * - Adjust QueryClient configuration (cache time, retry logic, etc.)
  * - Configure RainbowKit theme or locale
  */
-import { type ReactNode } from 'react';
-import { WagmiProvider } from 'wagmi';
-import { QueryClientProvider } from '@tanstack/react-query';
+
 import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
-import { wagmiConfig } from './wagmi';
+import { QueryClientProvider } from '@tanstack/react-query';
+import type { ReactNode } from 'react';
+import { WagmiProvider } from 'wagmi';
 import { queryClient } from './reactQuery';
+import { wagmiConfig } from './wagmi';
 import '@rainbow-me/rainbowkit/styles.css';
 
 interface WalletProviderProps {
@@ -39,9 +40,7 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
   return (
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider>
-          {children}
-        </RainbowKitProvider>
+        <RainbowKitProvider>{children}</RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>
   );

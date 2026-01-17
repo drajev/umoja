@@ -1,57 +1,107 @@
-/**
- * Zustand store for managing global loading states.
- * Provides a centralized way to manage loading states across the application.
- *
- * Usage:
- *   const { isLoading, setLoading } = useLoadingStore();
- *   setLoading('fetching-data', true);
- *   // ... async operation
- *   setLoading('fetching-data', false);
- */
 import { create } from 'zustand';
+import { devtools } from 'zustand/middleware';
 
+import { createSelectors } from './createSelectors';
+
+/**
+ * Loading state interface - data only
+ */
 interface LoadingState {
-  [key: string]: boolean;
+  loadingStates: Record<string, boolean>;
 }
 
-interface LoadingStore {
-  loadingStates: LoadingState;
+/**
+ * Loading actions interface - all methods grouped together
+ */
+interface LoadingActions {
   isLoading: (key: string) => boolean;
   setLoading: (key: string, isLoading: boolean) => void;
   clearLoading: (key?: string) => void;
   hasAnyLoading: () => boolean;
+  resetStore: () => void;
 }
 
-export const useLoadingStore = create<LoadingStore>((set, get) => ({
+/**
+ * Complete store interface
+ */
+interface LoadingStore extends LoadingState {
+  actions: LoadingActions;
+}
+
+/**
+ * Initial state - easily resettable
+ */
+const initialState: LoadingState = {
   loadingStates: {},
+};
 
-  isLoading: (key: string) => {
-    return get().loadingStates[key] ?? false;
-  },
+/**
+ * Base store with all functionality
+ */
+const baseStore = create<LoadingStore>()(
+  devtools(
+    (set, get) => ({
+      ...initialState,
 
-  setLoading: (key: string, isLoading: boolean) => {
-    set((state) => ({
-      loadingStates: {
-        ...state.loadingStates,
-        [key]: isLoading,
+      actions: {
+        isLoading: key => get().loadingStates[key] ?? false,
+
+        setLoading: (key, isLoading) =>
+          set(
+            state => ({
+              loadingStates: {
+                ...state.loadingStates,
+                [key]: isLoading,
+              },
+            }),
+            undefined,
+            `setLoading:${key}`,
+          ),
+
+        clearLoading: key => {
+          if (key) {
+            set(
+              state => {
+                const newStates = { ...state.loadingStates };
+                delete newStates[key];
+                return { loadingStates: newStates };
+              },
+              undefined,
+              `clearLoading:${key}`,
+            );
+          } else {
+            set({ loadingStates: {} }, undefined, 'clearAllLoading');
+          }
+        },
+
+        hasAnyLoading: () => Object.values(get().loadingStates).some(Boolean),
+
+        resetStore: () => set(initialState, undefined, 'resetStore'),
       },
-    }));
-  },
+    }),
+    { name: 'LoadingStore' },
+  ),
+);
 
-  clearLoading: (key?: string) => {
-    if (key) {
-      set((state) => {
-        const newStates = { ...state.loadingStates };
-        delete newStates[key];
-        return { loadingStates: newStates };
-      });
-    } else {
-      set({ loadingStates: {} });
-    }
-  },
-
-  hasAnyLoading: () => {
-    const states = get().loadingStates;
-    return Object.values(states).some((isLoading) => isLoading);
-  },
-}));
+/**
+ * Loading store with auto-generated selectors.
+ *
+ * @example
+ * // Access loading states
+ * const loadingStates = useLoadingStore.use.loadingStates();
+ *
+ * // Access actions
+ * const { isLoading, setLoading, hasAnyLoading } = useLoadingStore.use.actions();
+ *
+ * // Track async operation
+ * actions.setLoading('fetch-users', true);
+ * try {
+ *   await fetchUsers();
+ * } finally {
+ *   actions.setLoading('fetch-users', false);
+ * }
+ *
+ * // Check specific loading state
+ * if (actions.isLoading('fetch-users')) { ... }
+ */
+export const useLoadingStore = createSelectors(baseStore);

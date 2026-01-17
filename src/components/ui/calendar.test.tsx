@@ -3,7 +3,7 @@
  * Basic rendering and interaction tests.
  * Note: Calendar requires react-day-picker which needs proper DOM setup.
  */
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 describe('Calendar', () => {
   it.skip('renders without crashing - requires react-day-picker DOM setup', () => {

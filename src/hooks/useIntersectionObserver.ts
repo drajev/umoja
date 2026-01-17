@@ -1,3 +1,11 @@
+import {
+  type RefObject,
+  useEffect,
+  useEffectEvent,
+  useRef,
+  useState,
+} from 'react';
+
 /**
  * Hook for observing element intersection with viewport.
  * Useful for lazy loading images, components, or triggering animations.
@@ -12,8 +20,6 @@
  * @param options - IntersectionObserver options
  * @returns Object with ref and isIntersecting state
  */
-import { useState, useEffect, useRef, type RefObject } from 'react';
-
 interface UseIntersectionObserverOptions {
   threshold?: number | number[];
   rootMargin?: string;
@@ -24,10 +30,26 @@ interface UseIntersectionObserverOptions {
 export const useIntersectionObserver = (
   options: UseIntersectionObserverOptions = {},
 ) => {
-  const { threshold = 0, rootMargin = '0px', root = null, triggerOnce = false } = options;
+  const {
+    threshold = 0,
+    rootMargin = '0px',
+    root = null,
+    triggerOnce = false,
+  } = options;
   const [isIntersecting, setIsIntersecting] = useState(false);
   const [hasIntersected, setHasIntersected] = useState(false);
   const elementRef = useRef<HTMLElement>(null);
+
+  const handleIntersection = useEffectEvent(
+    (entry: IntersectionObserverEntry) => {
+      const isCurrentlyIntersecting = entry.isIntersecting;
+      setIsIntersecting(isCurrentlyIntersecting);
+
+      if (isCurrentlyIntersecting && triggerOnce) {
+        setHasIntersected(true);
+      }
+    },
+  );
 
   useEffect(() => {
     const element = elementRef.current;
@@ -38,11 +60,8 @@ export const useIntersectionObserver = (
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        const isCurrentlyIntersecting = entry.isIntersecting;
-        setIsIntersecting(isCurrentlyIntersecting);
-
-        if (isCurrentlyIntersecting && triggerOnce) {
-          setHasIntersected(true);
+        handleIntersection(entry);
+        if (entry.isIntersecting && triggerOnce) {
           observer.disconnect();
         }
       },

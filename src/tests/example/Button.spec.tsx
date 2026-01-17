@@ -1,3 +1,8 @@
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { describe, expect, it, vi } from 'vitest';
+import { Button } from '@/components/ui/button';
+
 /**
  * Example component test for Button.
  * Demonstrates testing React components with React Testing Library.
@@ -7,11 +12,6 @@
  * - Test user interactions
  * - Test accessibility
  */
-import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { Button } from '@/components/ui/button';
-
 describe('Button', () => {
   it('renders with text', () => {
     render(<Button>Click me</Button>);

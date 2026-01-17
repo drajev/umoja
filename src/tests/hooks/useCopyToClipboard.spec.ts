@@ -1,10 +1,10 @@
+import { act, renderHook } from '@testing-library/react';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { useCopyToClipboard } from '@/hooks/useCopyToClipboard';
+
 /**
  * Tests for useCopyToClipboard hook.
  */
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { renderHook, act } from '@testing-library/react';
-import { useCopyToClipboard } from '@/hooks/useCopyToClipboard';
-
 describe('useCopyToClipboard', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -35,7 +35,9 @@ describe('useCopyToClipboard', () => {
 
   it('should handle errors', async () => {
     const onError = vi.fn();
-    vi.spyOn(navigator.clipboard, 'writeText').mockRejectedValue(new Error('Failed'));
+    vi.spyOn(navigator.clipboard, 'writeText').mockRejectedValue(
+      new Error('Failed'),
+    );
 
     const { result } = renderHook(() =>
       useCopyToClipboard({

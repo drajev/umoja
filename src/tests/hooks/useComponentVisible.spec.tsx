@@ -1,10 +1,10 @@
+import { act, renderHook } from '@testing-library/react';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { useComponentVisible } from '@/hooks/useComponentVisible';
+
 /**
  * Tests for useComponentVisible hook.
  */
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { renderHook, act } from '@testing-library/react';
-import { useComponentVisible } from '@/hooks/useComponentVisible';
-
 describe('useComponentVisible', () => {
   beforeEach(() => {
     vi.clearAllMocks();

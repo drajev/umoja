@@ -1,0 +1,52 @@
+/**
+ * Home page styles.
+ * Uses @apply for Tailwind classes to keep JSX clean.
+ */
+
+.page {
+  @apply space-y-8;
+}
+
+.container {
+  @apply mx-auto max-w-4xl space-y-8;
+}
+
+/* Hero section */
+.hero {
+  @apply space-y-4 text-center;
+}
+
+.heroLogo {
+  @apply flex flex-col items-center justify-center h-full;
+}
+
+.heroDescription {
+  @apply mt-4;
+}
+
+/* Feature cards section */
+.featureSection {
+  @apply grid gap-6 md:grid-cols-2 lg:grid-cols-3;
+}
+
+/* Getting started card */
+.gettingStartedCard {
+  @apply mt-8;
+}
+
+.cardActions {
+  @apply flex gap-2;
+}
+
+/* General content sections */
+.section {
+  @apply py-8;
+}
+
+.sectionTitle {
+  @apply text-2xl font-bold mb-4;
+}
+
+.sectionContent {
+  @apply space-y-4;
+}

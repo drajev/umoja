@@ -1,0 +1,65 @@
+/**
+ * Authentication pages styles (Login, Register, ForgotPassword, ResetPassword).
+ * Uses @apply for Tailwind classes to keep JSX clean.
+ */
+
+.page {
+  @apply flex min-h-screen flex-col p-4;
+}
+
+.breadcrumbContainer {
+  @apply container mx-auto mb-6;
+}
+
+.content {
+  @apply flex flex-1 items-center justify-center;
+}
+
+.card {
+  @apply w-full max-w-md;
+}
+
+.cardHeader {
+  @apply space-y-1;
+}
+
+.cardTitle {
+  @apply text-2xl;
+}
+
+/* Form styles */
+.form {
+  @apply space-y-4;
+}
+
+.formActions {
+  @apply flex items-center justify-end;
+}
+
+.submitButton {
+  @apply w-full;
+}
+
+/* Links */
+.link {
+  @apply text-sm text-muted-foreground;
+  @apply hover:text-primary underline-offset-4 hover:underline;
+}
+
+.primaryLink {
+  @apply text-primary hover:underline underline-offset-4;
+}
+
+/* Footer section */
+.footer {
+  @apply flex flex-col space-y-4;
+}
+
+.footerText {
+  @apply text-sm text-center text-muted-foreground;
+}
+
+/* Success state */
+.successAlert {
+  @apply mt-4;
+}

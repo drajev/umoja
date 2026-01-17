@@ -1,79 +1,106 @@
-/**
- * Example test for Zustand store.
- * Demonstrates testing store state and actions.
- *
- * To customize:
- * - Add more test cases
- * - Test edge cases
- * - Test persistence behavior
- */
-import { describe, it, expect, beforeEach } from 'vitest';
-import { useUIStore } from '@/stores/useUIStore';
+import { act, renderHook } from '@testing-library/react';
+import { beforeEach, describe, expect, it } from 'vitest';
 
+import { useUIStore } from '@/stores';
+
+/**
+ * Tests for useUIStore.
+ * Tests UI state management with the new actions pattern.
+ */
 describe('useUIStore', () => {
   beforeEach(() => {
-    // Reset store state before each test
-    useUIStore.setState({
-      sidebarOpen: false,
-      theme: 'light',
-      popupContent: null,
+    // Reset store to initial state before each test
+    useUIStore.getState().actions.resetStore();
+  });
+
+  it('initializes with default values', () => {
+    const { result } = renderHook(() => useUIStore());
+    expect(result.current.sidebarOpen).toBe(false);
+    expect(result.current.theme).toBe('light');
+    expect(result.current.popupContent).toBeNull();
+  });
+
+  it('toggles sidebar correctly', () => {
+    const { result } = renderHook(() => useUIStore());
+
+    act(() => {
+      result.current.actions.toggleSidebar();
     });
+
+    expect(result.current.sidebarOpen).toBe(true);
+
+    act(() => {
+      result.current.actions.toggleSidebar();
+    });
+
+    expect(result.current.sidebarOpen).toBe(false);
   });
 
-  it('should toggle sidebar', () => {
-    const { sidebarOpen, toggleSidebar } = useUIStore.getState();
+  it('sets sidebar open correctly', () => {
+    const { result } = renderHook(() => useUIStore());
 
-    expect(sidebarOpen).toBe(false);
+    act(() => {
+      result.current.actions.setSidebarOpen(true);
+    });
 
-    toggleSidebar();
-    expect(useUIStore.getState().sidebarOpen).toBe(true);
-
-    toggleSidebar();
-    expect(useUIStore.getState().sidebarOpen).toBe(false);
+    expect(result.current.sidebarOpen).toBe(true);
   });
 
-  it('should set sidebar open state', () => {
-    const { setSidebarOpen } = useUIStore.getState();
+  it('toggles theme correctly', () => {
+    const { result } = renderHook(() => useUIStore());
 
-    setSidebarOpen(true);
-    expect(useUIStore.getState().sidebarOpen).toBe(true);
+    act(() => {
+      result.current.actions.toggleTheme();
+    });
 
-    setSidebarOpen(false);
-    expect(useUIStore.getState().sidebarOpen).toBe(false);
+    expect(result.current.theme).toBe('dark');
+
+    act(() => {
+      result.current.actions.toggleTheme();
+    });
+
+    expect(result.current.theme).toBe('light');
   });
 
-  it('should toggle theme', () => {
-    const { theme, toggleTheme } = useUIStore.getState();
+  it('sets theme correctly', () => {
+    const { result } = renderHook(() => useUIStore());
 
-    expect(theme).toBe('light');
+    act(() => {
+      result.current.actions.setTheme('dark');
+    });
 
-    toggleTheme();
-    expect(useUIStore.getState().theme).toBe('dark');
-
-    toggleTheme();
-    expect(useUIStore.getState().theme).toBe('light');
+    expect(result.current.theme).toBe('dark');
   });
 
-  it('should set theme', () => {
-    const { setTheme } = useUIStore.getState();
+  it('manages popup content correctly', () => {
+    const { result } = renderHook(() => useUIStore());
+    const testContent = 'Test popup content';
 
-    setTheme('dark');
-    expect(useUIStore.getState().theme).toBe('dark');
+    act(() => {
+      result.current.actions.setPopup(testContent);
+    });
 
-    setTheme('light');
-    expect(useUIStore.getState().theme).toBe('light');
+    expect(result.current.popupContent).toBe(testContent);
+
+    act(() => {
+      result.current.actions.clearPopup();
+    });
+
+    expect(result.current.popupContent).toBeNull();
   });
 
-  it('should set and clear popup', () => {
-    const { setPopup, clearPopup } = useUIStore.getState();
+  it('uses auto-generated selectors correctly', () => {
+    act(() => {
+      useUIStore.getState().actions.setTheme('dark');
+      useUIStore.getState().actions.setSidebarOpen(true);
+    });
 
-    expect(useUIStore.getState().popupContent).toBeNull();
+    const { result: themeResult } = renderHook(() => useUIStore.use.theme());
+    const { result: sidebarResult } = renderHook(() =>
+      useUIStore.use.sidebarOpen(),
+    );
 
-    const testContent = 'Test Content';
-    setPopup(testContent);
-    expect(useUIStore.getState().popupContent).toBe(testContent);
-
-    clearPopup();
-    expect(useUIStore.getState().popupContent).toBeNull();
+    expect(themeResult.current).toBe('dark');
+    expect(sidebarResult.current).toBe(true);
   });
 });

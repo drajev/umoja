@@ -1,14 +1,7 @@
 /**
- * Utility functions for shadcn/ui components.
- * Provides cn() helper for merging Tailwind classes with clsx and tailwind-merge.
+ * Re-export cn utility for backwards compatibility.
+ * New code should import from '@/utils' or '@/utils/helpers'.
  *
- * Usage:
- *   import { cn } from '@/lib/utils';
- *   <div className={cn('base-class', condition && 'conditional-class')} />
+ * @deprecated Import from '@/utils' instead
  */
-import { type ClassValue, clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
-
-export function cn(...inputs: ClassValue[]): string {
-  return twMerge(clsx(inputs));
-}
+export { cn } from '@/utils/helpers';

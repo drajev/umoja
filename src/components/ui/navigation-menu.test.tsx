@@ -2,9 +2,15 @@
  * Test file for navigation-menu component.
  * Basic rendering and interaction tests.
  */
-import { describe, it, expect } from 'vitest';
+
 import { render } from '@testing-library/react';
-import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuTrigger } from './navigation-menu';
+import { describe, expect, it } from 'vitest';
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from './navigation-menu';
 
 describe('NavigationMenu', () => {
   it('renders without crashing', () => {
@@ -15,7 +21,7 @@ describe('NavigationMenu', () => {
             <NavigationMenuTrigger>Item</NavigationMenuTrigger>
           </NavigationMenuItem>
         </NavigationMenuList>
-      </NavigationMenu>
+      </NavigationMenu>,
     );
     expect(container).toBeTruthy();
   });

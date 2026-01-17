@@ -10,7 +10,7 @@
  * - Add icon support
  * - Add animation/transition effects
  */
-import { type FieldErrors, type FieldPath, type FieldValues } from 'react-hook-form';
+import type { FieldErrors, FieldPath, FieldValues } from 'react-hook-form';
 import { Text } from '@/components/ui/typography';
 import { cn } from '@/lib/utils';
 
@@ -38,7 +38,7 @@ export function ErrorMessage<T extends FieldValues>({
   return (
     <Text
       variant="small"
-      className={cn('text-destructive mt-1', className)}
+      className={cn('mt-1 text-destructive', className)}
       role="alert"
     >
       {error.message as string}

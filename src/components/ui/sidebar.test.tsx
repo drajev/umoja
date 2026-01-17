@@ -2,9 +2,10 @@
  * Test file for sidebar component.
  * Basic rendering and interaction tests.
  */
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+
 import { render } from '@testing-library/react';
-import { Sidebar, SidebarProvider, SidebarContent } from './sidebar';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { Sidebar, SidebarContent, SidebarProvider } from './sidebar';
 
 // Mock useIsMobile hook
 vi.mock('@/hooks/useIsMobile', () => ({
@@ -16,7 +17,7 @@ describe('Sidebar', () => {
     // Mock window.matchMedia
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
-      value: vi.fn().mockImplementation((query) => ({
+      value: vi.fn().mockImplementation(query => ({
         matches: false,
         media: query,
         onchange: null,
@@ -35,7 +36,7 @@ describe('Sidebar', () => {
         <Sidebar collapsible="none">
           <SidebarContent>Test content</SidebarContent>
         </Sidebar>
-      </SidebarProvider>
+      </SidebarProvider>,
     );
     expect(container).toBeTruthy();
   });

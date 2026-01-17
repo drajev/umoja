@@ -1,14 +1,11 @@
-/**
- * Zustand store for authentication state management only.
- * Handles user state, token, and authentication status.
- * API calls are handled in queries/auth/auth.ts using TanStack Query.
- *
- * Usage:
- *   const { user, isAuthenticated, logout } = useAuthStore();
- */
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { devtools, persist } from 'zustand/middleware';
 
+import { createSelectors } from './createSelectors';
+
+/**
+ * User interface for authenticated users
+ */
 export interface User {
   id: string;
   email: string;
@@ -16,6 +13,9 @@ export interface User {
   avatar?: string;
 }
 
+/**
+ * Auth state interface - data only
+ */
 interface AuthState {
   user: User | null;
   token: string | null;
@@ -23,17 +23,29 @@ interface AuthState {
   error: string | null;
 }
 
+/**
+ * Auth actions interface - all methods grouped together
+ */
 interface AuthActions {
   setUser: (user: User | null) => void;
   setToken: (token: string | null) => void;
-  setIsAuthenticated: (isAuthenticated: boolean) => void;
+  setCredentials: (user: User, token: string) => void;
   setError: (error: string | null) => void;
   clearError: () => void;
   logout: () => void;
+  resetStore: () => void;
 }
 
-type AuthStore = AuthState & AuthActions;
+/**
+ * Complete store interface
+ */
+interface AuthStore extends AuthState {
+  actions: AuthActions;
+}
 
+/**
+ * Initial state - easily resettable
+ */
 const initialState: AuthState = {
   user: null,
   token: null,
@@ -41,44 +53,65 @@ const initialState: AuthState = {
   error: null,
 };
 
-export const useAuthStore = create<AuthStore>()(
-  persist(
-    (set) => ({
-      ...initialState,
+/**
+ * Base store with all functionality
+ */
+const baseStore = create<AuthStore>()(
+  devtools(
+    persist(
+      set => ({
+        ...initialState,
 
-      setUser: (user) => {
-        set({ user });
-      },
+        actions: {
+          setUser: user => set({ user, isAuthenticated: !!user }),
 
-      setToken: (token) => {
-        set({ token });
-      },
+          setToken: token => set({ token }),
 
-      setIsAuthenticated: (isAuthenticated) => {
-        set({ isAuthenticated });
-      },
+          setCredentials: (user, token) =>
+            set({
+              user,
+              token,
+              isAuthenticated: true,
+              error: null,
+            }),
 
-      setError: (error) => {
-        set({ error });
-      },
+          setError: error => set({ error }),
 
-      clearError: () => {
-        set({ error: null });
-      },
+          clearError: () => set({ error: null }),
 
-      logout: () => {
-        set({
-          ...initialState,
-        });
-      },
-    }),
-    {
-      name: 'auth-storage',
-      partialize: (state) => ({
-        user: state.user,
-        token: state.token,
-        isAuthenticated: state.isAuthenticated,
+          logout: () => set(initialState),
+
+          resetStore: () => set(initialState),
+        },
       }),
-    },
+      {
+        name: 'auth-storage',
+        partialize: state => ({
+          user: state.user,
+          token: state.token,
+          isAuthenticated: state.isAuthenticated,
+        }),
+      },
+    ),
+    { name: 'AuthStore' },
   ),
 );
+
+/**
+ * Auth store with auto-generated selectors.
+ *
+ * @example
+ * // Access state with individual selectors (optimized re-renders)
+ * const user = useAuthStore.use.user();
+ * const isAuthenticated = useAuthStore.use.isAuthenticated();
+ *
+ * // Access actions
+ * const { setCredentials, logout } = useAuthStore.use.actions();
+ *
+ * // Login flow
+ * actions.setCredentials(userData, tokenString);
+ *
+ * // Logout
+ * actions.logout();
+ */
+export const useAuthStore = createSelectors(baseStore);

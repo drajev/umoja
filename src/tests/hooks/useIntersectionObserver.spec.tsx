@@ -1,10 +1,11 @@
+import { renderHook } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
+import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+
 /**
  * Test file for useIntersectionObserver hook.
  * Tests intersection observer functionality.
  */
-import { describe, it, expect, vi } from 'vitest';
-import { renderHook } from '@testing-library/react';
-import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 
 // Mock IntersectionObserver
 const mockObserve = vi.fn();

@@ -41,7 +41,8 @@ export const useCopyToClipboard = (options?: UseCopyToClipboardOptions) => {
           }
         }
       } catch (error) {
-        const err = error instanceof Error ? error : new Error('Failed to copy');
+        const err =
+          error instanceof Error ? error : new Error('Failed to copy');
         if (options?.onError) {
           options.onError(err);
         }

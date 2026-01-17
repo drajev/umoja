@@ -1,18 +1,19 @@
-import * as React from "react"
-import * as ProgressPrimitive from "@radix-ui/react-progress"
+import * as ProgressPrimitive from '@radix-ui/react-progress';
+import type { ComponentPropsWithoutRef, ComponentRef, Ref } from 'react';
 
-import { cn } from "@/lib/utils"
+import { cn } from '@/lib/utils';
 
-interface ProgressProps extends React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root> {
-  ref?: React.Ref<React.ElementRef<typeof ProgressPrimitive.Root>>
+interface ProgressProps
+  extends ComponentPropsWithoutRef<typeof ProgressPrimitive.Root> {
+  ref?: Ref<ComponentRef<typeof ProgressPrimitive.Root>>;
 }
 
 const Progress = ({ className, value, ref, ...props }: ProgressProps) => (
   <ProgressPrimitive.Root
     ref={ref}
     className={cn(
-      "relative h-4 w-full overflow-hidden rounded-full bg-secondary",
-      className
+      'relative h-4 w-full overflow-hidden rounded-full bg-secondary',
+      className,
     )}
     {...props}
   >
@@ -21,7 +22,7 @@ const Progress = ({ className, value, ref, ...props }: ProgressProps) => (
       style={{ transform: `translateX(-${100 - (value || 0)}%)` }}
     />
   </ProgressPrimitive.Root>
-)
-Progress.displayName = ProgressPrimitive.Root.displayName
+);
+Progress.displayName = ProgressPrimitive.Root.displayName;
 
-export { Progress }
+export { Progress };

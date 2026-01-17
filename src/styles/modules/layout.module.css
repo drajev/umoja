@@ -1,0 +1,51 @@
+/**
+ * Layout component styles.
+ * Uses @apply for Tailwind classes to keep JSX clean.
+ */
+
+.layout {
+  @apply min-h-screen bg-background;
+}
+
+.layoutContent {
+  @apply flex flex-col md:flex-row;
+}
+
+/* Sidebar */
+.sidebar {
+  @apply w-full border-b;
+  @apply md:w-64 md:border-b-0 md:border-r;
+  @apply bg-card p-4 md:flex-shrink-0;
+}
+
+.sidebarNav {
+  @apply mt-4 space-y-2;
+}
+
+.sidebarButton {
+  @apply w-full justify-start;
+}
+
+/* Main content area */
+.main {
+  @apply flex-1 p-4 md:p-8;
+}
+
+/* Popup overlay */
+.popupOverlay {
+  @apply fixed inset-0 z-50;
+  @apply flex items-center justify-center;
+  @apply bg-black/50;
+}
+
+.popupCard {
+  @apply w-full max-w-md;
+}
+
+.popupContent {
+  @apply pt-6;
+}
+
+.popupCloseButton {
+  @apply mt-4 w-full;
+}

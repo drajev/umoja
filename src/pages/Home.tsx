@@ -1,3 +1,18 @@
+import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import LogoIcon from '@/assets/logo.svg?react';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Heading, Text } from '@/components/ui/typography';
+
 /**
  * Home page component.
  * Main landing page of the application.
@@ -7,21 +22,6 @@
  * - Link to other pages or sections
  * - Add hero section, features, etc.
  */
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Heading, Text } from "@/components/ui/typography";
-import LogoIcon from '@/assets/logo.svg?react';
-import { AspectRatio } from "@/components/ui/aspect-ratio";
-
 export const Home = () => {
   const [size, setSize] = useState(200);
 
@@ -34,12 +34,21 @@ export const Home = () => {
       <div className="mx-auto max-w-4xl space-y-8">
         <div className="space-y-4 text-center">
           <Heading level={1}>Welcome to umoja</Heading>
-          <button onClick={toggleSize}>toggle size</button>
+          <button type="button" onClick={toggleSize}>
+            toggle size
+          </button>
 
-          <AspectRatio ratio={5} className="w-full h-full absolute top-0 left-0">
-            <div className="flex flex-col items-center justify-center h-full">
+          <AspectRatio
+            ratio={5}
+            className="absolute top-0 left-0 h-full w-full"
+          >
+            <div className="flex h-full flex-col items-center justify-center">
               <motion.div layout style={{ width: size, height: size }}>
-                <LogoIcon width="100%" height="100%" className="text-foreground" />
+                <LogoIcon
+                  width="100%"
+                  height="100%"
+                  className="text-foreground"
+                />
               </motion.div>
             </div>
           </AspectRatio>
@@ -69,7 +78,7 @@ export const Home = () => {
             </div>
           </CardContent>
         </Card>
-      </div >
-    </div >
+      </div>
+    </div>
   );
 };

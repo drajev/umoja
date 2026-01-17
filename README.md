@@ -1,212 +1,142 @@
-# umoja - Web3 Starter Template
+# Umoja - Modern Web3 Starter Template
 
-A production-ready Web3 starter template built with Vite, React, TypeScript, Tailwind CSS, and shadcn/ui.
+A production-ready Web3 starter template built with **React 19.2**, **Vite**, **TypeScript**, **Tailwind CSS**, **Bun**, and **Biome**.
 
-## Features
+## ✨ Features
 
-- ⚡ **Vite** - Fast dev server with HMR
-- ⚛️ **React 19** - Latest React with TypeScript
-- 🎨 **Tailwind CSS** - Utility-first CSS framework
-- 🧩 **shadcn/ui** - Beautiful, accessible component primitives
-- 🧪 **Vitest** - Fast unit testing framework
-- 📝 **TypeScript** - Full type safety
-- 🎯 **ESLint + Prettier** - Code quality and formatting
-- 🛣️ **React Router** - Client-side routing
+| Category | Technology |
+|----------|------------|
+| ⚡ **Runtime** | Bun - Fast JavaScript runtime & package manager |
+| ⚛️ **Framework** | React 19.2 with latest features (ref-as-prop, useEffectEvent) |
+| 📦 **Bundler** | Vite 7 with optimized chunking |
+| 🎨 **Styling** | Tailwind CSS + CSS Modules with `@apply` |
+| 🧩 **Components** | shadcn/ui - Beautiful, accessible primitives |
+| 🔐 **Web3** | wagmi + RainbowKit (MetaMask, WalletConnect, etc.) |
+| 📊 **State** | Zustand with `createSelectors` pattern |
+| 📝 **Forms** | react-hook-form + Zod validation |
+| 🧪 **Testing** | Vitest + React Testing Library |
+| 🔍 **Linting** | Biome (replaces ESLint + Prettier) |
+| 🚀 **CI/CD** | GitHub Actions with Bun |
 
-## Getting Started
+## 🚀 Quick Start
 
 ### Prerequisites
 
-- Node.js 18+
-- pnpm (recommended) or npm/yarn
+- **Bun** (recommended) - [Install Bun](https://bun.sh/docs/installation)
+
+```bash
+curl -fsSL https://bun.sh/install | bash
+```
 
 ### Installation
 
-1. Install dependencies:
-
 ```bash
-pnpm install
+# Clone the repository
+git clone https://github.com/your-org/umoja.git
+cd umoja
+
+# Install dependencies
+bun install
+
+# Set up environment variables
+cp .env.example .env
+# Edit .env and add your VITE_WALLETCONNECT_PROJECT_ID
+
+# Start development server
+bun dev
 ```
 
-2. Start the development server:
+Open [http://localhost:5173](http://localhost:5173) in your browser.
 
-```bash
-pnpm dev
-```
+## 📜 Available Scripts
 
-3. Open [http://localhost:5173](http://localhost:5173) in your browser.
+| Command | Description |
+|---------|-------------|
+| `bun dev` | Start development server |
+| `bun run build` | Build for production |
+| `bun run preview` | Preview production build |
+| `bun run lint` | Lint and auto-fix with Biome |
+| `bun run format` | Format code with Biome |
+| `bun run check` | Check code without fixing |
+| `bun run test` | Run tests with Vitest |
+| `bun run test:watch` | Run tests in watch mode |
+| `bun run test:ui` | Run tests with interactive UI |
+| `bun run test:coverage` | Generate coverage report |
 
-## Available Scripts
-
-- `pnpm dev` - Start development server
-- `pnpm build` - Build for production
-- `pnpm preview` - Preview production build
-- `pnpm lint` - Run ESLint
-- `pnpm format` - Format code with Prettier
-- `pnpm format:check` - Check code formatting
-- `pnpm test` - Run tests with Vitest
-- `pnpm test:watch` - Run tests in watch mode
-- `pnpm test:ui` - Run tests with UI
-- `pnpm test:coverage` - Run tests with coverage report
-
-## Project Structure
+## 📁 Project Structure
 
 ```
-umoja/
-├── src/
-│   ├── assets/          # Static assets
-│   ├── components/
-│   │   ├── core/        # Core reusable components (Toast, ErrorMessage)
-│   │   ├── ui/          # shadcn/ui primitives (Button, Card, etc.)
-│   │   ├── shared/      # Shared business components
-│   │   └── forms/       # Form components
-│   ├── constants/       # Application constants (languages, etc.)
-│   ├── hooks/           # Custom React hooks
-│   │   ├── useComponentVisible.ts
-│   │   ├── useDebounce.ts
-│   │   ├── useCopyToClipboard.ts
-│   │   └── useLanguage.ts
-│   ├── lib/
-│   │   ├── forms/       # Form utilities
-│   │   ├── utils.ts     # Utility functions
-│   │   ├── wallet.tsx   # Wallet provider
-│   │   ├── wagmi.ts     # Wagmi configuration
-│   │   ├── axiosInstance.ts  # Axios setup
-│   │   └── reactQuery.ts     # React Query setup
-│   ├── locales/         # i18n translation files
-│   │   ├── en.json
-│   │   └── es.json
-│   ├── pages/           # Page components
-│   ├── queries/          # TanStack Query hooks
-│   ├── routes/           # Route definitions
-│   ├── schemas/          # Zod validation schemas
-│   ├── stores/           # Zustand stores
-│   │   ├── useUIStore.ts
-│   │   ├── useLanguageStore.ts
-│   │   ├── useToastStore.ts
-│   │   └── useWindowStore.ts
-│   ├── test/             # Test setup files
-│   ├── tests/            # Test files
-│   ├── types/            # Shared TypeScript types
-│   ├── utils/             # Utility functions
-│   │   ├── debounce.ts
-│   │   ├── format.ts
-│   │   └── constants.ts
-│   ├── theme/
-│   │   └── tokens.ts      # Design tokens
-│   ├── App.tsx           # Main app component
-│   ├── main.tsx          # Entry point
-│   └── index.css         # Global styles
-├── .github/workflows/    # CI/CD workflows
-├── tailwind.config.ts    # Tailwind configuration
-├── vite.config.ts        # Vite configuration
-├── vitest.config.ts      # Vitest configuration
-└── tsconfig.json         # TypeScript configuration
+src/
+├── components/
+│   ├── core/         # Reusable components (Activity, LoadingWrapper)
+│   ├── ui/           # shadcn/ui primitives
+│   └── forms/        # Form components
+├── hooks/            # Custom React hooks
+├── stores/           # Zustand stores with createSelectors
+├── utils/            # Utility functions
+├── lib/              # Configuration (wagmi, axios, forms)
+├── pages/            # Page components
+├── styles/modules/   # CSS modules with @apply
+├── schemas/          # Zod validation schemas
+├── queries/          # API query hooks
+└── locales/          # i18n translations (en, es)
 ```
 
-## Design System
+## 🎨 Styling
 
-Visit `/styleguide` to see all available components, design tokens, and patterns.
+### CSS Modules with Tailwind
 
-### Components
+```css
+/* src/styles/modules/header.module.css */
+.header {
+  @apply sticky top-0 z-50 border-b bg-background/95;
+}
 
-- **Button** - Multiple variants (default, secondary, destructive, outline, ghost, link) and sizes
-- **Card** - Composable card component with header, content, and footer
-- **Typography** - Heading and Text components with variants
-- **ErrorMessage** - Form error display component
-- **StrategyForm** - Example form with react-hook-form + Zod validation
-- **Layout** - Layout component with sidebar and theme toggle
-- **ConnectWallet** - Wallet connection component
-
-### Design Tokens
-
-All design tokens are defined in `src/index.css` using CSS custom properties and mapped in `src/theme/tokens.ts` for programmatic access.
-
-## Path Aliases
-
-The project uses `@/` as an alias for the `src/` directory:
-
-```typescript
-import { Button } from "@/components/ui/button";
-import { tokens } from "@/theme/tokens";
-```
-
-## Styling
-
-This project uses Tailwind CSS for styling. All components follow shadcn/ui patterns and use Tailwind utility classes.
-
-### Customization
-
-- **Theme colors**: Modify CSS custom properties in `src/index.css`
-- **Tailwind config**: Extend theme in `tailwind.config.ts`
-- **Components**: Customize shadcn/ui components in `src/components/ui/`
-
-## Testing
-
-Tests are written with Vitest and React Testing Library. Test files should be placed next to the code they test with a `.test.ts` or `.test.tsx` extension.
-
-Example:
-
-```typescript
-import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
-import { Button } from '@/components/ui/button';
-
-describe('Button', () => {
-  it('renders correctly', () => {
-    render(<Button>Click me</Button>);
-    expect(screen.getByText('Click me')).toBeInTheDocument();
-  });
-});
-```
-
-## Code Quality
-
-- **ESLint**: Configured with recommended React and TypeScript rules
-- **Prettier**: Configured with Tailwind CSS plugin for class sorting
-- **TypeScript**: Strict mode enabled with comprehensive type checking
-
-## Wallet Integration
-
-This project includes wallet integration using **wagmi** and **RainbowKit**.
-
-### Why wagmi + RainbowKit?
-
-- **wagmi**: React hooks for Ethereum, providing type-safe access to wallet state and actions
-- **RainbowKit**: Beautiful, accessible wallet connection UI that works with multiple wallets
-- **Together**: Best-in-class developer experience with minimal configuration and excellent TypeScript support
-
-### Setup
-
-1. **Get a WalletConnect Project ID** (required for WalletConnect support):
-   - Visit [WalletConnect Cloud](https://cloud.walletconnect.com/)
-   - Sign up and create a new project
-   - Copy your Project ID
-
-2. **Create a `.env` file** in the root directory:
-
-```bash
-# Required: WalletConnect Project ID
-VITE_WALLETCONNECT_PROJECT_ID=your_project_id_here
-
-# Optional: Custom RPC URLs (if not provided, public RPCs will be used)
-# Format: VITE_RPC_URL_<CHAIN_ID>=https://your-rpc-url.com
-
-# Examples:
-# VITE_RPC_URL_1=https://eth-mainnet.g.alchemy.com/v2/YOUR_API_KEY
-# VITE_RPC_URL_11155111=https://eth-sepolia.g.alchemy.com/v2/YOUR_API_KEY
-# VITE_RPC_URL_137=https://polygon-mainnet.g.alchemy.com/v2/YOUR_API_KEY
-```
-
-3. **Use the ConnectWallet component**:
-
-```tsx
-import { ConnectWallet } from "@/components/ConnectWallet";
-
-function MyComponent() {
-  return <ConnectWallet />;
+.nav {
+  @apply flex items-center gap-6;
 }
 ```
+
+```tsx
+import styles from '@/styles/modules/header.module.css';
+
+export const Header = () => (
+  <header className={styles.header}>
+    <nav className={styles.nav}>...</nav>
+  </header>
+);
+```
+
+## 📊 State Management
+
+### Zustand with Auto-Generated Selectors
+
+```typescript
+import { useUIStore } from '@/stores';
+
+// ✅ Optimized - only re-renders when theme changes
+const theme = useUIStore.use.theme();
+const { toggleTheme } = useUIStore.use.actions();
+```
+
+### Available Stores
+
+- `useUIStore` - UI state (theme, sidebar)
+- `useAuthStore` - Authentication (user, token)
+- `useLanguageStore` - i18n language
+- `useLoadingStore` - Loading states
+- `useToastStore` - Toast notifications
+- `useWindowStore` - Window size/breakpoints
+
+## 🔐 Wallet Integration
+
+Powered by **wagmi** and **RainbowKit** with support for:
+
+- ✅ MetaMask
+- ✅ WalletConnect
+- ✅ Rainbow Wallet
+- ✅ Trust Wallet
+- ✅ Injected wallets
 
 ### Supported Chains
 
@@ -216,91 +146,110 @@ function MyComponent() {
 - Arbitrum
 - Optimism
 
-### Features
+### Setup
 
-- ✅ Connect/disconnect wallet
-- ✅ Display wallet address
-- ✅ Display wallet balance
-- ✅ Automatic chain switching
-- ✅ Support for MetaMask, WalletConnect, and other popular wallets
-- ✅ SSR-safe (no window usage on server)
+1. Get a Project ID from [WalletConnect Cloud](https://cloud.walletconnect.com/)
+2. Add to `.env`:
 
-## Features Included
+```env
+VITE_WALLETCONNECT_PROJECT_ID=your_project_id
+```
 
-### ✅ Form Handling
+3. Use the component:
 
-This project includes form utilities with react-hook-form and Zod:
+```tsx
+import { ConnectWallet } from '@/components/ConnectWallet';
+
+<ConnectWallet />
+```
+
+## 🧪 Testing
+
+Tests use **Vitest** with **React Testing Library**:
 
 ```typescript
-import { useCreateForm } from "@/lib/forms/createForm";
-import { z } from "zod";
+import { describe, it, expect } from 'vitest';
+import { render, screen } from '@testing-library/react';
+
+describe('Button', () => {
+  it('renders correctly', () => {
+    render(<Button>Click me</Button>);
+    expect(screen.getByText('Click me')).toBeInTheDocument();
+  });
+});
+```
+
+## 🔍 Code Quality
+
+### Biome
+
+Single tool for linting and formatting (replaces ESLint + Prettier):
+
+```bash
+bun run check   # Check for issues
+bun run lint    # Fix issues
+bun run format  # Format code
+```
+
+### Pre-commit Hooks
+
+Husky + lint-staged automatically runs Biome on staged files.
+
+## ⚛️ React 19.2 Features
+
+This project uses modern React 19.2 patterns:
+
+```typescript
+// ✅ ref-as-prop (no forwardRef needed)
+const Input = ({ ref, ...props }: InputProps) => (
+  <input ref={ref} {...props} />
+);
+
+// ✅ useEffectEvent for stable event handlers
+const handleScroll = useEffectEvent(() => {
+  // handler logic
+});
+```
+
+## 📝 Forms
+
+### react-hook-form + Zod
+
+```typescript
+import { useCreateForm } from '@/lib/forms/createForm';
+import { z } from 'zod';
 
 const schema = z.object({
-  name: z.string().min(1, "Name is required"),
+  email: z.string().email(),
+  password: z.string().min(6),
 });
 
 const form = useCreateForm(schema);
 ```
 
-See `src/components/forms/StrategyForm.tsx` for a complete example.
+## 🌐 Internationalization
 
-### ✅ State Management
-
-Zustand store with persistence and devtools:
+Built-in i18n support with JSON locale files:
 
 ```typescript
-import { useUIStore } from "@/stores/useUIStore";
+import { useLanguage } from '@/hooks';
 
-const { theme, setTheme, sidebarOpen, toggleSidebar } = useUIStore();
+const { t, language, setLanguage } = useLanguage();
+
+<p>{t('common.welcome')}</p>
+<button onClick={() => setLanguage('es')}>Español</button>
 ```
 
-### ✅ Testing
+## 🛠️ Development
 
-Vitest setup with React Testing Library:
+See [DEVNOTES.md](./DEVNOTES.md) for detailed development guidelines:
 
-```bash
-pnpm test          # Run tests
-pnpm test:watch    # Watch mode
-pnpm test:coverage # Coverage report
-```
+- Adding new components
+- Creating custom hooks
+- State management patterns
+- CSS modules best practices
+- Testing strategies
 
-### ✅ CI/CD
-
-- GitHub Actions workflow for CI
-- Husky pre-commit hooks
-- lint-staged for automatic formatting
-
-### ✅ Custom Hooks
-
-Useful React hooks for common patterns:
-
-- **useComponentVisible** - Detect clicks outside a component
-- **useDebounce** - Debounce function calls
-- **useCopyToClipboard** - Copy text to clipboard with notifications
-- **useLanguage** - Access i18n translations
-
-### ✅ Utilities
-
-- **debounce** - Debounce utility function
-- **format** - Formatting helpers (address, price, numbers)
-- **constants** - Application constants and env variables
-
-### ✅ Enhanced Stores
-
-- **useUIStore** - UI state (sidebar, theme, popup)
-- **useLanguageStore** - Language/i18n state
-- **useToastStore** - Toast notifications
-- **useWindowStore** - Window size and responsive breakpoints
-
-## Development
-
-See [DEVNOTES.md](./DEVNOTES.md) for detailed development guidelines including:
-
-- How to add new components
-- How to add new hooks
-- Testing patterns
-- Code style guidelines
-
-## License
+## 📄 License
 
 MIT

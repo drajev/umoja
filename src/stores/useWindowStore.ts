@@ -1,18 +1,23 @@
-/**
- * Window size store for responsive breakpoints.
- * Tracks window dimensions and provides mobile breakpoint flags.
- *
- * Usage:
- *   const { windowSize } = useWindowStore();
- *   if (windowSize.isMdMobile) { ... }
- *
- * To customize:
- * - Adjust breakpoint values
- * - Add more breakpoints
- * - Add orientation tracking
- */
 import { create } from 'zustand';
+import { devtools } from 'zustand/middleware';
 
+import { createSelectors } from './createSelectors';
+
+/**
+ * Breakpoint constants - easily adjustable
+ */
+const BREAKPOINTS = {
+  xxl: 1440,
+  xl: 1230,
+  lg: 992,
+  md: 768,
+  sm: 576,
+  xs: 375,
+} as const;
+
+/**
+ * Window size state interface
+ */
 interface WindowSize {
   width: number;
   height: number;
@@ -24,12 +29,32 @@ interface WindowSize {
   isXsMobile: boolean; // <= 375px
 }
 
-interface WindowStore {
+/**
+ * Window store state interface - data only
+ */
+interface WindowState {
   windowSize: WindowSize;
-  setWindowSize: (size: WindowSize) => void;
 }
 
-const getInitialSize = (): WindowSize => {
+/**
+ * Window actions interface - all methods grouped together
+ */
+interface WindowActions {
+  updateSize: () => void;
+  resetStore: () => void;
+}
+
+/**
+ * Complete store interface
+ */
+interface WindowStore extends WindowState {
+  actions: WindowActions;
+}
+
+/**
+ * Calculate window size with breakpoint flags
+ */
+const calculateWindowSize = (): WindowSize => {
   if (typeof window === 'undefined') {
     return {
       width: 0,
@@ -44,44 +69,96 @@ const getInitialSize = (): WindowSize => {
   }
 
   const width = window.innerWidth;
+  const height = window.innerHeight;
+
   return {
     width,
-    height: window.innerHeight,
-    isXxlMobile: width <= 1440,
-    isXlMobile: width <= 1230,
-    isLgMobile: width <= 992,
-    isMdMobile: width <= 768,
-    isSmMobile: width <= 576,
-    isXsMobile: width <= 375,
+    height,
+    isXxlMobile: width <= BREAKPOINTS.xxl,
+    isXlMobile: width <= BREAKPOINTS.xl,
+    isLgMobile: width <= BREAKPOINTS.lg,
+    isMdMobile: width <= BREAKPOINTS.md,
+    isSmMobile: width <= BREAKPOINTS.sm,
+    isXsMobile: width <= BREAKPOINTS.xs,
   };
 };
 
-export const useWindowStore = create<WindowStore>((set) => ({
-  windowSize: getInitialSize(),
-  setWindowSize: (size) => set({ windowSize: size }),
-}));
+/**
+ * Initial state
+ */
+const initialState: WindowState = {
+  windowSize: calculateWindowSize(),
+};
 
-// Initialize window size and add resize listener
-if (typeof window !== 'undefined') {
-  const handleResize = () => {
-    const width = window.innerWidth;
-    useWindowStore.getState().setWindowSize({
-      width,
-      height: window.innerHeight,
-      isXxlMobile: width <= 1440,
-      isXlMobile: width <= 1230,
-      isLgMobile: width <= 992,
-      isMdMobile: width <= 768,
-      isSmMobile: width <= 576,
-      isXsMobile: width <= 375,
-    });
+/**
+ * Base store with all functionality
+ */
+const baseStore = create<WindowStore>()(
+  devtools(
+    set => ({
+      ...initialState,
+
+      actions: {
+        updateSize: () => set({ windowSize: calculateWindowSize() }),
+
+        resetStore: () => set(initialState),
+      },
+    }),
+    { name: 'WindowStore' },
+  ),
+);
+
+/**
+ * Window store with auto-generated selectors.
+ *
+ * @example
+ * // Access window size state
+ * const windowSize = useWindowStore.use.windowSize();
+ *
+ * // Use breakpoint flags
+ * if (windowSize.isMdMobile) {
+ *   // Render mobile layout
+ * }
+ *
+ * // Access actions (rarely needed - listener handles updates)
+ * const { updateSize } = useWindowStore.use.actions();
+ */
+export const useWindowStore = createSelectors(baseStore);
+
+// ============================================================================
+// Resize Listener Setup (Module-level, guarded for HMR)
+// ============================================================================
+
+let isListenerAttached = false;
+let resizeHandler: (() => void) | null = null;
+
+const attachResizeListener = () => {
+  if (isListenerAttached || typeof window === 'undefined') return;
+
+  resizeHandler = () => {
+    useWindowStore.getState().actions.updateSize();
   };
 
-  window.addEventListener('resize', handleResize);
-  handleResize(); // Initial call
+  window.addEventListener('resize', resizeHandler);
+  resizeHandler(); // Initial call
+  isListenerAttached = true;
+};
 
-  // Cleanup on unload
-  window.addEventListener('beforeunload', () => {
-    window.removeEventListener('resize', handleResize);
+const detachResizeListener = () => {
+  if (!isListenerAttached || !resizeHandler || typeof window === 'undefined')
+    return;
+
+  window.removeEventListener('resize', resizeHandler);
+  isListenerAttached = false;
+  resizeHandler = null;
+};
+
+// Auto-attach on module load
+attachResizeListener();
+
+// HMR cleanup
+if (import.meta.hot) {
+  import.meta.hot.dispose(() => {
+    detachResizeListener();
   });
 }

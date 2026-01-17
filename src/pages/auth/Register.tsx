@@ -3,10 +3,7 @@
  * Allows new users to create an account.
  */
 import { Link } from 'react-router-dom';
-import { useCreateForm } from '@/lib/forms/createForm';
-import { registerSchema, type RegisterFormData } from '@/schemas/authSchemas';
-import { useRegisterHandler } from '@/queries/auth/auth';
-import { Button } from '@/components/ui/button';
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -15,6 +12,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -32,7 +30,11 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { useCreateForm } from '@/lib/forms/createForm';
+import { useRegisterHandler } from '@/queries/auth/auth';
 import { routes } from '@/routes';
+import { type RegisterFormData, registerSchema } from '@/schemas/authSchemas';
+import styles from '@/styles/modules/auth.module.css';
 
 export const Register = () => {
   const { handleRegister } = useRegisterHandler();
@@ -54,8 +56,8 @@ export const Register = () => {
   });
 
   return (
-    <div className="flex min-h-screen flex-col p-4">
-      <div className="container mx-auto mb-6">
+    <div className={styles.page}>
+      <div className={styles.breadcrumbContainer}>
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -70,15 +72,19 @@ export const Register = () => {
           </BreadcrumbList>
         </Breadcrumb>
       </div>
-      <div className="flex flex-1 items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl">Create Account</CardTitle>
-            <CardDescription>Enter your information to create a new account</CardDescription>
+
+      <div className={styles.content}>
+        <Card className={styles.card}>
+          <CardHeader className={styles.cardHeader}>
+            <CardTitle className={styles.cardTitle}>Create Account</CardTitle>
+            <CardDescription>
+              Enter your information to create a new account
+            </CardDescription>
           </CardHeader>
+
           <CardContent>
             <Form {...form}>
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form onSubmit={handleSubmit} className={styles.form}>
                 <FormField
                   control={form.control}
                   name="name"
@@ -100,7 +106,11 @@ export const Register = () => {
                     <FormItem>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
-                        <Input type="email" placeholder="name@example.com" {...field} />
+                        <Input
+                          type="email"
+                          placeholder="name@example.com"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -114,7 +124,11 @@ export const Register = () => {
                     <FormItem>
                       <FormLabel>Password</FormLabel>
                       <FormControl>
-                        <Input type="password" placeholder="••••••••" {...field} />
+                        <Input
+                          type="password"
+                          placeholder="••••••••"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -128,26 +142,34 @@ export const Register = () => {
                     <FormItem>
                       <FormLabel>Confirm Password</FormLabel>
                       <FormControl>
-                        <Input type="password" placeholder="••••••••" {...field} />
+                        <Input
+                          type="password"
+                          placeholder="••••••••"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
 
-                <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
-                  {form.formState.isSubmitting ? 'Validating...' : 'Create Account'}
+                <Button
+                  type="submit"
+                  className={styles.submitButton}
+                  disabled={form.formState.isSubmitting}
+                >
+                  {form.formState.isSubmitting
+                    ? 'Validating...'
+                    : 'Create Account'}
                 </Button>
               </form>
             </Form>
           </CardContent>
-          <CardFooter className="flex flex-col space-y-4">
-            <div className="text-sm text-center text-muted-foreground">
+
+          <CardFooter className={styles.footer}>
+            <div className={styles.footerText}>
               Already have an account?{' '}
-              <Link
-                to={routes.login}
-                className="text-primary hover:underline underline-offset-4"
-              >
+              <Link to={routes.login} className={styles.primaryLink}>
                 Sign in
               </Link>
             </div>

@@ -1,19 +1,12 @@
-/**
- * Styleguide page showcasing all shadcn/ui components and design tokens.
- * Comprehensive reference for the design system and component library.
- */
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Heading, Text } from '@/components/ui/typography';
+import { HiOutlineClipboardDocument } from 'react-icons/hi2';
 import { StrategyForm } from '@/components/forms/StrategyForm';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import {
   AlertDialog,
@@ -37,7 +30,15 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
+import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import {
   Carousel,
   CarouselContent,
@@ -46,7 +47,11 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible';
 import {
   Command,
   CommandEmpty,
@@ -87,9 +92,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from '@/components/ui/hover-card';
 import { Input } from '@/components/ui/input';
-import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from '@/components/ui/input-otp';
 import { Label } from '@/components/ui/label';
 import {
   Menubar,
@@ -116,10 +129,18 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 import { Progress } from '@/components/ui/progress';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from '@/components/ui/resizable';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   Select,
@@ -153,9 +174,18 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import { Toggle } from '@/components/ui/toggle';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { HiOutlineClipboardDocument } from 'react-icons/hi2';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import { Heading, Text } from '@/components/ui/typography';
 
+/**
+ * Styleguide page showcasing all shadcn/ui components and design tokens.
+ * Comprehensive reference for the design system and component library.
+ */
 export const Styleguide = () => {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [sliderValue, setSliderValue] = useState([50]);
@@ -166,7 +196,8 @@ export const Styleguide = () => {
         <div className="space-y-4">
           <Heading level={1}>Design System Styleguide</Heading>
           <Text variant="lead">
-            A comprehensive reference for all shadcn/ui components and design tokens.
+            A comprehensive reference for all shadcn/ui components and design
+            tokens.
           </Text>
         </div>
 
@@ -176,7 +207,9 @@ export const Styleguide = () => {
           <Card>
             <CardHeader>
               <CardTitle>Color Palette</CardTitle>
-              <CardDescription>Primary color tokens used throughout the application</CardDescription>
+              <CardDescription>
+                Primary color tokens used throughout the application
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
@@ -268,7 +301,8 @@ export const Styleguide = () => {
                 <AccordionItem value="item-2">
                   <AccordionTrigger>Is it styled?</AccordionTrigger>
                   <AccordionContent>
-                    Yes. It comes with default styles that match the other components&apos; aesthetic.
+                    Yes. It comes with default styles that match the other
+                    components&apos; aesthetic.
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
@@ -282,11 +316,15 @@ export const Styleguide = () => {
           <div className="space-y-2">
             <Alert>
               <AlertTitle>Heads up!</AlertTitle>
-              <AlertDescription>This is a default alert message.</AlertDescription>
+              <AlertDescription>
+                This is a default alert message.
+              </AlertDescription>
             </Alert>
             <Alert variant="destructive">
               <AlertTitle>Error</AlertTitle>
-              <AlertDescription>This is a destructive alert message.</AlertDescription>
+              <AlertDescription>
+                This is a destructive alert message.
+              </AlertDescription>
             </Alert>
           </div>
         </section>
@@ -302,8 +340,8 @@ export const Styleguide = () => {
               <AlertDialogHeader>
                 <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete your account and remove
-                  your data from our servers.
+                  This action cannot be undone. This will permanently delete
+                  your account and remove your data from our servers.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
@@ -364,7 +402,12 @@ export const Styleguide = () => {
           <Heading level={2}>Calendar</Heading>
           <Card>
             <CardContent className="pt-6">
-              <Calendar mode="single" selected={date} onSelect={setDate} className="rounded-md border" />
+              <Calendar
+                mode="single"
+                selected={date}
+                onSelect={setDate}
+                className="rounded-md border"
+              />
             </CardContent>
           </Card>
         </section>
@@ -386,7 +429,9 @@ export const Styleguide = () => {
               <Button variant="outline">Toggle</Button>
             </CollapsibleTrigger>
             <CollapsibleContent>
-              <div className="rounded-md border p-4">This content is collapsible.</div>
+              <div className="rounded-md border p-4">
+                This content is collapsible.
+              </div>
             </CollapsibleContent>
           </Collapsible>
         </section>
@@ -437,7 +482,8 @@ export const Styleguide = () => {
               <DialogHeader>
                 <DialogTitle>Are you absolutely sure?</DialogTitle>
                 <DialogDescription>
-                  This action cannot be undone. This will permanently delete your account.
+                  This action cannot be undone. This will permanently delete
+                  your account.
                 </DialogDescription>
               </DialogHeader>
             </DialogContent>
@@ -454,7 +500,9 @@ export const Styleguide = () => {
             <DrawerContent>
               <DrawerHeader>
                 <DrawerTitle>Are you absolutely sure?</DrawerTitle>
-                <DrawerDescription>This action cannot be undone.</DrawerDescription>
+                <DrawerDescription>
+                  This action cannot be undone.
+                </DrawerDescription>
               </DrawerHeader>
               <DrawerFooter>
                 <Button>Submit</Button>
@@ -489,11 +537,13 @@ export const Styleguide = () => {
           <Card>
             <CardHeader>
               <CardTitle>Form Example</CardTitle>
-              <CardDescription>Example form using react-hook-form and Zod validation</CardDescription>
+              <CardDescription>
+                Example form using react-hook-form and Zod validation
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <StrategyForm
-                onSubmit={async (data) => {
+                onSubmit={async data => {
                   console.log('Form submitted:', data);
                 }}
               />
@@ -514,7 +564,7 @@ export const Styleguide = () => {
                   <AvatarFallback>VC</AvatarFallback>
                 </Avatar>
                 <div className="space-y-1">
-                  <Text className="text-sm font-semibold">@hovercard</Text>
+                  <Text className="font-semibold text-sm">@hovercard</Text>
                   <Text variant="small" className="text-muted-foreground">
                     The React Framework
                   </Text>
@@ -667,7 +717,10 @@ export const Styleguide = () => {
         {/* Resizable */}
         <section className="space-y-4">
           <Heading level={2}>Resizable</Heading>
-          <ResizablePanelGroup direction="horizontal" className="max-w-md rounded-lg border">
+          <ResizablePanelGroup
+            direction="horizontal"
+            className="max-w-md rounded-lg border"
+          >
             <ResizablePanel defaultSize={50}>
               <div className="flex h-[200px] items-center justify-center p-6">
                 <Text variant="small">Panel 1</Text>
@@ -687,7 +740,7 @@ export const Styleguide = () => {
           <Heading level={2}>Scroll Area</Heading>
           <ScrollArea className="h-32 w-48 rounded-md border p-4">
             <div className="space-y-2">
-              {Array.from({ length: 20 }).map((_, i) => (
+              {Array.from({ length: 20 }, (_, i) => (
                 <Text key={i} variant="small">
                   Item {i + 1}
                 </Text>
@@ -716,7 +769,7 @@ export const Styleguide = () => {
           <Heading level={2}>Separator</Heading>
           <div>
             <div className="space-y-1">
-              <Text className="text-sm font-medium">Radix Primitives</Text>
+              <Text className="font-medium text-sm">Radix Primitives</Text>
               <Text variant="small" className="text-muted-foreground">
                 An open-source UI component library.
               </Text>
@@ -742,7 +795,10 @@ export const Styleguide = () => {
             <SheetContent>
               <SheetHeader>
                 <SheetTitle>Edit profile</SheetTitle>
-                <SheetDescription>Make changes to your profile here. Click save when you&apos;re done.</SheetDescription>
+                <SheetDescription>
+                  Make changes to your profile here. Click save when you&apos;re
+                  done.
+                </SheetDescription>
               </SheetHeader>
             </SheetContent>
           </Sheet>
@@ -763,7 +819,13 @@ export const Styleguide = () => {
         {/* Slider */}
         <section className="space-y-4">
           <Heading level={2}>Slider</Heading>
-          <Slider value={sliderValue} onValueChange={setSliderValue} max={100} step={1} className="w-[60%]" />
+          <Slider
+            value={sliderValue}
+            onValueChange={setSliderValue}
+            max={100}
+            step={1}
+            className="w-[60%]"
+          />
           <Text variant="small">Value: {sliderValue[0]}</Text>
         </section>
 
@@ -822,7 +884,9 @@ export const Styleguide = () => {
               <Card>
                 <CardHeader>
                   <CardTitle>Account</CardTitle>
-                  <CardDescription>Make changes to your account here.</CardDescription>
+                  <CardDescription>
+                    Make changes to your account here.
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <Text>Account settings content</Text>
@@ -897,14 +961,16 @@ export const Styleguide = () => {
         <section className="space-y-4">
           <Heading level={2}>Carousel</Heading>
           <div className="w-full overflow-hidden px-4 md:px-0">
-            <Carousel className="w-full max-w-xs mx-auto">
+            <Carousel className="mx-auto w-full max-w-xs">
               <CarouselContent className="-ml-2 md:-ml-4">
-                {Array.from({ length: 5 }).map((_, index) => (
+                {Array.from({ length: 5 }, (_, index) => (
                   <CarouselItem key={index} className="pl-2 md:pl-4">
                     <div className="p-1">
                       <Card>
                         <CardContent className="flex aspect-square items-center justify-center p-4 md:p-6">
-                          <Text className="text-xl md:text-2xl font-semibold">{index + 1}</Text>
+                          <Text className="font-semibold text-xl md:text-2xl">
+                            {index + 1}
+                          </Text>
                         </CardContent>
                       </Card>
                     </div>
@@ -921,7 +987,7 @@ export const Styleguide = () => {
         <section className="space-y-4">
           <Heading level={2}>Aspect Ratio</Heading>
           <AspectRatio ratio={16 / 9} className="bg-muted">
-            <div className="flex items-center justify-center h-full">
+            <div className="flex h-full items-center justify-center">
               <Text>16:9 Aspect Ratio</Text>
             </div>
           </AspectRatio>

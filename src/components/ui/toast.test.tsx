@@ -2,9 +2,10 @@
  * Test file for toast component.
  * Basic rendering and interaction tests.
  */
-import { describe, it, expect } from 'vitest';
+
 import { render } from '@testing-library/react';
-import { Toast, ToastTitle, ToastDescription, ToastProvider } from './toast';
+import { describe, expect, it } from 'vitest';
+import { Toast, ToastDescription, ToastProvider, ToastTitle } from './toast';
 
 describe('Toast', () => {
   it('renders without crashing', () => {
@@ -14,7 +15,7 @@ describe('Toast', () => {
           <ToastTitle>Title</ToastTitle>
           <ToastDescription>Description</ToastDescription>
         </Toast>
-      </ToastProvider>
+      </ToastProvider>,
     );
     expect(container).toBeTruthy();
   });

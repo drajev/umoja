@@ -1,14 +1,15 @@
+import type { ComponentProps } from 'react';
+import { Toaster as Sonner } from 'sonner';
+import { useUIStore } from '@/stores/useUIStore';
+
+type ToasterProps = ComponentProps<typeof Sonner>;
+
 /**
  * Sonner toast component from shadcn/ui.
  * Wrapper around sonner library for toast notifications.
  */
-import { useUIStore } from '@/stores/useUIStore';
-import { Toaster as Sonner } from 'sonner';
-
-type ToasterProps = React.ComponentProps<typeof Sonner>;
-
 const Toaster = ({ ...props }: ToasterProps) => {
-  const theme = useUIStore((state) => state.theme);
+  const theme = useUIStore(state => state.theme);
 
   return (
     <Sonner

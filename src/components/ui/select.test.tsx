@@ -2,8 +2,9 @@
  * Test file for select component.
  * Basic rendering and interaction tests.
  */
-import { describe, it, expect } from 'vitest';
+
 import { render } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
 import { Select } from './select';
 
 describe('Select', () => {

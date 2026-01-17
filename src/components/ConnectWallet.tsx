@@ -16,8 +16,9 @@
  * - Add additional wallet information (chain, network, etc.)
  * - Add copy address functionality
  */
-import { useAccount, useBalance, useDisconnect, useConnect } from 'wagmi';
+
 import { HiOutlineClipboardDocument, HiOutlineWallet } from 'react-icons/hi2';
+import { useAccount, useBalance, useConnect, useDisconnect } from 'wagmi';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -28,21 +29,23 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Text } from '@/components/ui/typography';
-import { cn } from '@/lib/utils';
 import { useCopyToClipboard } from '@/hooks/useCopyToClipboard';
-import { useToastStore } from '@/stores/useToastStore';
-import { formatAddress } from '@/utils/format';
 import { useLanguage } from '@/hooks/useLanguage';
+import { cn } from '@/lib/utils';
+import { useToastStore } from '@/stores';
+import { formatAddress } from '@/utils/format';
 
 interface ConnectWalletProps {
   className?: string;
 }
 
-
 /**
  * Formats balance to show 4 decimal places.
  */
-const formatBalance = (balance: string | undefined, symbol: string | undefined): string => {
+const formatBalance = (
+  balance: string | undefined,
+  symbol: string | undefined,
+): string => {
   if (!balance) return '0.0000';
   const num = parseFloat(balance);
   return `${num.toFixed(4)} ${symbol || 'ETH'}`;
@@ -59,13 +62,13 @@ export const ConnectWallet = ({ className }: ConnectWalletProps) => {
   });
   const { connect, connectors, isPending } = useConnect();
   const { disconnect } = useDisconnect();
-  const { notifications } = useToastStore();
+  const { success, error } = useToastStore.use.actions();
   const copyToClipboard = useCopyToClipboard({
     onSuccess: () => {
-      notifications.success('Address copied to clipboard!');
+      success('Address copied to clipboard!');
     },
     onError: () => {
-      notifications.error('Failed to copy address');
+      error('Failed to copy address');
     },
   });
 
@@ -76,7 +79,7 @@ export const ConnectWallet = ({ className }: ConnectWalletProps) => {
   // Filter out duplicate connectors by ID to prevent React key warnings
   const uniqueConnectors = connectors.filter(
     (connector, index, self) =>
-      index === self.findIndex((c) => c.id === connector.id)
+      index === self.findIndex(c => c.id === connector.id),
   );
 
   if (!isConnected || !address) {
@@ -84,7 +87,11 @@ export const ConnectWallet = ({ className }: ConnectWalletProps) => {
       <div className={cn('flex items-center justify-start', className)}>
         <Dialog>
           <DialogTrigger asChild>
-            <Button variant="outline" className='w-full' disabled={uniqueConnectors.length === 0}>
+            <Button
+              variant="outline"
+              className="w-full"
+              disabled={uniqueConnectors.length === 0}
+            >
               <HiOutlineWallet className="h-4 w-4" />
               {t('wallet.connect')}
             </Button>
@@ -97,7 +104,7 @@ export const ConnectWallet = ({ className }: ConnectWalletProps) => {
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-2 py-4">
-              {uniqueConnectors.map((connector) => (
+              {uniqueConnectors.map(connector => (
                 <Button
                   key={connector.id}
                   variant="outline"
@@ -110,7 +117,10 @@ export const ConnectWallet = ({ className }: ConnectWalletProps) => {
                 </Button>
               ))}
               {uniqueConnectors.length === 0 && (
-                <Text variant="small" className="text-muted-foreground text-center py-4">
+                <Text
+                  variant="small"
+                  className="py-4 text-center text-muted-foreground"
+                >
                   No wallets available. Please install a wallet extension.
                 </Text>
               )}
@@ -123,27 +133,41 @@ export const ConnectWallet = ({ className }: ConnectWalletProps) => {
 
   return (
     <>
-      <div className="flex items-start flex-col justify-start gap-2">
+      <div className="flex flex-col items-start justify-start gap-2">
         <div className="flex items-center justify-start gap-2">
-          <Text className="text-sm font-medium">Chain:</Text>
-          <Text variant="small" className="font-medium text-muted-foreground">{chain?.name || 'Unknown Network'}</Text>
+          <Text className="font-medium text-sm">Chain:</Text>
+          <Text variant="small" className="font-medium text-muted-foreground">
+            {chain?.name || 'Unknown Network'}
+          </Text>
         </div>
         <div className="flex items-center justify-start gap-2">
-          <Text className="text-sm font-medium">Address:</Text>
-          <Text variant="small" className="font-medium text-muted-foreground" onClick={() => copyToClipboard(address)}>{formatAddress(address)}</Text>
-          <Button variant="ghost" size="icon" onClick={() => copyToClipboard(address)}>
+          <Text className="font-medium text-sm">Address:</Text>
+          <Text
+            variant="small"
+            className="font-medium text-muted-foreground"
+            onClick={() => copyToClipboard(address)}
+          >
+            {formatAddress(address)}
+          </Text>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => copyToClipboard(address)}
+          >
             <HiOutlineClipboardDocument className="h-4 w-4" />
           </Button>
         </div>
         <div className="flex items-center justify-start gap-2">
-          <Text className="text-sm font-medium">Balance:</Text>
-          <Text variant="small" className="font-medium text-muted-foreground">{formatBalance(balance?.formatted, balance?.symbol)}</Text>
+          <Text className="font-medium text-sm">Balance:</Text>
+          <Text variant="small" className="font-medium text-muted-foreground">
+            {formatBalance(balance?.formatted, balance?.symbol)}
+          </Text>
         </div>
       </div>
-      <Button variant="outline" className='w-full' onClick={() => disconnect()}>
+      <Button variant="outline" className="w-full" onClick={() => disconnect()}>
         <HiOutlineWallet className="h-4 w-4" />
         Disconnect Wallet
-      </Button >
+      </Button>
     </>
     // <Card className={cn('w-full', className)}>
     //   <CardHeader>

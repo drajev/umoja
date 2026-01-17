@@ -1,31 +1,73 @@
-/**
- * Language store using Zustand (converted from Context pattern).
- * Manages application language and i18n state.
- *
- * Usage:
- *   const { language, setLanguage } = useLanguageStore();
- *
- * To customize:
- * - Add more languages in constants/languages.ts
- * - Add language persistence if needed
- */
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import { type Language, DEFAULT_LANGUAGE } from '@/constants/languages';
+import { devtools, persist } from 'zustand/middleware';
 
-interface LanguageStore {
+import { DEFAULT_LANGUAGE, type Language } from '@/constants/languages';
+
+import { createSelectors } from './createSelectors';
+
+/**
+ * Language state interface - data only
+ */
+interface LanguageState {
   language: Language;
-  setLanguage: (lang: Language) => void;
 }
 
-export const useLanguageStore = create<LanguageStore>()(
-  persist(
-    (set) => ({
-      language: DEFAULT_LANGUAGE,
-      setLanguage: (lang) => set({ language: lang }),
-    }),
-    {
-      name: 'language-storage',
-    },
+/**
+ * Language actions interface - all methods grouped together
+ */
+interface LanguageActions {
+  setLanguage: (lang: Language) => void;
+  resetStore: () => void;
+}
+
+/**
+ * Complete store interface
+ */
+interface LanguageStore extends LanguageState {
+  actions: LanguageActions;
+}
+
+/**
+ * Initial state - easily resettable
+ */
+const initialState: LanguageState = {
+  language: DEFAULT_LANGUAGE,
+};
+
+/**
+ * Base store with all functionality
+ */
+const baseStore = create<LanguageStore>()(
+  devtools(
+    persist(
+      set => ({
+        ...initialState,
+
+        actions: {
+          setLanguage: language => set({ language }),
+
+          resetStore: () => set(initialState),
+        },
+      }),
+      {
+        name: 'language-storage',
+      },
+    ),
+    { name: 'LanguageStore' },
   ),
 );
+
+/**
+ * Language store with auto-generated selectors.
+ *
+ * @example
+ * // Access state with individual selectors
+ * const language = useLanguageStore.use.language();
+ *
+ * // Access actions
+ * const { setLanguage } = useLanguageStore.use.actions();
+ *
+ * // Change language
+ * actions.setLanguage('es');
+ */
+export const useLanguageStore = createSelectors(baseStore);

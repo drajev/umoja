@@ -1,16 +1,16 @@
+import { act, renderHook } from '@testing-library/react';
+import { beforeEach, describe, expect, it } from 'vitest';
+
+import { type User, useAuthStore } from '@/stores';
+
 /**
  * Tests for useAuthStore.
- * Tests state management only - API calls are tested in queries/auth/auth.test.ts
+ * Tests state management with the new actions pattern.
  */
-import { describe, it, expect, beforeEach } from 'vitest';
-import { renderHook, act } from '@testing-library/react';
-import { useAuthStore } from '@/stores/useAuthStore';
-import type { User } from '@/stores/useAuthStore';
-
 describe('useAuthStore', () => {
   beforeEach(() => {
     // Reset store to initial state before each test
-    useAuthStore.getState().logout();
+    useAuthStore.getState().actions.resetStore();
   });
 
   it('initializes with empty state', () => {
@@ -30,10 +30,11 @@ describe('useAuthStore', () => {
     };
 
     act(() => {
-      result.current.setUser(mockUser);
+      result.current.actions.setUser(mockUser);
     });
 
     expect(result.current.user).toEqual(mockUser);
+    expect(result.current.isAuthenticated).toBe(true);
   });
 
   it('sets token correctly', () => {
@@ -41,20 +42,29 @@ describe('useAuthStore', () => {
     const mockToken = 'test-token-123';
 
     act(() => {
-      result.current.setToken(mockToken);
+      result.current.actions.setToken(mockToken);
     });
 
     expect(result.current.token).toBe(mockToken);
   });
 
-  it('sets isAuthenticated correctly', () => {
+  it('sets credentials correctly', () => {
     const { result } = renderHook(() => useAuthStore());
+    const mockUser: User = {
+      id: '1',
+      email: 'test@example.com',
+      name: 'Test User',
+    };
+    const mockToken = 'test-token-123';
 
     act(() => {
-      result.current.setIsAuthenticated(true);
+      result.current.actions.setCredentials(mockUser, mockToken);
     });
 
+    expect(result.current.user).toEqual(mockUser);
+    expect(result.current.token).toBe(mockToken);
     expect(result.current.isAuthenticated).toBe(true);
+    expect(result.current.error).toBeNull();
   });
 
   it('sets error correctly', () => {
@@ -62,7 +72,7 @@ describe('useAuthStore', () => {
     const errorMessage = 'Test error';
 
     act(() => {
-      result.current.setError(errorMessage);
+      result.current.actions.setError(errorMessage);
     });
 
     expect(result.current.error).toBe(errorMessage);
@@ -72,8 +82,8 @@ describe('useAuthStore', () => {
     const { result } = renderHook(() => useAuthStore());
 
     act(() => {
-      result.current.setError('Test error');
-      result.current.clearError();
+      result.current.actions.setError('Test error');
+      result.current.actions.clearError();
     });
 
     expect(result.current.error).toBeNull();
@@ -88,10 +98,8 @@ describe('useAuthStore', () => {
     };
 
     act(() => {
-      result.current.setUser(mockUser);
-      result.current.setToken('test-token');
-      result.current.setIsAuthenticated(true);
-      result.current.setError('Some error');
+      result.current.actions.setCredentials(mockUser, 'test-token');
+      result.current.actions.setError('Some error');
     });
 
     expect(result.current.user).not.toBeNull();
@@ -99,12 +107,35 @@ describe('useAuthStore', () => {
     expect(result.current.isAuthenticated).toBe(true);
 
     act(() => {
-      result.current.logout();
+      result.current.actions.logout();
     });
 
     expect(result.current.user).toBeNull();
     expect(result.current.token).toBeNull();
     expect(result.current.isAuthenticated).toBe(false);
     expect(result.current.error).toBeNull();
+  });
+
+  it('uses auto-generated selectors correctly', () => {
+    const mockUser: User = {
+      id: '1',
+      email: 'test@example.com',
+      name: 'Test User',
+    };
+
+    act(() => {
+      useAuthStore.getState().actions.setCredentials(mockUser, 'test-token');
+    });
+
+    // Test individual selectors
+    const { result: userResult } = renderHook(() => useAuthStore.use.user());
+    const { result: tokenResult } = renderHook(() => useAuthStore.use.token());
+    const { result: authResult } = renderHook(() =>
+      useAuthStore.use.isAuthenticated(),
+    );
+
+    expect(userResult.current).toEqual(mockUser);
+    expect(tokenResult.current).toBe('test-token');
+    expect(authResult.current).toBe(true);
   });
 });

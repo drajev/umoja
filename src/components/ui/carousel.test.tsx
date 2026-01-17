@@ -4,7 +4,7 @@
  * Note: Carousel requires embla-carousel which needs proper DOM setup.
  * Skipping full render test due to embla-carousel dependency requirements.
  */
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 describe('Carousel', () => {
   it.skip('renders without crashing - requires embla-carousel DOM setup', () => {
