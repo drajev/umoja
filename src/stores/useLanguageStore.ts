@@ -1,3 +1,7 @@
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import { type Language, DEFAULT_LANGUAGE } from "@/constants/languages";
+
 /**
  * Language store using Zustand (converted from Context pattern).
  * Manages application language and i18n state.
@@ -9,10 +13,6 @@
  * - Add more languages in constants/languages.ts
  * - Add language persistence if needed
  */
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import { type Language, DEFAULT_LANGUAGE } from '@/constants/languages';
-
 interface LanguageStore {
   language: Language;
   setLanguage: (lang: Language) => void;
@@ -25,7 +25,7 @@ export const useLanguageStore = create<LanguageStore>()(
       setLanguage: (lang) => set({ language: lang }),
     }),
     {
-      name: 'language-storage',
+      name: "language-storage",
     },
   ),
 );

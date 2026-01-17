@@ -1,3 +1,6 @@
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+
 /**
  * Zustand store for authentication state management only.
  * Handles user state, token, and authentication status.
@@ -6,9 +9,6 @@
  * Usage:
  *   const { user, isAuthenticated, logout } = useAuthStore();
  */
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-
 export interface User {
   id: string;
   email: string;
@@ -73,7 +73,7 @@ export const useAuthStore = create<AuthStore>()(
       },
     }),
     {
-      name: 'auth-storage',
+      name: "auth-storage",
       partialize: (state) => ({
         user: state.user,
         token: state.token,

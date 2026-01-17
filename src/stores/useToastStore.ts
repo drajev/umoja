@@ -1,3 +1,6 @@
+import { create } from "zustand";
+import { toast as sonnerToast } from "sonner";
+
 /**
  * Toast notification store using Zustand with Sonner integration.
  * Manages toast notifications with success, error, warning, and info types.
@@ -11,15 +14,24 @@
  * - Add custom toast options
  * - Modify toast duration
  */
-import { create } from 'zustand';
-import { toast as sonnerToast } from 'sonner';
-
 interface ToastStore {
   notifications: {
-    success: (message: string, options?: { title?: string; duration?: number }) => void;
-    error: (message: string, options?: { title?: string; duration?: number }) => void;
-    warning: (message: string, options?: { title?: string; duration?: number }) => void;
-    info: (message: string, options?: { title?: string; duration?: number }) => void;
+    success: (
+      message: string,
+      options?: { title?: string; duration?: number },
+    ) => void;
+    error: (
+      message: string,
+      options?: { title?: string; duration?: number },
+    ) => void;
+    warning: (
+      message: string,
+      options?: { title?: string; duration?: number },
+    ) => void;
+    info: (
+      message: string,
+      options?: { title?: string; duration?: number },
+    ) => void;
   };
 }
 

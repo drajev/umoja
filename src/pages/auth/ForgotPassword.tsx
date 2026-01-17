@@ -1,13 +1,12 @@
-/**
- * Forgot Password page component.
- * Allows users to request a password reset email.
- */
-import { Link } from 'react-router-dom';
-import { useState } from 'react';
-import { useCreateForm } from '@/lib/forms/createForm';
-import { forgotPasswordSchema, type ForgotPasswordFormData } from '@/schemas/authSchemas';
-import { useForgotPasswordHandler } from '@/queries/auth/auth';
-import { Button } from '@/components/ui/button';
+import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useCreateForm } from "@/lib/forms/createForm";
+import {
+  forgotPasswordSchema,
+  type ForgotPasswordFormData,
+} from "@/schemas/authSchemas";
+import { useForgotPasswordHandler } from "@/queries/auth/auth";
+import { Button } from "@/components/ui/button";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -15,7 +14,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
+} from "@/components/ui/breadcrumb";
 import {
   Card,
   CardContent,
@@ -23,7 +22,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -31,24 +30,30 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { routes } from '@/routes';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { routes } from "@/routes";
 
+/**
+ * Forgot Password page component.
+ * Allows users to request a password reset email.
+ */
 export const ForgotPassword = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const { handleForgotPassword } = useForgotPasswordHandler();
   const form = useCreateForm(forgotPasswordSchema, {
     defaultValues: {
-      email: '',
+      email: "",
     },
   });
 
-  const handleSubmit = form.handleSubmit(async (data: ForgotPasswordFormData) => {
-    await handleForgotPassword({ email: data.email });
-    setIsSuccess(true);
-    form.reset();
-  });
+  const handleSubmit = form.handleSubmit(
+    async (data: ForgotPasswordFormData) => {
+      await handleForgotPassword({ email: data.email });
+      setIsSuccess(true);
+      form.reset();
+    },
+  );
 
   const breadcrumb = (
     <div className="container mx-auto mb-6">
@@ -88,7 +93,8 @@ export const ForgotPassword = () => {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
-                If an account exists with that email, you will receive a password reset link.
+                If an account exists with that email, you will receive a
+                password reset link.
               </p>
             </CardContent>
             <CardFooter className="flex flex-col space-y-4">
@@ -125,15 +131,25 @@ export const ForgotPassword = () => {
                     <FormItem>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
-                        <Input type="email" placeholder="name@example.com" {...field} />
+                        <Input
+                          type="email"
+                          placeholder="name@example.com"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
 
-                <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
-                  {form.formState.isSubmitting ? 'Validating...' : 'Send Reset Link'}
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={form.formState.isSubmitting}
+                >
+                  {form.formState.isSubmitting
+                    ? "Validating..."
+                    : "Send Reset Link"}
                 </Button>
               </form>
             </Form>

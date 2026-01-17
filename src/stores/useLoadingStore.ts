@@ -1,3 +1,5 @@
+import { create } from "zustand";
+
 /**
  * Zustand store for managing global loading states.
  * Provides a centralized way to manage loading states across the application.
@@ -8,8 +10,6 @@
  *   // ... async operation
  *   setLoading('fetching-data', false);
  */
-import { create } from 'zustand';
-
 interface LoadingState {
   [key: string]: boolean;
 }

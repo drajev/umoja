@@ -1,3 +1,6 @@
+import { describe, it, expect, beforeEach } from "vitest";
+import { useUIStore } from "@/stores/useUIStore";
+
 /**
  * Example test for Zustand store.
  * Demonstrates testing store state and actions.
@@ -7,20 +10,17 @@
  * - Test edge cases
  * - Test persistence behavior
  */
-import { describe, it, expect, beforeEach } from 'vitest';
-import { useUIStore } from '@/stores/useUIStore';
-
-describe('useUIStore', () => {
+describe("useUIStore", () => {
   beforeEach(() => {
     // Reset store state before each test
     useUIStore.setState({
       sidebarOpen: false,
-      theme: 'light',
+      theme: "light",
       popupContent: null,
     });
   });
 
-  it('should toggle sidebar', () => {
+  it("should toggle sidebar", () => {
     const { sidebarOpen, toggleSidebar } = useUIStore.getState();
 
     expect(sidebarOpen).toBe(false);
@@ -32,7 +32,7 @@ describe('useUIStore', () => {
     expect(useUIStore.getState().sidebarOpen).toBe(false);
   });
 
-  it('should set sidebar open state', () => {
+  it("should set sidebar open state", () => {
     const { setSidebarOpen } = useUIStore.getState();
 
     setSidebarOpen(true);
@@ -42,34 +42,34 @@ describe('useUIStore', () => {
     expect(useUIStore.getState().sidebarOpen).toBe(false);
   });
 
-  it('should toggle theme', () => {
+  it("should toggle theme", () => {
     const { theme, toggleTheme } = useUIStore.getState();
 
-    expect(theme).toBe('light');
+    expect(theme).toBe("light");
 
     toggleTheme();
-    expect(useUIStore.getState().theme).toBe('dark');
+    expect(useUIStore.getState().theme).toBe("dark");
 
     toggleTheme();
-    expect(useUIStore.getState().theme).toBe('light');
+    expect(useUIStore.getState().theme).toBe("light");
   });
 
-  it('should set theme', () => {
+  it("should set theme", () => {
     const { setTheme } = useUIStore.getState();
 
-    setTheme('dark');
-    expect(useUIStore.getState().theme).toBe('dark');
+    setTheme("dark");
+    expect(useUIStore.getState().theme).toBe("dark");
 
-    setTheme('light');
-    expect(useUIStore.getState().theme).toBe('light');
+    setTheme("light");
+    expect(useUIStore.getState().theme).toBe("light");
   });
 
-  it('should set and clear popup', () => {
+  it("should set and clear popup", () => {
     const { setPopup, clearPopup } = useUIStore.getState();
 
     expect(useUIStore.getState().popupContent).toBeNull();
 
-    const testContent = 'Test Content';
+    const testContent = "Test Content";
     setPopup(testContent);
     expect(useUIStore.getState().popupContent).toBe(testContent);
 

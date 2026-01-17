@@ -1,13 +1,12 @@
-/**
- * Reset Password page component.
- * Allows users to reset their password using a reset token.
- */
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { useCreateForm } from '@/lib/forms/createForm';
-import { resetPasswordSchema, type ResetPasswordFormData } from '@/schemas/authSchemas';
-import { useResetPasswordHandler } from '@/queries/auth/auth';
-import { Button } from '@/components/ui/button';
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { useCreateForm } from "@/lib/forms/createForm";
+import {
+  resetPasswordSchema,
+  type ResetPasswordFormData,
+} from "@/schemas/authSchemas";
+import { useResetPasswordHandler } from "@/queries/auth/auth";
+import { Button } from "@/components/ui/button";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -15,7 +14,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
+} from "@/components/ui/breadcrumb";
 import {
   Card,
   CardContent,
@@ -23,7 +22,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -31,21 +30,26 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { routes } from '@/routes';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { routes } from "@/routes";
 
+/**
+ * Reset Password page component.
+ * Allows users to reset their password using a reset token.
+ */
 export const ResetPassword = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [isSuccess, setIsSuccess] = useState(false);
-  const token = searchParams.get('token') || '';
+  const redirectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const token = searchParams.get("token") || "";
   const { handleResetPassword } = useResetPasswordHandler();
   const form = useCreateForm(resetPasswordSchema, {
     defaultValues: {
-      password: '',
-      confirmPassword: '',
+      password: "",
+      confirmPassword: "",
     },
   });
 
@@ -55,17 +59,30 @@ export const ResetPassword = () => {
     }
   }, [token, navigate]);
 
-  const handleSubmit = form.handleSubmit(async (data: ResetPasswordFormData) => {
-    await handleResetPassword({
-      token,
-      password: data.password,
-    });
-    setIsSuccess(true);
-    form.reset();
-    setTimeout(() => {
-      navigate(routes.login);
-    }, 2000);
-  });
+  const handleSubmit = form.handleSubmit(
+    async (data: ResetPasswordFormData) => {
+      await handleResetPassword({
+        token,
+        password: data.password,
+      });
+      setIsSuccess(true);
+      form.reset();
+      if (redirectTimeoutRef.current) {
+        clearTimeout(redirectTimeoutRef.current);
+      }
+      redirectTimeoutRef.current = setTimeout(() => {
+        navigate(routes.login);
+      }, 2000);
+    },
+  );
+
+  useEffect(() => {
+    return () => {
+      if (redirectTimeoutRef.current) {
+        clearTimeout(redirectTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const breadcrumb = (
     <div className="container mx-auto mb-6">
@@ -99,7 +116,9 @@ export const ResetPassword = () => {
           <Card className="w-full max-w-md">
             <CardHeader className="space-y-1">
               <CardTitle className="text-2xl">Password Reset</CardTitle>
-              <CardDescription>Your password has been reset successfully</CardDescription>
+              <CardDescription>
+                Your password has been reset successfully
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <Alert>
@@ -138,7 +157,11 @@ export const ResetPassword = () => {
                     <FormItem>
                       <FormLabel>New Password</FormLabel>
                       <FormControl>
-                        <Input type="password" placeholder="••••••••" {...field} />
+                        <Input
+                          type="password"
+                          placeholder="••••••••"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -152,15 +175,25 @@ export const ResetPassword = () => {
                     <FormItem>
                       <FormLabel>Confirm New Password</FormLabel>
                       <FormControl>
-                        <Input type="password" placeholder="••••••••" {...field} />
+                        <Input
+                          type="password"
+                          placeholder="••••••••"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
 
-                <Button type="submit" className="w-full" disabled={form.formState.isSubmitting || !token}>
-                  {form.formState.isSubmitting ? 'Validating...' : 'Reset Password'}
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={form.formState.isSubmitting || !token}
+                >
+                  {form.formState.isSubmitting
+                    ? "Validating..."
+                    : "Reset Password"}
                 </Button>
               </form>
             </Form>

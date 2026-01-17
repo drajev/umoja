@@ -1,12 +1,8 @@
-/**
- * Register page component.
- * Allows new users to create an account.
- */
-import { Link } from 'react-router-dom';
-import { useCreateForm } from '@/lib/forms/createForm';
-import { registerSchema, type RegisterFormData } from '@/schemas/authSchemas';
-import { useRegisterHandler } from '@/queries/auth/auth';
-import { Button } from '@/components/ui/button';
+import { Link } from "react-router-dom";
+import { useCreateForm } from "@/lib/forms/createForm";
+import { registerSchema, type RegisterFormData } from "@/schemas/authSchemas";
+import { useRegisterHandler } from "@/queries/auth/auth";
+import { Button } from "@/components/ui/button";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -14,7 +10,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
+} from "@/components/ui/breadcrumb";
 import {
   Card,
   CardContent,
@@ -22,7 +18,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -30,18 +26,22 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { routes } from '@/routes';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { routes } from "@/routes";
 
+/**
+ * Register page component.
+ * Allows new users to create an account.
+ */
 export const Register = () => {
   const { handleRegister } = useRegisterHandler();
   const form = useCreateForm(registerSchema, {
     defaultValues: {
-      name: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
     },
   });
 
@@ -74,7 +74,9 @@ export const Register = () => {
         <Card className="w-full max-w-md">
           <CardHeader className="space-y-1">
             <CardTitle className="text-2xl">Create Account</CardTitle>
-            <CardDescription>Enter your information to create a new account</CardDescription>
+            <CardDescription>
+              Enter your information to create a new account
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <Form {...form}>
@@ -100,7 +102,11 @@ export const Register = () => {
                     <FormItem>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
-                        <Input type="email" placeholder="name@example.com" {...field} />
+                        <Input
+                          type="email"
+                          placeholder="name@example.com"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -114,7 +120,11 @@ export const Register = () => {
                     <FormItem>
                       <FormLabel>Password</FormLabel>
                       <FormControl>
-                        <Input type="password" placeholder="••••••••" {...field} />
+                        <Input
+                          type="password"
+                          placeholder="••••••••"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -128,22 +138,32 @@ export const Register = () => {
                     <FormItem>
                       <FormLabel>Confirm Password</FormLabel>
                       <FormControl>
-                        <Input type="password" placeholder="••••••••" {...field} />
+                        <Input
+                          type="password"
+                          placeholder="••••••••"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
 
-                <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
-                  {form.formState.isSubmitting ? 'Validating...' : 'Create Account'}
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={form.formState.isSubmitting}
+                >
+                  {form.formState.isSubmitting
+                    ? "Validating..."
+                    : "Create Account"}
                 </Button>
               </form>
             </Form>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
             <div className="text-sm text-center text-muted-foreground">
-              Already have an account?{' '}
+              Already have an account?{" "}
               <Link
                 to={routes.login}
                 className="text-primary hover:underline underline-offset-4"

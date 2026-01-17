@@ -1,3 +1,11 @@
+import { useCallback, useRef, useEffect, useEffectEvent } from "react";
+import { debounce } from "@/utils/debounce";
+
+interface UseDebounceProps<T extends (...args: never[]) => unknown> {
+  callback: T;
+  delay?: number;
+}
+
 /**
  * React hook for debouncing function calls.
  * Wraps the debounce utility for use in React components.
@@ -13,23 +21,21 @@
  * @param delay - Delay in milliseconds (default: 300)
  * @returns Object with debouncedCallback function
  */
-import { useCallback, useRef, useEffect } from 'react';
-import { debounce } from '@/utils/debounce';
-
-interface UseDebounceProps<T extends (...args: never[]) => unknown> {
-  callback: T;
-  delay?: number;
-}
-
 export const useDebounce = <T extends (...args: never[]) => unknown>({
   callback,
   delay = 300,
 }: UseDebounceProps<T>) => {
-  const debouncedFnRef = useRef<ReturnType<typeof debounce<T>> | undefined>(undefined);
+  const debouncedFnRef = useRef<ReturnType<typeof debounce<T>> | undefined>(
+    undefined,
+  );
+
+  const stableCallback = useEffectEvent((...args: Parameters<T>) => {
+    callback(...args);
+  });
 
   useEffect(() => {
     debouncedFnRef.current = debounce((...args: Parameters<T>) => {
-      callback(...args);
+      stableCallback(...args);
     }, delay);
 
     return () => {
@@ -37,14 +43,11 @@ export const useDebounce = <T extends (...args: never[]) => unknown>({
         debouncedFnRef.current.cancel?.();
       }
     };
-  }, [callback, delay]);
+  }, [delay, stableCallback]);
 
-  const debouncedCallback = useCallback(
-    (...args: Parameters<T>) => {
-      debouncedFnRef.current?.(...args);
-    },
-    [],
-  );
+  const debouncedCallback = useCallback((...args: Parameters<T>) => {
+    debouncedFnRef.current?.(...args);
+  }, []);
 
   return { debouncedCallback };
 };

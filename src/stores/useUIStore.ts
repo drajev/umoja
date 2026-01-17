@@ -1,3 +1,7 @@
+import type { ReactNode } from "react";
+import { create } from "zustand";
+import { persist, devtools } from "zustand/middleware";
+
 /**
  * UI state store using Zustand with persistence and devtools.
  * Manages global UI state like sidebar, theme, and popups.
@@ -10,9 +14,6 @@
  * - Modify persistence key
  * - Add middleware for additional functionality
  */
-import { create } from 'zustand';
-import { persist, devtools } from 'zustand/middleware';
-
 interface UIState {
   // Sidebar state
   sidebarOpen: boolean;
@@ -20,13 +21,13 @@ interface UIState {
   setSidebarOpen: (open: boolean) => void;
 
   // Theme state
-  theme: 'light' | 'dark';
-  setTheme: (theme: 'light' | 'dark') => void;
+  theme: "light" | "dark";
+  setTheme: (theme: "light" | "dark") => void;
   toggleTheme: () => void;
 
   // Popup state (similar to modal but following example project pattern)
-  popupContent: React.ReactNode | null;
-  setPopup: (content: React.ReactNode) => void;
+  popupContent: ReactNode | null;
+  setPopup: (content: ReactNode) => void;
   clearPopup: () => void;
 }
 
@@ -41,15 +42,16 @@ export const useUIStore = create<UIState>()(
       (set) => ({
         // Sidebar
         sidebarOpen: false,
-        toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
+        toggleSidebar: () =>
+          set((state) => ({ sidebarOpen: !state.sidebarOpen })),
         setSidebarOpen: (open) => set({ sidebarOpen: open }),
 
         // Theme
-        theme: 'light',
+        theme: "light",
         setTheme: (theme) => set({ theme }),
         toggleTheme: () =>
           set((state) => ({
-            theme: state.theme === 'light' ? 'dark' : 'light',
+            theme: state.theme === "light" ? "dark" : "light",
           })),
 
         // Popup (replaces modal for consistency with example project)
@@ -58,13 +60,13 @@ export const useUIStore = create<UIState>()(
         clearPopup: () => set({ popupContent: null }),
       }),
       {
-        name: 'ui-storage',
+        name: "ui-storage",
         partialize: (state) => ({
           sidebarOpen: state.sidebarOpen,
           theme: state.theme,
         }),
       },
     ),
-    { name: 'UIStore' },
+    { name: "UIStore" },
   ),
 );

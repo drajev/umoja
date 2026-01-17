@@ -1,3 +1,5 @@
+import { create } from "zustand";
+
 /**
  * Window size store for responsive breakpoints.
  * Tracks window dimensions and provides mobile breakpoint flags.
@@ -11,8 +13,6 @@
  * - Add more breakpoints
  * - Add orientation tracking
  */
-import { create } from 'zustand';
-
 interface WindowSize {
   width: number;
   height: number;
@@ -30,7 +30,7 @@ interface WindowStore {
 }
 
 const getInitialSize = (): WindowSize => {
-  if (typeof window === 'undefined') {
+  if (typeof window === "undefined") {
     return {
       width: 0,
       height: 0,
@@ -61,9 +61,14 @@ export const useWindowStore = create<WindowStore>((set) => ({
   setWindowSize: (size) => set({ windowSize: size }),
 }));
 
-// Initialize window size and add resize listener
-if (typeof window !== 'undefined') {
-  const handleResize = () => {
+// Initialize window size and add resize listener (guarded for HMR/dev)
+let isListenerAttached = false;
+let handleResize: (() => void) | null = null;
+
+const attachResizeListener = () => {
+  if (isListenerAttached || typeof window === "undefined") return;
+
+  handleResize = () => {
     const width = window.innerWidth;
     useWindowStore.getState().setWindowSize({
       width,
@@ -77,11 +82,23 @@ if (typeof window !== 'undefined') {
     });
   };
 
-  window.addEventListener('resize', handleResize);
+  window.addEventListener("resize", handleResize);
   handleResize(); // Initial call
+  isListenerAttached = true;
+};
 
-  // Cleanup on unload
-  window.addEventListener('beforeunload', () => {
-    window.removeEventListener('resize', handleResize);
+const detachResizeListener = () => {
+  if (!isListenerAttached || !handleResize || typeof window === "undefined")
+    return;
+  window.removeEventListener("resize", handleResize);
+  isListenerAttached = false;
+  handleResize = null;
+};
+
+attachResizeListener();
+
+if (import.meta.hot) {
+  import.meta.hot.dispose(() => {
+    detachResizeListener();
   });
 }

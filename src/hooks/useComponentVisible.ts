@@ -1,3 +1,5 @@
+import { useState, useEffect, useRef, useEffectEvent } from "react";
+
 /**
  * Hook for detecting clicks outside a component.
  * Useful for dropdowns, modals, and popover components.
@@ -10,28 +12,27 @@
  * @param isDoubleClick - Use double-click instead of single click
  * @returns Object with ref, isComponentVisible state, and setIsComponentVisible setter
  */
-import { useState, useEffect, useRef } from 'react';
-
 export const useComponentVisible = (
   initialIsVisible: boolean,
   isDoubleClick?: boolean,
 ) => {
-  const [isComponentVisible, setIsComponentVisible] = useState(initialIsVisible);
+  const [isComponentVisible, setIsComponentVisible] =
+    useState(initialIsVisible);
   const ref = useRef<HTMLDivElement>(null);
 
-  const handleClickOutside = (event: MouseEvent) => {
+  const handleClickOutside = useEffectEvent((event: MouseEvent) => {
     if (ref.current && !ref.current.contains(event.target as Node)) {
       setIsComponentVisible(false);
     }
-  };
+  });
 
   useEffect(() => {
-    const eventType = isDoubleClick ? 'dblclick' : 'click';
+    const eventType = isDoubleClick ? "dblclick" : "click";
     document.addEventListener(eventType, handleClickOutside, true);
     return () => {
       document.removeEventListener(eventType, handleClickOutside, true);
     };
-  }, [isDoubleClick]);
+  }, [isDoubleClick, handleClickOutside]);
 
   return { ref, isComponentVisible, setIsComponentVisible };
 };

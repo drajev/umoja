@@ -1,3 +1,5 @@
+import { useQuery } from "@tanstack/react-query";
+
 /**
  * Example query file demonstrating TanStack Query patterns.
  * Shows how to structure API queries following the example project patterns.
@@ -10,9 +12,7 @@
  * - Add more query hooks
  * - Add mutation hooks
  */
-import { useQuery } from '@tanstack/react-query';
-
-export const EXAMPLE_QUERY_KEY = 'example';
+export const EXAMPLE_QUERY_KEY = "example";
 
 interface ExampleData {
   id: string;
@@ -24,7 +24,7 @@ const fetchExampleData = async (): Promise<ExampleData> => {
   // Replace with actual API call
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve({ id: '1', name: 'Example' });
+      resolve({ id: "1", name: "Example" });
     }, 1000);
   });
 };
@@ -36,7 +36,7 @@ export const useExampleQuery = () => {
       try {
         return await fetchExampleData();
       } catch (error) {
-        console.error('Failed to fetch example data:', error);
+        console.error("Failed to fetch example data:", error);
         throw error;
       }
     },

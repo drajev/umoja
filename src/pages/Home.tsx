@@ -1,12 +1,3 @@
-/**
- * Home page component.
- * Main landing page of the application.
- *
- * To customize:
- * - Add your main content and layout
- * - Link to other pages or sections
- * - Add hero section, features, etc.
- */
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -19,9 +10,18 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Heading, Text } from "@/components/ui/typography";
-import LogoIcon from '@/assets/logo.svg?react';
+import LogoIcon from "@/assets/logo.svg?react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 
+/**
+ * Home page component.
+ * Main landing page of the application.
+ *
+ * To customize:
+ * - Add your main content and layout
+ * - Link to other pages or sections
+ * - Add hero section, features, etc.
+ */
 export const Home = () => {
   const [size, setSize] = useState(200);
 
@@ -36,10 +36,17 @@ export const Home = () => {
           <Heading level={1}>Welcome to umoja</Heading>
           <button onClick={toggleSize}>toggle size</button>
 
-          <AspectRatio ratio={5} className="w-full h-full absolute top-0 left-0">
+          <AspectRatio
+            ratio={5}
+            className="w-full h-full absolute top-0 left-0"
+          >
             <div className="flex flex-col items-center justify-center h-full">
               <motion.div layout style={{ width: size, height: size }}>
-                <LogoIcon width="100%" height="100%" className="text-foreground" />
+                <LogoIcon
+                  width="100%"
+                  height="100%"
+                  className="text-foreground"
+                />
               </motion.div>
             </div>
           </AspectRatio>
@@ -69,7 +76,7 @@ export const Home = () => {
             </div>
           </CardContent>
         </Card>
-      </div >
-    </div >
+      </div>
+    </div>
   );
 };
