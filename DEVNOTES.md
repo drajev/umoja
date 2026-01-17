@@ -1,12 +1,15 @@
 # Developer Notes
 
-This document contains development guidelines, patterns, and best practices for the umoja project.
+This document contains development guidelines, patterns, and best practices for the Umoja project.
 
 ## Table of Contents
 
 - [Running Locally](#running-locally)
+- [Project Architecture](#project-architecture)
 - [Adding New Components](#adding-new-components)
 - [Adding New Hooks](#adding-new-hooks)
+- [State Management](#state-management)
+- [Styling with CSS Modules](#styling-with-css-modules)
 - [Testing Guidance](#testing-guidance)
 - [Environment Variables](#environment-variables)
 - [Code Style](#code-style)
@@ -15,18 +18,24 @@ This document contains development guidelines, patterns, and best practices for 
 
 ### Prerequisites
 
-- Node.js 18+
-- pnpm (recommended) or npm/yarn
+- **Bun** (recommended) - Fast JavaScript runtime & package manager
+- Node.js 18+ (fallback)
 
 ### Setup
 
-1. **Install dependencies:**
+1. **Install Bun** (if not already installed):
 
    ```bash
-   pnpm install
+   curl -fsSL https://bun.sh/install | bash
    ```
 
-2. **Set up environment variables:**
+2. **Install dependencies:**
+
+   ```bash
+   bun install
+   ```
+
+3. **Set up environment variables:**
 
    ```bash
    cp .env.example .env
@@ -34,120 +43,266 @@ This document contains development guidelines, patterns, and best practices for 
 
    Then edit `.env` and add your:
    - `VITE_WALLETCONNECT_PROJECT_ID` (get from https://cloud.walletconnect.com/)
+   - `VITE_API_URL` (backend API URL)
    - Optional: Custom RPC URLs for each chain
 
-3. **Start development server:**
+4. **Start development server:**
 
    ```bash
-   pnpm dev
+   bun dev
    ```
 
-4. **Run tests:**
+5. **Run tests:**
+
    ```bash
-   pnpm test          # Run once
-   pnpm test:watch    # Watch mode
-   pnpm test:ui       # UI mode
+   bun run test           # Run once
+   bun run test:watch     # Watch mode
+   bun run test:ui        # UI mode
+   bun run test:coverage  # With coverage
    ```
+
+6. **Lint & Format:**
+
+   ```bash
+   bun run lint    # Lint and auto-fix with Biome
+   bun run format  # Format with Biome
+   bun run check   # Check without fixing
+   ```
+
+## Project Architecture
+
+```
+src/
+├── assets/           # Static assets (SVGs, images)
+├── components/
+│   ├── animated/     # Framer Motion animated components
+│   ├── core/         # Core reusable components (Activity, LoadingWrapper)
+│   ├── forms/        # Form-specific components
+│   └── ui/           # shadcn/ui primitives (Button, Card, etc.)
+├── constants/        # Application constants
+├── hooks/            # Custom React hooks (barrel export: @/hooks)
+├── lib/              # Utilities and configurations
+│   ├── forms/        # Form utilities (useCreateForm)
+│   ├── axiosInstance.ts
+│   ├── reactQuery.ts
+│   ├── wagmi.ts
+│   └── wallet.tsx
+├── locales/          # i18n translation files (en.json, es.json)
+├── pages/            # Page components
+│   └── auth/         # Authentication pages
+├── queries/          # API query hooks
+├── routes/           # Route definitions
+├── schemas/          # Zod validation schemas
+├── stores/           # Zustand stores (barrel export: @/stores)
+├── styles/
+│   └── modules/      # CSS modules with @apply
+├── test/             # Test setup files
+├── tests/            # Test files
+├── theme/            # Design tokens
+├── types/            # Shared TypeScript types
+└── utils/            # Utility functions (barrel export: @/utils)
+```
 
 ## Adding New Components
 
 ### Component Structure
 
-Components should follow this structure:
+```typescript
+// src/components/core/MyComponent.tsx
+import type { ReactNode, Ref } from 'react';
+import { cn } from '@/lib/utils';
 
+interface MyComponentProps {
+  children: ReactNode;
+  className?: string;
+  ref?: Ref<HTMLDivElement>;
+}
+
+/**
+ * MyComponent description.
+ * @example
+ * <MyComponent className="custom">Content</MyComponent>
+ */
+export const MyComponent = ({ children, className, ref }: MyComponentProps) => {
+  return (
+    <div ref={ref} className={cn('base-styles', className)}>
+      {children}
+    </div>
+  );
+};
+
+MyComponent.displayName = 'MyComponent';
 ```
-src/components/
-  /core          # Reusable core components (ErrorMessage, etc.)
-  /ui            # shadcn/ui primitives (Button, Card, etc.)
-  /shared        # Shared business components
-  /forms         # Form-specific components
-```
 
-### Creating a New Component
+### Key Patterns
 
-1. **Create the component file:**
+- **Use `ref-as-prop`** - React 19 pattern, no `forwardRef` needed
+- **Use named exports** - Not default exports
+- **Use `import type`** - For type-only imports (verbatimModuleSyntax)
+- **Add `displayName`** - For DevTools debugging
+- **Add JSDoc comments** - For documentation
 
-   ```typescript
-   // src/components/core/MyComponent.tsx
-   import { type ReactNode } from 'react';
-   import { cn } from '@/lib/utils';
-
-   interface MyComponentProps {
-     children: ReactNode;
-     className?: string;
-   }
-
-   export const MyComponent = ({ children, className }: MyComponentProps) => {
-     return (
-       <div className={cn('base-styles', className)}>
-         {children}
-       </div>
-     );
-   };
-   ```
-
-2. **Follow naming conventions:**
-   - Use PascalCase for component names
-   - Use named exports (not default exports)
-   - Add TypeScript types for all props
-   - Include JSDoc comments explaining usage
-
-3. **Add to styleguide:**
-   Update `src/pages/Styleguide.tsx` to showcase your component.
-
-### Using shadcn/ui Components
-
-To add new shadcn/ui components:
+### Adding shadcn/ui Components
 
 ```bash
-pnpm dlx shadcn@latest add [component-name]
+bunx shadcn@latest add [component-name]
 ```
-
-This will add the component to `src/components/ui/`.
 
 ## Adding New Hooks
 
 ### Hook Structure
 
-Hooks should be placed in `src/hooks/` and follow this pattern:
-
 ```typescript
 // src/hooks/useMyHook.ts
-import { useState, useEffect } from "react";
+import { useState, useEffect, useEffectEvent } from 'react';
 
 /**
  * Custom hook description.
- *
  * @param param - Parameter description
  * @returns Return value description
  */
-export function useMyHook(param: string) {
-  const [state, setState] = useState<string>("");
+export const useMyHook = (param: string) => {
+  const [state, setState] = useState<string>('');
+
+  // Use useEffectEvent for event handlers used in effects
+  const handleChange = useEffectEvent((value: string) => {
+    setState(value);
+  });
 
   useEffect(() => {
-    // Hook logic
-  }, [param]);
+    handleChange(param);
+  }, [param, handleChange]);
 
-  return { state, setState };
+  return { state };
+};
+```
+
+### Export from Barrel
+
+Add to `src/hooks/index.ts`:
+
+```typescript
+export { useMyHook } from './useMyHook';
+```
+
+## State Management
+
+### Zustand with createSelectors
+
+All stores use the `createSelectors` pattern for optimized re-renders:
+
+```typescript
+// src/stores/useMyStore.ts
+import { create } from 'zustand';
+import { devtools, persist } from 'zustand/middleware';
+import { createSelectors } from './createSelectors';
+
+interface MyState {
+  count: number;
+}
+
+interface MyActions {
+  increment: () => void;
+  resetStore: () => void;
+}
+
+interface MyStore extends MyState {
+  actions: MyActions;
+}
+
+const initialState: MyState = {
+  count: 0,
+};
+
+const baseStore = create<MyStore>()(
+  devtools(
+    persist(
+      set => ({
+        ...initialState,
+        actions: {
+          increment: () => set(state => ({ count: state.count + 1 })),
+          resetStore: () => set(initialState),
+        },
+      }),
+      { name: 'my-storage' },
+    ),
+    { name: 'MyStore' },
+  ),
+);
+
+export const useMyStore = createSelectors(baseStore);
+```
+
+### Usage in Components
+
+```typescript
+// ✅ Optimized - only re-renders when count changes
+const count = useMyStore.use.count();
+
+// ✅ Access actions
+const { increment } = useMyStore.use.actions();
+
+// ❌ Avoid - causes re-render on any state change
+const { count } = useMyStore();
+```
+
+### Available Stores
+
+| Store | Purpose |
+|-------|---------|
+| `useUIStore` | UI state (sidebar, theme, popup) |
+| `useAuthStore` | Authentication state (user, token) |
+| `useLanguageStore` | Language/i18n state |
+| `useLoadingStore` | Global loading states |
+| `useToastStore` | Toast notifications |
+| `useWindowStore` | Window size and breakpoints |
+
+## Styling with CSS Modules
+
+### Using @apply with Tailwind
+
+```css
+/* src/styles/modules/myComponent.module.css */
+.container {
+  @apply flex flex-col gap-4;
+  @apply rounded-lg border bg-card p-6;
+}
+
+.title {
+  @apply text-lg font-semibold text-foreground;
+}
+
+.description {
+  @apply text-sm text-muted-foreground;
 }
 ```
 
-### Best Practices
+### Usage in Components
 
-- Use TypeScript for all hooks
-- Include JSDoc comments
-- Follow React 19.2 best practices (use `useEffectEvent` for event handlers in effects)
-- Keep hooks focused and single-purpose
-- Test hooks with Vitest
+```typescript
+import styles from '@/styles/modules/myComponent.module.css';
+
+export const MyComponent = () => (
+  <div className={styles.container}>
+    <h2 className={styles.title}>Title</h2>
+    <p className={styles.description}>Description</p>
+  </div>
+);
+```
+
+### Guidelines
+
+- Use CSS modules for component-specific styles
+- Use `@apply` for Tailwind utilities
+- Keep inline Tailwind for one-off utility classes
+- Class names use camelCase in modules
 
 ## Testing Guidance
 
 ### Writing Tests
 
-Tests should be placed next to the code they test or in `src/tests/`:
-
 ```typescript
-// Component.test.tsx or tests/example/Component.spec.tsx
+// src/tests/example/MyComponent.spec.tsx
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MyComponent } from '@/components/core/MyComponent';
@@ -160,295 +315,174 @@ describe('MyComponent', () => {
 });
 ```
 
-### Testing Patterns
+### Testing Stores
 
-- **Components**: Test rendering, user interactions, accessibility
-- **Hooks**: Test state changes, side effects, edge cases
-- **Stores**: Test state updates, actions, persistence
-- **Forms**: Test validation, submission, error handling
+```typescript
+// src/tests/stores/useMyStore.spec.ts
+import { describe, it, expect, beforeEach } from 'vitest';
+import { useMyStore } from '@/stores';
 
-### Running Tests
+describe('useMyStore', () => {
+  beforeEach(() => {
+    useMyStore.getState().actions.resetStore();
+  });
+
+  it('increments count', () => {
+    const { increment } = useMyStore.getState().actions;
+    increment();
+    expect(useMyStore.getState().count).toBe(1);
+  });
+});
+```
+
+### Commands
 
 ```bash
-pnpm test              # Run all tests once
-pnpm test:watch        # Watch mode for development
-pnpm test:ui           # Interactive UI mode
-pnpm test:coverage     # Generate coverage report
+bun run test              # Run all tests once
+bun run test:watch        # Watch mode
+bun run test:ui           # Interactive UI
+bun run test:coverage     # Coverage report
 ```
 
 ## Environment Variables
 
-### Wallet Configuration
+### Required
 
-Required:
+| Variable | Description |
+|----------|-------------|
+| `VITE_WALLETCONNECT_PROJECT_ID` | WalletConnect Project ID |
 
-- `VITE_WALLETCONNECT_PROJECT_ID` - Get from [WalletConnect Cloud](https://cloud.walletconnect.com/)
+### Optional
 
-Optional (for custom RPC endpoints):
+| Variable | Description |
+|----------|-------------|
+| `VITE_API_URL` | Backend API URL |
+| `VITE_RPC_URL_1` | Ethereum Mainnet RPC |
+| `VITE_RPC_URL_11155111` | Sepolia Testnet RPC |
+| `VITE_RPC_URL_137` | Polygon RPC |
+| `VITE_RPC_URL_42161` | Arbitrum RPC |
+| `VITE_RPC_URL_10` | Optimism RPC |
 
-- `VITE_RPC_URL_1` - Ethereum Mainnet
-- `VITE_RPC_URL_11155111` - Sepolia Testnet
-- `VITE_RPC_URL_137` - Polygon
-- `VITE_RPC_URL_42161` - Arbitrum
-- `VITE_RPC_URL_10` - Optimism
+### Adding New Variables
 
-### Adding New Environment Variables
-
-1. Add to `.env.example` with a comment explaining the variable
-2. Use `VITE_` prefix for client-side variables
+1. Add to `.env.example` with description
+2. Use `VITE_` prefix for client-side access
 3. Access via `import.meta.env.VITE_YOUR_VAR`
 4. Document in this file
 
 ## Code Style
 
+### Biome Configuration
+
+The project uses **Biome** for linting and formatting (replaces ESLint + Prettier):
+
+```bash
+bun run lint    # Lint and auto-fix
+bun run format  # Format code
+bun run check   # Check without fixing
+```
+
 ### TypeScript
 
-- Use strict TypeScript (no `any` types)
+- Strict TypeScript enabled
+- No `any` types (enforced by Biome)
+- Use `import type` for type-only imports
 - Prefer type inference where possible
-- Use interfaces for object shapes
-- Use type aliases for unions/intersections
 
-### React
+### React 19.2 Patterns
 
-- Use functional components only
-- Use React 19.2 features where appropriate:
-  - `useEffectEvent` for event handlers in effects
-  - Proper dependency arrays
-- Prefer named exports
-- Keep components small (< 250 LOC)
+```typescript
+// ✅ ref-as-prop (no forwardRef)
+const Input = ({ ref, ...props }: InputProps) => (
+  <input ref={ref} {...props} />
+);
 
-### Styling
+// ✅ useEffectEvent for event handlers in effects
+const handleClick = useEffectEvent((e: MouseEvent) => {
+  // event handler logic
+});
 
-- Use Tailwind CSS utility classes
-- Use `cn()` helper for conditional classes
-- Follow shadcn/ui patterns
-- Keep custom CSS minimal
+useEffect(() => {
+  element.addEventListener('click', handleClick);
+  return () => element.removeEventListener('click', handleClick);
+}, [handleClick]);
+```
 
 ### File Organization
 
-```
-src/
-  /assets          # Static assets
-  /components      # React components
-    /core          # Core reusable components
-    /ui            # shadcn/ui primitives
-    /shared        # Shared business components
-    /forms         # Form components
-  /hooks           # Custom React hooks
-  /lib             # Utility functions and helpers
-  /pages           # Page components
-  /schemas         # Zod validation schemas
-  /stores          # Zustand stores
-  /styles          # Global styles
-  /test            # Test setup files
-  /tests           # Test files
-  /theme          # Theme tokens
-```
+| Directory | Purpose |
+|-----------|---------|
+| `components/core/` | Core reusable components |
+| `components/ui/` | shadcn/ui primitives |
+| `hooks/` | Custom React hooks |
+| `stores/` | Zustand stores |
+| `utils/` | Utility functions |
+| `lib/` | Configuration and setup |
+| `styles/modules/` | CSS modules |
 
-## Form Patterns
+## Utility Functions
 
-### Using react-hook-form + Zod
+### Barrel Exports
 
 ```typescript
-import { useCreateForm } from '@/lib/forms/createForm';
-import { z } from 'zod';
-
-const schema = z.object({
-  name: z.string().min(1, 'Name is required'),
-});
-
-const form = useCreateForm(schema);
-
-// Use form.register() for inputs
-<input {...form.register('name')} />
+// Import from barrel exports
+import { cn, isString, preventDefault } from '@/utils';
+import { useDebounce, useIsMobile } from '@/hooks';
+import { useUIStore, useAuthStore } from '@/stores';
 ```
 
-See `src/components/forms/StrategyForm.tsx` for a complete example.
+### Available Utilities
 
-## Custom Hooks
-
-### useComponentVisible
-
-Detect clicks outside a component:
-
-```typescript
-import { useComponentVisible } from '@/hooks/useComponentVisible';
-
-const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(false);
-
-<div ref={ref}>
-  {isComponentVisible && <Dropdown />}
-</div>
-```
-
-### useDebounce
-
-Debounce function calls:
-
-```typescript
-import { useDebounce } from "@/hooks/useDebounce";
-
-const { debouncedCallback } = useDebounce({
-  callback: (value: string) => console.log(value),
-  delay: 300,
-});
-
-debouncedCallback("test");
-```
-
-### useCopyToClipboard
-
-Copy text to clipboard:
-
-```typescript
-import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
-import { useToastStore } from "@/stores/useToastStore";
-
-const { notifications } = useToastStore();
-const copyToClipboard = useCopyToClipboard({
-  onSuccess: () => notifications.success("Copied!"),
-});
-
-copyToClipboard("text to copy");
-```
-
-### useLanguage
-
-Access i18n translations:
-
-```typescript
-import { useLanguage } from '@/hooks/useLanguage';
-
-const { language, setLanguage, t } = useLanguage();
-
-<div>{t('common.welcome')}</div>
-<button onClick={() => setLanguage('es')}>Spanish</button>
-```
-
-## State Management
-
-### Using Zustand
-
-```typescript
-import { useUIStore } from "@/stores/useUIStore";
-import { useToastStore } from "@/stores/useToastStore";
-import { useLanguageStore } from "@/stores/useLanguageStore";
-import { useWindowStore } from "@/stores/useWindowStore";
-
-function MyComponent() {
-  const { theme, setTheme } = useUIStore();
-  const { notifications } = useToastStore();
-  const { language } = useLanguageStore();
-  const { windowSize } = useWindowStore();
-
-  // Use store state and actions
-  if (windowSize.isMdMobile) {
-    // Mobile layout
-  }
-}
-```
-
-### Available Stores
-
-- **useUIStore** - UI state (sidebar, theme, popup)
-- **useLanguageStore** - Language/i18n state
-- **useToastStore** - Toast notifications
-- **useWindowStore** - Window size and responsive breakpoints
-
-### Creating New Stores
-
-1. Create store in `src/stores/`
-2. Use `create` from Zustand
-3. Add `persist` middleware for localStorage (if needed)
-4. Add `devtools` middleware for Redux DevTools
-5. Export typed hook
-
-Example:
-
-```typescript
-import { create } from "zustand";
-import { persist, devtools } from "zustand/middleware";
-
-export const useMyStore = create<MyState>()(
-  devtools(
-    persist(
-      (set) => ({
-        // state and actions
-      }),
-      { name: "my-storage" }
-    ),
-    { name: "MyStore" }
-  )
-);
-```
-
-## Common Patterns
-
-### Error Handling
-
-Use the `ErrorMessage` component for form errors:
-
-```typescript
-<ErrorMessage errors={form.formState.errors} name="fieldName" />
-```
-
-### Conditional Rendering
-
-Use React 19.2 patterns:
-
-```typescript
-// Simple conditional
-{isVisible && <Component />}
-
-// With Activity (React 19.2)
-<Activity mode={isVisible ? 'visible' : 'hidden'}>
-  <Component />
-</Activity>
-```
-
-### Date Formatting
-
-Use `date-fns`:
-
-```typescript
-import { format } from "date-fns";
-
-const formatted = format(new Date(), "PPP");
-```
+| Category | Functions |
+|----------|-----------|
+| **Assertions** | `isString`, `isNumber`, `isArray`, `isObject`, `isDefined`, `isNullish` |
+| **Callbacks** | `preventDefault`, `stopPropagation`, `noop`, `conditionalHandler` |
+| **Helpers** | `cn`, `uid`, `sleep`, `deepCopy`, `groupBy`, `formatBytes`, `capitalize` |
+| **Format** | `formatAddress`, `formatPrice`, `formatNumber`, `truncateDescription` |
 
 ## Troubleshooting
 
-### PostCSS Errors
-
-If you see PostCSS errors, ensure `tailwindcss` and `autoprefixer` are installed:
+### Biome Errors
 
 ```bash
-pnpm add -D tailwindcss autoprefixer
+# Check all files
+bun run check
+
+# Auto-fix issues
+bun run lint
 ```
 
-### Type Errors
-
-Run TypeScript check:
+### TypeScript Errors
 
 ```bash
-pnpm tsc --noEmit
+# Type check without emit
+bunx tsc --noEmit
 ```
 
 ### Build Errors
 
-Clear cache and rebuild:
+```bash
+# Clean rebuild
+rm -rf node_modules .vite dist
+bun install
+bun run build
+```
+
+### Test Errors
 
 ```bash
-rm -rf node_modules .vite dist
-pnpm install
-pnpm build
+# Clear test cache
+rm -rf node_modules/.vitest
+bun run test
 ```
 
 ## Resources
 
-- [React 19.2 Documentation](https://react.dev/blog/2025/10/01/react-19-2)
+- [React 19.2 Documentation](https://react.dev/)
+- [Bun Documentation](https://bun.sh/docs)
+- [Biome Documentation](https://biomejs.dev/)
 - [Tailwind CSS](https://tailwindcss.com/docs)
 - [shadcn/ui](https://ui.shadcn.com/)
-- [wagmi Documentation](https://wagmi.sh/)
-- [Zustand Documentation](https://zustand-demo.pmnd.rs/)
-- [react-hook-form](https://react-hook-form.com/)
+- [Zustand](https://zustand-demo.pmnd.rs/)
+- [wagmi](https://wagmi.sh/)
+- [Vitest](https://vitest.dev/)
