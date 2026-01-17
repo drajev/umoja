@@ -1,26 +1,26 @@
-import { act, renderHook } from "@testing-library/react";
-import { beforeEach, describe, expect, it } from "vitest";
+import { act, renderHook } from '@testing-library/react';
+import { beforeEach, describe, expect, it } from 'vitest';
 
-import { useUIStore } from "@/stores";
+import { useUIStore } from '@/stores';
 
 /**
  * Tests for useUIStore.
  * Tests UI state management with the new actions pattern.
  */
-describe("useUIStore", () => {
+describe('useUIStore', () => {
   beforeEach(() => {
     // Reset store to initial state before each test
     useUIStore.getState().actions.resetStore();
   });
 
-  it("initializes with default values", () => {
+  it('initializes with default values', () => {
     const { result } = renderHook(() => useUIStore());
     expect(result.current.sidebarOpen).toBe(false);
-    expect(result.current.theme).toBe("light");
+    expect(result.current.theme).toBe('light');
     expect(result.current.popupContent).toBeNull();
   });
 
-  it("toggles sidebar correctly", () => {
+  it('toggles sidebar correctly', () => {
     const { result } = renderHook(() => useUIStore());
 
     act(() => {
@@ -36,7 +36,7 @@ describe("useUIStore", () => {
     expect(result.current.sidebarOpen).toBe(false);
   });
 
-  it("sets sidebar open correctly", () => {
+  it('sets sidebar open correctly', () => {
     const { result } = renderHook(() => useUIStore());
 
     act(() => {
@@ -46,35 +46,35 @@ describe("useUIStore", () => {
     expect(result.current.sidebarOpen).toBe(true);
   });
 
-  it("toggles theme correctly", () => {
+  it('toggles theme correctly', () => {
     const { result } = renderHook(() => useUIStore());
 
     act(() => {
       result.current.actions.toggleTheme();
     });
 
-    expect(result.current.theme).toBe("dark");
+    expect(result.current.theme).toBe('dark');
 
     act(() => {
       result.current.actions.toggleTheme();
     });
 
-    expect(result.current.theme).toBe("light");
+    expect(result.current.theme).toBe('light');
   });
 
-  it("sets theme correctly", () => {
+  it('sets theme correctly', () => {
     const { result } = renderHook(() => useUIStore());
 
     act(() => {
-      result.current.actions.setTheme("dark");
+      result.current.actions.setTheme('dark');
     });
 
-    expect(result.current.theme).toBe("dark");
+    expect(result.current.theme).toBe('dark');
   });
 
-  it("manages popup content correctly", () => {
+  it('manages popup content correctly', () => {
     const { result } = renderHook(() => useUIStore());
-    const testContent = "Test popup content";
+    const testContent = 'Test popup content';
 
     act(() => {
       result.current.actions.setPopup(testContent);
@@ -89,9 +89,9 @@ describe("useUIStore", () => {
     expect(result.current.popupContent).toBeNull();
   });
 
-  it("uses auto-generated selectors correctly", () => {
+  it('uses auto-generated selectors correctly', () => {
     act(() => {
-      useUIStore.getState().actions.setTheme("dark");
+      useUIStore.getState().actions.setTheme('dark');
       useUIStore.getState().actions.setSidebarOpen(true);
     });
 
@@ -100,7 +100,7 @@ describe("useUIStore", () => {
       useUIStore.use.sidebarOpen(),
     );
 
-    expect(themeResult.current).toBe("dark");
+    expect(themeResult.current).toBe('dark');
     expect(sidebarResult.current).toBe(true);
   });
 });

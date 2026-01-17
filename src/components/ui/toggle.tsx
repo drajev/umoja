@@ -1,11 +1,10 @@
-import type { ComponentPropsWithRef } from "react";
-import * as TogglePrimitive from "@radix-ui/react-toggle";
-
-import { cn } from "@/lib/utils";
+import * as TogglePrimitive from '@radix-ui/react-toggle';
+import type { ComponentPropsWithRef } from 'react';
 import {
-  toggleVariants,
   type ToggleVariantProps,
-} from "@/components/ui/toggle-variants";
+  toggleVariants,
+} from '@/components/ui/toggle-variants';
+import { cn } from '@/lib/utils';
 
 type ToggleProps = ComponentPropsWithRef<typeof TogglePrimitive.Root> &
   ToggleVariantProps;

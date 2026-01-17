@@ -1,8 +1,8 @@
-import { useContext, type ComponentPropsWithRef } from "react";
-import { OTPInput, OTPInputContext } from "input-otp";
-import { Dot } from "lucide-react";
+import { OTPInput, OTPInputContext } from 'input-otp';
+import { Dot } from 'lucide-react';
+import { type ComponentPropsWithRef, useContext } from 'react';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
 type InputOTPProps = ComponentPropsWithRef<typeof OTPInput>;
 
@@ -15,23 +15,23 @@ const InputOTP = ({
   <OTPInput
     ref={ref}
     containerClassName={cn(
-      "flex items-center gap-2 has-[:disabled]:opacity-50",
+      'flex items-center gap-2 has-[:disabled]:opacity-50',
       containerClassName,
     )}
-    className={cn("disabled:cursor-not-allowed", className)}
+    className={cn('disabled:cursor-not-allowed', className)}
     {...props}
   />
 );
-InputOTP.displayName = "InputOTP";
+InputOTP.displayName = 'InputOTP';
 
-type InputOTPGroupProps = ComponentPropsWithRef<"div">;
+type InputOTPGroupProps = ComponentPropsWithRef<'div'>;
 
 const InputOTPGroup = ({ className, ref, ...props }: InputOTPGroupProps) => (
-  <div ref={ref} className={cn("flex items-center", className)} {...props} />
+  <div ref={ref} className={cn('flex items-center', className)} {...props} />
 );
-InputOTPGroup.displayName = "InputOTPGroup";
+InputOTPGroup.displayName = 'InputOTPGroup';
 
-type InputOTPSlotProps = ComponentPropsWithRef<"div"> & { index: number };
+type InputOTPSlotProps = ComponentPropsWithRef<'div'> & { index: number };
 
 const InputOTPSlot = ({
   index,
@@ -46,8 +46,8 @@ const InputOTPSlot = ({
     <div
       ref={ref}
       className={cn(
-        "relative flex h-10 w-10 items-center justify-center border-y border-r border-input text-sm transition-all first:rounded-l-md first:border-l last:rounded-r-md",
-        isActive && "z-10 ring-2 ring-ring ring-offset-background",
+        'relative flex h-10 w-10 items-center justify-center border-input border-y border-r text-sm transition-all first:rounded-l-md first:border-l last:rounded-r-md',
+        isActive && 'z-10 ring-2 ring-ring ring-offset-background',
         className,
       )}
       {...props}
@@ -61,15 +61,15 @@ const InputOTPSlot = ({
     </div>
   );
 };
-InputOTPSlot.displayName = "InputOTPSlot";
+InputOTPSlot.displayName = 'InputOTPSlot';
 
-type InputOTPSeparatorProps = ComponentPropsWithRef<"div">;
+type InputOTPSeparatorProps = ComponentPropsWithRef<'div'>;
 
 const InputOTPSeparator = ({ ref, ...props }: InputOTPSeparatorProps) => (
-  <div ref={ref} role="separator" {...props}>
+  <div ref={ref} aria-hidden="true" {...props}>
     <Dot />
   </div>
 );
-InputOTPSeparator.displayName = "InputOTPSeparator";
+InputOTPSeparator.displayName = 'InputOTPSeparator';
 
 export { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator };

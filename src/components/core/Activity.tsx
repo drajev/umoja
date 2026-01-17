@@ -1,14 +1,14 @@
 import {
-  Activity as ReactActivity,
   type ComponentType,
+  Activity as ReactActivity,
   type ReactNode,
-} from "react";
+} from 'react';
 
 /**
  * Activity wrapper.
  * Falls back to rendering children directly if Activity is unavailable.
  */
-export type ActivityMode = "visible" | "hidden";
+export type ActivityMode = 'visible' | 'hidden';
 
 export interface ActivityProps {
   mode: ActivityMode;
@@ -24,4 +24,4 @@ export const Activity = ({ mode, children }: ActivityProps) => {
   return <ActivityComponent mode={mode}>{children}</ActivityComponent>;
 };
 
-Activity.displayName = "Activity";
+Activity.displayName = 'Activity';

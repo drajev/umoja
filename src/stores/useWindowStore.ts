@@ -1,7 +1,7 @@
-import { create } from "zustand";
-import { devtools } from "zustand/middleware";
+import { create } from 'zustand';
+import { devtools } from 'zustand/middleware';
 
-import { createSelectors } from "./createSelectors";
+import { createSelectors } from './createSelectors';
 
 /**
  * Breakpoint constants - easily adjustable
@@ -55,7 +55,7 @@ interface WindowStore extends WindowState {
  * Calculate window size with breakpoint flags
  */
 const calculateWindowSize = (): WindowSize => {
-  if (typeof window === "undefined") {
+  if (typeof window === 'undefined') {
     return {
       width: 0,
       height: 0,
@@ -95,7 +95,7 @@ const initialState: WindowState = {
  */
 const baseStore = create<WindowStore>()(
   devtools(
-    (set) => ({
+    set => ({
       ...initialState,
 
       actions: {
@@ -104,7 +104,7 @@ const baseStore = create<WindowStore>()(
         resetStore: () => set(initialState),
       },
     }),
-    { name: "WindowStore" },
+    { name: 'WindowStore' },
   ),
 );
 
@@ -133,22 +133,22 @@ let isListenerAttached = false;
 let resizeHandler: (() => void) | null = null;
 
 const attachResizeListener = () => {
-  if (isListenerAttached || typeof window === "undefined") return;
+  if (isListenerAttached || typeof window === 'undefined') return;
 
   resizeHandler = () => {
     useWindowStore.getState().actions.updateSize();
   };
 
-  window.addEventListener("resize", resizeHandler);
+  window.addEventListener('resize', resizeHandler);
   resizeHandler(); // Initial call
   isListenerAttached = true;
 };
 
 const detachResizeListener = () => {
-  if (!isListenerAttached || !resizeHandler || typeof window === "undefined")
+  if (!isListenerAttached || !resizeHandler || typeof window === 'undefined')
     return;
 
-  window.removeEventListener("resize", resizeHandler);
+  window.removeEventListener('resize', resizeHandler);
   isListenerAttached = false;
   resizeHandler = null;
 };

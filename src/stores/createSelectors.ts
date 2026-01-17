@@ -1,4 +1,4 @@
-import type { StoreApi, UseBoundStore } from "zustand";
+import type { StoreApi, UseBoundStore } from 'zustand';
 
 /**
  * Type helper that extracts the state type from a Zustand store and creates
@@ -44,11 +44,11 @@ export const createSelectors = <S extends UseBoundStore<StoreApi<object>>>(
 ): WithSelectors<S> => {
   const storeWithSelectors = store as WithSelectors<typeof store>;
 
-  storeWithSelectors.use = {} as WithSelectors<typeof store>["use"];
+  storeWithSelectors.use = {} as WithSelectors<typeof store>['use'];
 
   for (const key of Object.keys(store.getState())) {
     (storeWithSelectors.use as Record<string, () => unknown>)[key] = () =>
-      store((state) => state[key as keyof typeof state]);
+      store(state => state[key as keyof typeof state]);
   }
 
   return storeWithSelectors;

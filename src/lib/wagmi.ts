@@ -15,16 +15,16 @@
  * - Configure custom RPC endpoints via environment variables
  * - Add/remove wallet connectors as needed
  */
-import { connectorsForWallets } from "@rainbow-me/rainbowkit";
+import { connectorsForWallets } from '@rainbow-me/rainbowkit';
 import {
   injectedWallet,
   metaMaskWallet,
-  walletConnectWallet,
   rainbowWallet,
   trustWallet,
-} from "@rainbow-me/rainbowkit/wallets";
-import { createConfig, http } from "wagmi";
-import { arbitrum, mainnet, optimism, polygon, sepolia } from "wagmi/chains";
+  walletConnectWallet,
+} from '@rainbow-me/rainbowkit/wallets';
+import { createConfig, http } from 'wagmi';
+import { arbitrum, mainnet, optimism, polygon, sepolia } from 'wagmi/chains';
 
 // Supported chains configuration
 const chains = [mainnet, sepolia, polygon, arbitrum, optimism] as const;
@@ -38,21 +38,21 @@ const getRpcUrl = (chainId: number, defaultRpc: string): string => {
 
 // Create transports with custom RPC URLs or public fallbacks
 const transports = {
-  [mainnet.id]: http(getRpcUrl(mainnet.id, "https://eth.llamarpc.com")),
-  [sepolia.id]: http(getRpcUrl(sepolia.id, "https://rpc.sepolia.org")),
-  [polygon.id]: http(getRpcUrl(polygon.id, "https://polygon.llamarpc.com")),
-  [arbitrum.id]: http(getRpcUrl(arbitrum.id, "https://arb1.arbitrum.io/rpc")),
-  [optimism.id]: http(getRpcUrl(optimism.id, "https://mainnet.optimism.io")),
+  [mainnet.id]: http(getRpcUrl(mainnet.id, 'https://eth.llamarpc.com')),
+  [sepolia.id]: http(getRpcUrl(sepolia.id, 'https://rpc.sepolia.org')),
+  [polygon.id]: http(getRpcUrl(polygon.id, 'https://polygon.llamarpc.com')),
+  [arbitrum.id]: http(getRpcUrl(arbitrum.id, 'https://arb1.arbitrum.io/rpc')),
+  [optimism.id]: http(getRpcUrl(optimism.id, 'https://mainnet.optimism.io')),
 };
 
 // Get WalletConnect Project ID from environment
 const projectId =
-  import.meta.env.VITE_WALLETCONNECT_PROJECT_ID || "YOUR_PROJECT_ID";
+  import.meta.env.VITE_WALLETCONNECT_PROJECT_ID || 'YOUR_PROJECT_ID';
 
 if (!import.meta.env.VITE_WALLETCONNECT_PROJECT_ID) {
   console.warn(
-    "VITE_WALLETCONNECT_PROJECT_ID is not set. WalletConnect may not work properly. " +
-      "Get a project ID at https://cloud.walletconnect.com/",
+    'VITE_WALLETCONNECT_PROJECT_ID is not set. WalletConnect may not work properly. ' +
+      'Get a project ID at https://cloud.walletconnect.com/',
   );
 }
 
@@ -60,7 +60,7 @@ if (!import.meta.env.VITE_WALLETCONNECT_PROJECT_ID) {
 const connectors = connectorsForWallets(
   [
     {
-      groupName: "Popular",
+      groupName: 'Popular',
       wallets: [
         metaMaskWallet,
         walletConnectWallet,
@@ -71,7 +71,7 @@ const connectors = connectorsForWallets(
     },
   ],
   {
-    appName: "umoja",
+    appName: 'umoja',
     projectId,
   },
 );

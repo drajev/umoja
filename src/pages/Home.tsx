@@ -1,17 +1,17 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
+import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import LogoIcon from '@/assets/logo.svg?react';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Heading, Text } from "@/components/ui/typography";
-import LogoIcon from "@/assets/logo.svg?react";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
+} from '@/components/ui/card';
+import { Heading, Text } from '@/components/ui/typography';
 
 /**
  * Home page component.
@@ -34,13 +34,15 @@ export const Home = () => {
       <div className="mx-auto max-w-4xl space-y-8">
         <div className="space-y-4 text-center">
           <Heading level={1}>Welcome to umoja</Heading>
-          <button onClick={toggleSize}>toggle size</button>
+          <button type="button" onClick={toggleSize}>
+            toggle size
+          </button>
 
           <AspectRatio
             ratio={5}
-            className="w-full h-full absolute top-0 left-0"
+            className="absolute top-0 left-0 h-full w-full"
           >
-            <div className="flex flex-col items-center justify-center h-full">
+            <div className="flex h-full flex-col items-center justify-center">
               <motion.div layout style={{ width: size, height: size }}>
                 <LogoIcon
                   width="100%"

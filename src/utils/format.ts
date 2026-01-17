@@ -20,7 +20,7 @@ export const formatAddress = (
 
 export const formatPrice = (price: number | string): string => {
   const num = typeof price === 'string' ? parseFloat(price) : price;
-  if (isNaN(num)) return '0.00';
+  if (Number.isNaN(num)) return '0.00';
   return num.toLocaleString('en-US', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
@@ -38,6 +38,6 @@ export const truncateDescription = (
 
 export const formatNumber = (num: number | string): string => {
   const n = typeof num === 'string' ? parseFloat(num) : num;
-  if (isNaN(n)) return '0';
+  if (Number.isNaN(n)) return '0';
   return n.toLocaleString('en-US');
 };

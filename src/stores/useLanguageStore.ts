@@ -1,9 +1,9 @@
-import { create } from "zustand";
-import { devtools, persist } from "zustand/middleware";
+import { create } from 'zustand';
+import { devtools, persist } from 'zustand/middleware';
 
-import { type Language, DEFAULT_LANGUAGE } from "@/constants/languages";
+import { DEFAULT_LANGUAGE, type Language } from '@/constants/languages';
 
-import { createSelectors } from "./createSelectors";
+import { createSelectors } from './createSelectors';
 
 /**
  * Language state interface - data only
@@ -40,20 +40,20 @@ const initialState: LanguageState = {
 const baseStore = create<LanguageStore>()(
   devtools(
     persist(
-      (set) => ({
+      set => ({
         ...initialState,
 
         actions: {
-          setLanguage: (language) => set({ language }),
+          setLanguage: language => set({ language }),
 
           resetStore: () => set(initialState),
         },
       }),
       {
-        name: "language-storage",
+        name: 'language-storage',
       },
     ),
-    { name: "LanguageStore" },
+    { name: 'LanguageStore' },
   ),
 );
 

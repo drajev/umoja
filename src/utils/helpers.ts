@@ -1,5 +1,5 @@
-import { type ClassValue, clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
+import { type ClassValue, clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 /**
  * General utility functions for common operations.
@@ -25,8 +25,8 @@ export const cn = (...inputs: ClassValue[]): string => {
  */
 export const uid = (length = 8): string => {
   const chars =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  let result = "";
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
   const randomValues = new Uint32Array(length);
   crypto.getRandomValues(randomValues);
   for (let i = 0; i < length; i++) {
@@ -42,7 +42,7 @@ export const uid = (length = 8): string => {
  * await sleep(1000); // Wait 1 second
  */
 export const sleep = (ms: number): Promise<void> => {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+  return new Promise(resolve => setTimeout(resolve, ms));
 };
 
 /**
@@ -53,7 +53,7 @@ export const sleep = (ms: number): Promise<void> => {
  * const copy = deepCopy({ nested: { value: 1 } });
  */
 export const deepCopy = <T>(obj: T): T => {
-  if (typeof obj !== "object" || obj === null) {
+  if (typeof obj !== 'object' || obj === null) {
     return obj;
   }
 
@@ -62,7 +62,7 @@ export const deepCopy = <T>(obj: T): T => {
   }
 
   if (obj instanceof Set) {
-    return new Set([...obj].map((item) => deepCopy(item))) as T;
+    return new Set([...obj].map(item => deepCopy(item))) as T;
   }
 
   if (obj instanceof Map) {
@@ -70,7 +70,7 @@ export const deepCopy = <T>(obj: T): T => {
   }
 
   if (Array.isArray(obj)) {
-    return obj.map((item) => deepCopy(item)) as T;
+    return obj.map(item => deepCopy(item)) as T;
   }
 
   const copy = {} as Record<string, unknown>;
@@ -89,7 +89,7 @@ export const deepCopy = <T>(obj: T): T => {
  * capitalize('hello') // 'Hello'
  */
 export const capitalize = (str: string): string => {
-  if (!str) return "";
+  if (!str) return '';
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
@@ -101,7 +101,7 @@ export const capitalize = (str: string): string => {
  */
 export const truncate = (str: string, length: number): string => {
   if (str.length <= length) return str;
-  return str.slice(0, length) + "...";
+  return `${str.slice(0, length)}...`;
 };
 
 /**
@@ -125,17 +125,17 @@ export const formatBytes = (
   decimals = 2,
 ): { value: number; unit: string } => {
   if (bytes === 0) {
-    return { value: 0, unit: "Bytes" };
+    return { value: 0, unit: 'Bytes' };
   }
 
   const k = 1024;
   const dm = decimals < 0 ? 0 : decimals;
-  const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB"];
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB'];
 
   const index = Math.floor(Math.log(bytes) / Math.log(k));
 
   return {
-    value: parseFloat((bytes / Math.pow(k, index)).toFixed(dm)),
+    value: parseFloat((bytes / k ** index).toFixed(dm)),
     unit: sizes[index],
   };
 };

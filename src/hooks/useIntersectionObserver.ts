@@ -1,10 +1,10 @@
 import {
-  useState,
-  useEffect,
-  useRef,
-  useEffectEvent,
   type RefObject,
-} from "react";
+  useEffect,
+  useEffectEvent,
+  useRef,
+  useState,
+} from 'react';
 
 /**
  * Hook for observing element intersection with viewport.
@@ -32,7 +32,7 @@ export const useIntersectionObserver = (
 ) => {
   const {
     threshold = 0,
-    rootMargin = "0px",
+    rootMargin = '0px',
     root = null,
     triggerOnce = false,
   } = options;
@@ -77,14 +77,7 @@ export const useIntersectionObserver = (
     return () => {
       observer.disconnect();
     };
-  }, [
-    threshold,
-    rootMargin,
-    root,
-    triggerOnce,
-    hasIntersected,
-    handleIntersection,
-  ]);
+  }, [threshold, rootMargin, root, triggerOnce, hasIntersected]);
 
   return { ref: elementRef as RefObject<HTMLElement>, isIntersecting };
 };

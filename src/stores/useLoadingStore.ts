@@ -1,7 +1,7 @@
-import { create } from "zustand";
-import { devtools } from "zustand/middleware";
+import { create } from 'zustand';
+import { devtools } from 'zustand/middleware';
 
-import { createSelectors } from "./createSelectors";
+import { createSelectors } from './createSelectors';
 
 /**
  * Loading state interface - data only
@@ -44,11 +44,11 @@ const baseStore = create<LoadingStore>()(
       ...initialState,
 
       actions: {
-        isLoading: (key) => get().loadingStates[key] ?? false,
+        isLoading: key => get().loadingStates[key] ?? false,
 
         setLoading: (key, isLoading) =>
           set(
-            (state) => ({
+            state => ({
               loadingStates: {
                 ...state.loadingStates,
                 [key]: isLoading,
@@ -58,10 +58,10 @@ const baseStore = create<LoadingStore>()(
             `setLoading:${key}`,
           ),
 
-        clearLoading: (key) => {
+        clearLoading: key => {
           if (key) {
             set(
-              (state) => {
+              state => {
                 const newStates = { ...state.loadingStates };
                 delete newStates[key];
                 return { loadingStates: newStates };
@@ -70,16 +70,16 @@ const baseStore = create<LoadingStore>()(
               `clearLoading:${key}`,
             );
           } else {
-            set({ loadingStates: {} }, undefined, "clearAllLoading");
+            set({ loadingStates: {} }, undefined, 'clearAllLoading');
           }
         },
 
         hasAnyLoading: () => Object.values(get().loadingStates).some(Boolean),
 
-        resetStore: () => set(initialState, undefined, "resetStore"),
+        resetStore: () => set(initialState, undefined, 'resetStore'),
       },
     }),
-    { name: "LoadingStore" },
+    { name: 'LoadingStore' },
   ),
 );
 

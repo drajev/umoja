@@ -11,10 +11,16 @@
  * - Add async validation
  * - Add form reset on success
  */
-import { useCreateForm } from '@/lib/forms/createForm';
-import { createStrategySchema, type StrategyFormData } from '@/schemas/createStrategySchema';
+
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import {
   Form,
   FormControl,
@@ -25,7 +31,6 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
   SelectContent,
@@ -33,18 +38,26 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Textarea } from '@/components/ui/textarea';
+import { useCreateForm } from '@/lib/forms/createForm';
+import {
+  createStrategySchema,
+  type StrategyFormData,
+} from '@/schemas/createStrategySchema';
 
 interface StrategyFormProps {
   onSubmit: (data: StrategyFormData) => void | Promise<void>;
   defaultValues?: Partial<StrategyFormData>;
 }
 
-export const StrategyForm = ({ onSubmit, defaultValues }: StrategyFormProps) => {
+export const StrategyForm = ({
+  onSubmit,
+  defaultValues,
+}: StrategyFormProps) => {
   const schema = createStrategySchema();
   const form = useCreateForm(schema, { defaultValues });
 
-  const handleSubmit = form.handleSubmit(async (data) => {
+  const handleSubmit = form.handleSubmit(async data => {
     await onSubmit(data);
   });
 
@@ -52,7 +65,9 @@ export const StrategyForm = ({ onSubmit, defaultValues }: StrategyFormProps) => 
     <Card className="w-full max-w-2xl">
       <CardHeader>
         <CardTitle>Create Strategy</CardTitle>
-        <CardDescription>Fill in the details to create a new strategy</CardDescription>
+        <CardDescription>
+          Fill in the details to create a new strategy
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -85,7 +100,9 @@ export const StrategyForm = ({ onSubmit, defaultValues }: StrategyFormProps) => 
                       value={field.value || ''}
                     />
                   </FormControl>
-                  <FormDescription>Optional description for your strategy</FormDescription>
+                  <FormDescription>
+                    Optional description for your strategy
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -117,7 +134,10 @@ export const StrategyForm = ({ onSubmit, defaultValues }: StrategyFormProps) => 
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Risk Level</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select risk level" />
@@ -129,7 +149,9 @@ export const StrategyForm = ({ onSubmit, defaultValues }: StrategyFormProps) => 
                       <SelectItem value="high">High</SelectItem>
                     </SelectContent>
                   </Select>
-                  <FormDescription>Choose the risk level for this strategy</FormDescription>
+                  <FormDescription>
+                    Choose the risk level for this strategy
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -144,7 +166,9 @@ export const StrategyForm = ({ onSubmit, defaultValues }: StrategyFormProps) => 
                   <FormControl>
                     <Input type="date" {...field} value={field.value || ''} />
                   </FormControl>
-                  <FormDescription>Select the start date for this strategy</FormDescription>
+                  <FormDescription>
+                    Select the start date for this strategy
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -152,13 +176,17 @@ export const StrategyForm = ({ onSubmit, defaultValues }: StrategyFormProps) => 
 
             {form.formState.isSubmitSuccessful && (
               <Alert>
-                <AlertDescription>Form submitted successfully!</AlertDescription>
+                <AlertDescription>
+                  Form submitted successfully!
+                </AlertDescription>
               </Alert>
             )}
 
             <div className="flex gap-2">
               <Button type="submit" disabled={form.formState.isSubmitting}>
-                {form.formState.isSubmitting ? 'Submitting...' : 'Create Strategy'}
+                {form.formState.isSubmitting
+                  ? 'Submitting...'
+                  : 'Create Strategy'}
               </Button>
               <Button
                 type="button"

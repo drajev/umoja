@@ -1,0 +1,13 @@
+# Bun configuration
+# https://bun.sh/docs/runtime/bunfig
+
+[test]
+# Only run tests in src/ directory by default
+root = "./src"
+
+# Coverage thresholds
+coverageThreshold = { lines = 0.5, functions = 0.5, statements = 0.5 }
+
+[install]
+# Automatically install peer dependencies
+peer = true

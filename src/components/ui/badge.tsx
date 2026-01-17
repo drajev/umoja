@@ -1,10 +1,9 @@
-import type { HTMLAttributes } from "react";
-
-import { cn } from "@/lib/utils";
+import type { HTMLAttributes } from 'react';
 import {
-  badgeVariants,
   type BadgeVariantProps,
-} from "@/components/ui/badge-variants";
+  badgeVariants,
+} from '@/components/ui/badge-variants';
+import { cn } from '@/lib/utils';
 
 export interface BadgeProps
   extends HTMLAttributes<HTMLDivElement>,

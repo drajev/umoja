@@ -16,9 +16,10 @@
  * - Add additional wallet information (chain, network, etc.)
  * - Add copy address functionality
  */
-import { useAccount, useBalance, useDisconnect, useConnect } from "wagmi";
-import { HiOutlineClipboardDocument, HiOutlineWallet } from "react-icons/hi2";
-import { Button } from "@/components/ui/button";
+
+import { HiOutlineClipboardDocument, HiOutlineWallet } from 'react-icons/hi2';
+import { useAccount, useBalance, useConnect, useDisconnect } from 'wagmi';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -26,13 +27,13 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Text } from "@/components/ui/typography";
-import { cn } from "@/lib/utils";
-import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
-import { useToastStore } from "@/stores";
-import { formatAddress } from "@/utils/format";
-import { useLanguage } from "@/hooks/useLanguage";
+} from '@/components/ui/dialog';
+import { Text } from '@/components/ui/typography';
+import { useCopyToClipboard } from '@/hooks/useCopyToClipboard';
+import { useLanguage } from '@/hooks/useLanguage';
+import { cn } from '@/lib/utils';
+import { useToastStore } from '@/stores';
+import { formatAddress } from '@/utils/format';
 
 interface ConnectWalletProps {
   className?: string;
@@ -45,9 +46,9 @@ const formatBalance = (
   balance: string | undefined,
   symbol: string | undefined,
 ): string => {
-  if (!balance) return "0.0000";
+  if (!balance) return '0.0000';
   const num = parseFloat(balance);
-  return `${num.toFixed(4)} ${symbol || "ETH"}`;
+  return `${num.toFixed(4)} ${symbol || 'ETH'}`;
 };
 
 export const ConnectWallet = ({ className }: ConnectWalletProps) => {
@@ -64,10 +65,10 @@ export const ConnectWallet = ({ className }: ConnectWalletProps) => {
   const { success, error } = useToastStore.use.actions();
   const copyToClipboard = useCopyToClipboard({
     onSuccess: () => {
-      success("Address copied to clipboard!");
+      success('Address copied to clipboard!');
     },
     onError: () => {
-      error("Failed to copy address");
+      error('Failed to copy address');
     },
   });
 
@@ -78,12 +79,12 @@ export const ConnectWallet = ({ className }: ConnectWalletProps) => {
   // Filter out duplicate connectors by ID to prevent React key warnings
   const uniqueConnectors = connectors.filter(
     (connector, index, self) =>
-      index === self.findIndex((c) => c.id === connector.id),
+      index === self.findIndex(c => c.id === connector.id),
   );
 
   if (!isConnected || !address) {
     return (
-      <div className={cn("flex items-center justify-start", className)}>
+      <div className={cn('flex items-center justify-start', className)}>
         <Dialog>
           <DialogTrigger asChild>
             <Button
@@ -92,7 +93,7 @@ export const ConnectWallet = ({ className }: ConnectWalletProps) => {
               disabled={uniqueConnectors.length === 0}
             >
               <HiOutlineWallet className="h-4 w-4" />
-              {t("wallet.connect")}
+              {t('wallet.connect')}
             </Button>
           </DialogTrigger>
           <DialogContent>
@@ -103,7 +104,7 @@ export const ConnectWallet = ({ className }: ConnectWalletProps) => {
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-2 py-4">
-              {uniqueConnectors.map((connector) => (
+              {uniqueConnectors.map(connector => (
                 <Button
                   key={connector.id}
                   variant="outline"
@@ -118,7 +119,7 @@ export const ConnectWallet = ({ className }: ConnectWalletProps) => {
               {uniqueConnectors.length === 0 && (
                 <Text
                   variant="small"
-                  className="text-muted-foreground text-center py-4"
+                  className="py-4 text-center text-muted-foreground"
                 >
                   No wallets available. Please install a wallet extension.
                 </Text>
@@ -132,15 +133,15 @@ export const ConnectWallet = ({ className }: ConnectWalletProps) => {
 
   return (
     <>
-      <div className="flex items-start flex-col justify-start gap-2">
+      <div className="flex flex-col items-start justify-start gap-2">
         <div className="flex items-center justify-start gap-2">
-          <Text className="text-sm font-medium">Chain:</Text>
+          <Text className="font-medium text-sm">Chain:</Text>
           <Text variant="small" className="font-medium text-muted-foreground">
-            {chain?.name || "Unknown Network"}
+            {chain?.name || 'Unknown Network'}
           </Text>
         </div>
         <div className="flex items-center justify-start gap-2">
-          <Text className="text-sm font-medium">Address:</Text>
+          <Text className="font-medium text-sm">Address:</Text>
           <Text
             variant="small"
             className="font-medium text-muted-foreground"
@@ -157,7 +158,7 @@ export const ConnectWallet = ({ className }: ConnectWalletProps) => {
           </Button>
         </div>
         <div className="flex items-center justify-start gap-2">
-          <Text className="text-sm font-medium">Balance:</Text>
+          <Text className="font-medium text-sm">Balance:</Text>
           <Text variant="small" className="font-medium text-muted-foreground">
             {formatBalance(balance?.formatted, balance?.symbol)}
           </Text>

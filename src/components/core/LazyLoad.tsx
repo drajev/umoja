@@ -1,7 +1,7 @@
-import { type ReactNode, type RefObject } from "react";
-import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Activity } from "@/components/core/Activity";
+import type { ReactNode, RefObject } from 'react';
+import { Activity } from '@/components/core/Activity';
+import { Skeleton } from '@/components/ui/skeleton';
+import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 
 interface LazyLoadProps {
   children: ReactNode;
@@ -26,7 +26,7 @@ export const LazyLoad = ({
   children,
   fallback = <Skeleton className="h-32 w-full" />,
   threshold = 0.1,
-  rootMargin = "50px",
+  rootMargin = '50px',
   triggerOnce = true,
   className,
   preserveState = false,
@@ -41,7 +41,7 @@ export const LazyLoad = ({
     <div ref={ref as RefObject<HTMLDivElement>} className={className}>
       {preserveState ? (
         <>
-          <Activity mode={isIntersecting ? "visible" : "hidden"}>
+          <Activity mode={isIntersecting ? 'visible' : 'hidden'}>
             {children}
           </Activity>
           {!isIntersecting && fallback}

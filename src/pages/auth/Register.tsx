@@ -2,7 +2,7 @@
  * Register page component.
  * Allows new users to create an account.
  */
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
 import {
   Breadcrumb,
@@ -11,8 +11,8 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/breadcrumb';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -20,7 +20,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/card';
 import {
   Form,
   FormControl,
@@ -28,22 +28,22 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useCreateForm } from "@/lib/forms/createForm";
-import { useRegisterHandler } from "@/queries/auth/auth";
-import { routes } from "@/routes";
-import { registerSchema, type RegisterFormData } from "@/schemas/authSchemas";
-import styles from "@/styles/modules/auth.module.css";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { useCreateForm } from '@/lib/forms/createForm';
+import { useRegisterHandler } from '@/queries/auth/auth';
+import { routes } from '@/routes';
+import { type RegisterFormData, registerSchema } from '@/schemas/authSchemas';
+import styles from '@/styles/modules/auth.module.css';
 
 export const Register = () => {
   const { handleRegister } = useRegisterHandler();
   const form = useCreateForm(registerSchema, {
     defaultValues: {
-      name: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
+      name: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
     },
   });
 
@@ -159,8 +159,8 @@ export const Register = () => {
                   disabled={form.formState.isSubmitting}
                 >
                   {form.formState.isSubmitting
-                    ? "Validating..."
-                    : "Create Account"}
+                    ? 'Validating...'
+                    : 'Create Account'}
                 </Button>
               </form>
             </Form>
@@ -168,7 +168,7 @@ export const Register = () => {
 
           <CardFooter className={styles.footer}>
             <div className={styles.footerText}>
-              Already have an account?{" "}
+              Already have an account?{' '}
               <Link to={routes.login} className={styles.primaryLink}>
                 Sign in
               </Link>

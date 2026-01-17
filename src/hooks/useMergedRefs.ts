@@ -1,4 +1,4 @@
-import { useCallback, type RefObject, type Ref, type RefCallback } from "react";
+import { type Ref, type RefCallback, type RefObject, useCallback } from 'react';
 
 type PossibleRef<T> = Ref<T> | undefined;
 
@@ -6,7 +6,7 @@ type PossibleRef<T> = Ref<T> | undefined;
  * Assigns a value to a ref, handling both callback refs and object refs.
  */
 const assignRef = <T>(ref: PossibleRef<T>, value: T): void => {
-  if (typeof ref === "function") {
+  if (typeof ref === 'function') {
     ref(value);
   } else if (ref !== null && ref !== undefined) {
     (ref as RefObject<T>).current = value;
@@ -43,9 +43,11 @@ const assignRef = <T>(ref: PossibleRef<T>, value: T): void => {
 export const useMergedRefs = <T>(...refs: PossibleRef<T>[]): RefCallback<T> => {
   return useCallback(
     (node: T) => {
-      refs.forEach((ref) => assignRef(ref, node));
+      for (const ref of refs) {
+        assignRef(ref, node);
+      }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // biome-ignore lint/correctness/useExhaustiveDependencies: refs array is spread
     refs,
   );
 };
@@ -60,5 +62,7 @@ export const useMergedRefs = <T>(...refs: PossibleRef<T>[]): RefCallback<T> => {
 export const mergeRefs =
   <T>(...refs: PossibleRef<T>[]): RefCallback<T> =>
   (node: T) => {
-    refs.forEach((ref) => assignRef(ref, node));
+    for (const ref of refs) {
+      assignRef(ref, node);
+    }
   };

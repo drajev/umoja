@@ -1,7 +1,7 @@
-import type { ComponentPropsWithoutRef, ComponentRef, Ref } from "react";
-import * as ProgressPrimitive from "@radix-ui/react-progress";
+import * as ProgressPrimitive from '@radix-ui/react-progress';
+import type { ComponentPropsWithoutRef, ComponentRef, Ref } from 'react';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
 interface ProgressProps
   extends ComponentPropsWithoutRef<typeof ProgressPrimitive.Root> {
@@ -12,7 +12,7 @@ const Progress = ({ className, value, ref, ...props }: ProgressProps) => (
   <ProgressPrimitive.Root
     ref={ref}
     className={cn(
-      "relative h-4 w-full overflow-hidden rounded-full bg-secondary",
+      'relative h-4 w-full overflow-hidden rounded-full bg-secondary',
       className,
     )}
     {...props}

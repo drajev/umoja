@@ -1,4 +1,4 @@
-import type { FocusEvent, KeyboardEvent, MouseEvent, WheelEvent } from "react";
+import type { FocusEvent, KeyboardEvent, MouseEvent, WheelEvent } from 'react';
 
 /**
  * Common event callback utilities.
@@ -29,14 +29,14 @@ export const preventDefaultAndStopPropagation = (e: ReactEvent) => {
 
 /** Stops propagation only when Escape key is pressed */
 export const stopPropagationOnEscape = (e: KeyboardEvent) => {
-  if (e.key === "Escape") {
+  if (e.key === 'Escape') {
     e.stopPropagation();
   }
 };
 
 /** Prevents default only when Enter key is pressed */
 export const preventDefaultOnEnter = (e: KeyboardEvent) => {
-  if (e.key === "Enter") {
+  if (e.key === 'Enter') {
     e.preventDefault();
   }
 };

@@ -2,8 +2,8 @@
  * Forgot Password page component.
  * Allows users to request a password reset email.
  */
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import {
   Breadcrumb,
@@ -12,8 +12,8 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/breadcrumb';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -21,7 +21,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/card';
 import {
   Form,
   FormControl,
@@ -29,24 +29,24 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Text } from "@/components/ui/typography";
-import { useCreateForm } from "@/lib/forms/createForm";
-import { useForgotPasswordHandler } from "@/queries/auth/auth";
-import { routes } from "@/routes";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Text } from '@/components/ui/typography';
+import { useCreateForm } from '@/lib/forms/createForm';
+import { useForgotPasswordHandler } from '@/queries/auth/auth';
+import { routes } from '@/routes';
 import {
-  forgotPasswordSchema,
   type ForgotPasswordFormData,
-} from "@/schemas/authSchemas";
-import styles from "@/styles/modules/auth.module.css";
+  forgotPasswordSchema,
+} from '@/schemas/authSchemas';
+import styles from '@/styles/modules/auth.module.css';
 
 export const ForgotPassword = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const { handleForgotPassword } = useForgotPasswordHandler();
   const form = useCreateForm(forgotPasswordSchema, {
     defaultValues: {
-      email: "",
+      email: '',
     },
   });
 
@@ -154,8 +154,8 @@ export const ForgotPassword = () => {
                   disabled={form.formState.isSubmitting}
                 >
                   {form.formState.isSubmitting
-                    ? "Validating..."
-                    : "Send Reset Link"}
+                    ? 'Validating...'
+                    : 'Send Reset Link'}
                 </Button>
               </form>
             </Form>

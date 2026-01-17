@@ -7,11 +7,11 @@
  *     <YourContent />
  *   </LoadingWrapper>
  */
-import { type ReactNode } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Spinner } from "@/components/ui/spinner";
-import { useLoadingStore } from "@/stores";
-import { cn } from "@/lib/utils";
+import type { ReactNode } from 'react';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Spinner } from '@/components/ui/spinner';
+import { cn } from '@/lib/utils';
+import { useLoadingStore } from '@/stores';
 
 interface LoadingWrapperProps {
   children: ReactNode;
@@ -20,7 +20,7 @@ interface LoadingWrapperProps {
   useSkeleton?: boolean;
   skeletonCount?: number;
   className?: string;
-  spinnerSize?: "sm" | "md" | "lg";
+  spinnerSize?: 'sm' | 'md' | 'lg';
   showSpinner?: boolean;
 }
 
@@ -31,7 +31,7 @@ export const LoadingWrapper = ({
   useSkeleton = false,
   skeletonCount = 1,
   className,
-  spinnerSize = "md",
+  spinnerSize = 'md',
   showSpinner = true,
 }: LoadingWrapperProps) => {
   // Use loading key from store if provided, otherwise use local loading state
@@ -42,8 +42,8 @@ export const LoadingWrapper = ({
   if (isLoading) {
     if (useSkeleton) {
       return (
-        <div className={cn("space-y-2", className)}>
-          {Array.from({ length: skeletonCount }).map((_, i) => (
+        <div className={cn('space-y-2', className)}>
+          {Array.from({ length: skeletonCount }, (_, i) => (
             <Skeleton key={i} className="h-4 w-full" />
           ))}
         </div>
@@ -52,12 +52,12 @@ export const LoadingWrapper = ({
 
     if (showSpinner) {
       const sizeClasses = {
-        sm: "size-4",
-        md: "size-6",
-        lg: "size-8",
+        sm: 'size-4',
+        md: 'size-6',
+        lg: 'size-8',
       };
       return (
-        <div className={cn("flex items-center justify-center p-8", className)}>
+        <div className={cn('flex items-center justify-center p-8', className)}>
           <Spinner className={sizeClasses[spinnerSize]} />
         </div>
       );

@@ -2,10 +2,10 @@
  * Reset Password page component.
  * Allows users to reset their password using a reset token.
  */
-import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect, useRef, useState } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -13,8 +13,8 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/breadcrumb';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -22,7 +22,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/card';
 import {
   Form,
   FormControl,
@@ -30,29 +30,29 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useCreateForm } from "@/lib/forms/createForm";
-import { useResetPasswordHandler } from "@/queries/auth/auth";
-import { routes } from "@/routes";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { useCreateForm } from '@/lib/forms/createForm';
+import { useResetPasswordHandler } from '@/queries/auth/auth';
+import { routes } from '@/routes';
 import {
-  resetPasswordSchema,
   type ResetPasswordFormData,
-} from "@/schemas/authSchemas";
-import styles from "@/styles/modules/auth.module.css";
+  resetPasswordSchema,
+} from '@/schemas/authSchemas';
+import styles from '@/styles/modules/auth.module.css';
 
 export const ResetPassword = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [isSuccess, setIsSuccess] = useState(false);
   const redirectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const token = searchParams.get("token") || "";
+  const token = searchParams.get('token') || '';
   const { handleResetPassword } = useResetPasswordHandler();
 
   const form = useCreateForm(resetPasswordSchema, {
     defaultValues: {
-      password: "",
-      confirmPassword: "",
+      password: '',
+      confirmPassword: '',
     },
   });
 
@@ -201,8 +201,8 @@ export const ResetPassword = () => {
                   disabled={form.formState.isSubmitting || !token}
                 >
                   {form.formState.isSubmitting
-                    ? "Validating..."
-                    : "Reset Password"}
+                    ? 'Validating...'
+                    : 'Reset Password'}
                 </Button>
               </form>
             </Form>

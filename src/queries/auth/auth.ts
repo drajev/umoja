@@ -1,4 +1,4 @@
-import { useToastStore } from "@/stores";
+import { useToastStore } from '@/stores';
 
 /**
  * Authentication form handlers.
@@ -36,8 +36,8 @@ export const useLoginHandler = () => {
   const { info } = useToastStore.use.actions();
 
   const handleLogin = async (data: LoginRequest) => {
-    info("Form validated successfully. Backend integration pending.");
-    console.log("Login data:", data);
+    info('Form validated successfully. Backend integration pending.');
+    console.log('Login data:', data);
   };
 
   return { handleLogin };
@@ -51,8 +51,8 @@ export const useRegisterHandler = () => {
   const { info } = useToastStore.use.actions();
 
   const handleRegister = async (data: RegisterRequest) => {
-    info("Form validated successfully. Backend integration pending.");
-    console.log("Register data:", data);
+    info('Form validated successfully. Backend integration pending.');
+    console.log('Register data:', data);
   };
 
   return { handleRegister };
@@ -66,8 +66,8 @@ export const useForgotPasswordHandler = () => {
   const { info } = useToastStore.use.actions();
 
   const handleForgotPassword = async (data: ForgotPasswordRequest) => {
-    info("Form validated successfully. Backend integration pending.");
-    console.log("Forgot password data:", data);
+    info('Form validated successfully. Backend integration pending.');
+    console.log('Forgot password data:', data);
   };
 
   return { handleForgotPassword };
@@ -81,8 +81,8 @@ export const useResetPasswordHandler = () => {
   const { info } = useToastStore.use.actions();
 
   const handleResetPassword = async (data: ResetPasswordRequest) => {
-    info("Form validated successfully. Backend integration pending.");
-    console.log("Reset password data:", data);
+    info('Form validated successfully. Backend integration pending.');
+    console.log('Reset password data:', data);
   };
 
   return { handleResetPassword };

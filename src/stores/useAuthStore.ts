@@ -1,7 +1,7 @@
-import { create } from "zustand";
-import { devtools, persist } from "zustand/middleware";
+import { create } from 'zustand';
+import { devtools, persist } from 'zustand/middleware';
 
-import { createSelectors } from "./createSelectors";
+import { createSelectors } from './createSelectors';
 
 /**
  * User interface for authenticated users
@@ -59,13 +59,13 @@ const initialState: AuthState = {
 const baseStore = create<AuthStore>()(
   devtools(
     persist(
-      (set) => ({
+      set => ({
         ...initialState,
 
         actions: {
-          setUser: (user) => set({ user, isAuthenticated: !!user }),
+          setUser: user => set({ user, isAuthenticated: !!user }),
 
-          setToken: (token) => set({ token }),
+          setToken: token => set({ token }),
 
           setCredentials: (user, token) =>
             set({
@@ -75,7 +75,7 @@ const baseStore = create<AuthStore>()(
               error: null,
             }),
 
-          setError: (error) => set({ error }),
+          setError: error => set({ error }),
 
           clearError: () => set({ error: null }),
 
@@ -85,15 +85,15 @@ const baseStore = create<AuthStore>()(
         },
       }),
       {
-        name: "auth-storage",
-        partialize: (state) => ({
+        name: 'auth-storage',
+        partialize: state => ({
           user: state.user,
           token: state.token,
           isAuthenticated: state.isAuthenticated,
         }),
       },
     ),
-    { name: "AuthStore" },
+    { name: 'AuthStore' },
   ),
 );
 

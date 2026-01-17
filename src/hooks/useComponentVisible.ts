@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useEffectEvent } from "react";
+import { useEffect, useEffectEvent, useRef, useState } from 'react';
 
 /**
  * Hook for detecting clicks outside a component.
@@ -27,12 +27,12 @@ export const useComponentVisible = (
   });
 
   useEffect(() => {
-    const eventType = isDoubleClick ? "dblclick" : "click";
+    const eventType = isDoubleClick ? 'dblclick' : 'click';
     document.addEventListener(eventType, handleClickOutside, true);
     return () => {
       document.removeEventListener(eventType, handleClickOutside, true);
     };
-  }, [isDoubleClick, handleClickOutside]);
+  }, [isDoubleClick]);
 
   return { ref, isComponentVisible, setIsComponentVisible };
 };

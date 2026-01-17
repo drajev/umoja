@@ -21,7 +21,7 @@ export {
   isPositiveNumber,
   isPromise,
   isString,
-} from "./assertion";
+} from './assertion';
 
 // Event callback helpers
 export {
@@ -35,8 +35,15 @@ export {
   returnTrue,
   stopPropagation,
   stopPropagationOnEscape,
-} from "./callbacks";
-
+} from './callbacks';
+// Legacy exports (for backwards compatibility)
+export { debounce } from './debounce';
+export {
+  formatAddress,
+  formatNumber,
+  formatPrice,
+  truncateDescription,
+} from './format';
 // General helpers
 export {
   capitalize,
@@ -51,13 +58,4 @@ export {
   truncate,
   uid,
   unique,
-} from "./helpers";
-
-// Legacy exports (for backwards compatibility)
-export { debounce } from "./debounce";
-export {
-  formatAddress,
-  formatPrice,
-  formatNumber,
-  truncateDescription,
-} from "./format";
+} from './helpers';

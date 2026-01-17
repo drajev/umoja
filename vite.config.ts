@@ -94,11 +94,5 @@ export default defineConfig({
     // Large chunks (rainbowkit ~1.7MB, viem ~600KB) are acceptable for Web3 apps and are loaded on-demand
     chunkSizeWarningLimit: 3000,
   },
-  // @ts-expect-error - Vitest types are not properly merged with Vite types
-  test: {
-    globals: true,
-    environment: 'jsdom',
-    setupFiles: './src/test/setup.ts',
-    css: true,
-  },
+  // Test configuration moved to vitest.config.ts
 });

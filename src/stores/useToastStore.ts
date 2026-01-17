@@ -1,7 +1,7 @@
-import { create } from "zustand";
-import { toast as sonnerToast } from "sonner";
+import { toast as sonnerToast } from 'sonner';
+import { create } from 'zustand';
 
-import { createSelectors } from "./createSelectors";
+import { createSelectors } from './createSelectors';
 
 /**
  * Toast options interface
@@ -79,7 +79,7 @@ const baseStore = create<ToastStore>()(() => ({
       });
     },
 
-    dismiss: (toastId) => {
+    dismiss: toastId => {
       sonnerToast.dismiss(toastId);
     },
 

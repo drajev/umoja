@@ -12,16 +12,16 @@
  * - Add error handling logic
  */
 import axios, {
-  type InternalAxiosRequestConfig,
-  type AxiosResponse,
   type AxiosError,
-} from "axios";
-import { useAuthStore } from "@/stores";
+  type AxiosResponse,
+  type InternalAxiosRequestConfig,
+} from 'axios';
+import { useAuthStore } from '@/stores';
 
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "",
+  baseURL: import.meta.env.VITE_API_URL || '',
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
 });
 

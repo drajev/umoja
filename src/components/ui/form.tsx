@@ -1,22 +1,21 @@
+import type * as LabelPrimitive from '@radix-ui/react-label';
+import { Slot } from '@radix-ui/react-slot';
 import {
+  type ComponentPropsWithRef,
   createContext,
   useContext,
   useId,
-  type ComponentPropsWithRef,
-} from "react";
-import * as LabelPrimitive from "@radix-ui/react-label";
-import { Slot } from "@radix-ui/react-slot";
+} from 'react';
 import {
   Controller,
-  FormProvider,
-  useFormContext,
   type ControllerProps,
   type FieldPath,
   type FieldValues,
-} from "react-hook-form";
-
-import { cn } from "@/lib/utils";
-import { Label } from "@/components/ui/label";
+  FormProvider,
+  useFormContext,
+} from 'react-hook-form';
+import { Label } from '@/components/ui/label';
+import { cn } from '@/lib/utils';
 
 const Form = FormProvider;
 
@@ -48,11 +47,11 @@ const useFormField = () => {
   const { getFieldState, formState } = useFormContext();
 
   if (!fieldContext) {
-    throw new Error("useFormField should be used within <FormField>");
+    throw new Error('useFormField should be used within <FormField>');
   }
 
   if (!itemContext) {
-    throw new Error("useFormField should be used within <FormItem>");
+    throw new Error('useFormField should be used within <FormItem>');
   }
 
   const fieldState = getFieldState(fieldContext.name, formState);
@@ -75,18 +74,18 @@ type FormItemContextValue = {
 
 const FormItemContext = createContext<FormItemContextValue | null>(null);
 
-type FormItemProps = ComponentPropsWithRef<"div">;
+type FormItemProps = ComponentPropsWithRef<'div'>;
 
 const FormItem = ({ className, ref, ...props }: FormItemProps) => {
   const id = useId();
 
   return (
     <FormItemContext.Provider value={{ id }}>
-      <div ref={ref} className={cn("space-y-2", className)} {...props} />
+      <div ref={ref} className={cn('space-y-2', className)} {...props} />
     </FormItemContext.Provider>
   );
 };
-FormItem.displayName = "FormItem";
+FormItem.displayName = 'FormItem';
 
 type FormLabelProps = ComponentPropsWithRef<typeof LabelPrimitive.Root>;
 
@@ -96,13 +95,13 @@ const FormLabel = ({ className, ref, ...props }: FormLabelProps) => {
   return (
     <Label
       ref={ref}
-      className={cn(error && "text-destructive", className)}
+      className={cn(error && 'text-destructive', className)}
       htmlFor={formItemId}
       {...props}
     />
   );
 };
-FormLabel.displayName = "FormLabel";
+FormLabel.displayName = 'FormLabel';
 
 type FormControlProps = ComponentPropsWithRef<typeof Slot>;
 
@@ -124,9 +123,9 @@ const FormControl = ({ ref, ...props }: FormControlProps) => {
     />
   );
 };
-FormControl.displayName = "FormControl";
+FormControl.displayName = 'FormControl';
 
-type FormDescriptionProps = ComponentPropsWithRef<"p">;
+type FormDescriptionProps = ComponentPropsWithRef<'p'>;
 
 const FormDescription = ({
   className,
@@ -139,14 +138,14 @@ const FormDescription = ({
     <p
       ref={ref}
       id={formDescriptionId}
-      className={cn("text-sm text-muted-foreground", className)}
+      className={cn('text-muted-foreground text-sm', className)}
       {...props}
     />
   );
 };
-FormDescription.displayName = "FormDescription";
+FormDescription.displayName = 'FormDescription';
 
-type FormMessageProps = ComponentPropsWithRef<"p">;
+type FormMessageProps = ComponentPropsWithRef<'p'>;
 
 const FormMessage = ({
   className,
@@ -155,7 +154,7 @@ const FormMessage = ({
   ...props
 }: FormMessageProps) => {
   const { error, formMessageId } = useFormField();
-  const body = error ? String(error?.message ?? "") : children;
+  const body = error ? String(error?.message ?? '') : children;
 
   if (!body) {
     return null;
@@ -165,14 +164,14 @@ const FormMessage = ({
     <p
       ref={ref}
       id={formMessageId}
-      className={cn("text-sm font-medium text-destructive", className)}
+      className={cn('font-medium text-destructive text-sm', className)}
       {...props}
     >
       {body}
     </p>
   );
 };
-FormMessage.displayName = "FormMessage";
+FormMessage.displayName = 'FormMessage';
 
 export {
   // eslint-disable-next-line react-refresh/only-export-components

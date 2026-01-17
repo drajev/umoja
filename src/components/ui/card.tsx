@@ -1,6 +1,6 @@
-import type { HTMLAttributes, Ref } from "react";
+import type { HTMLAttributes, Ref } from 'react';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
 interface CardProps extends HTMLAttributes<HTMLDivElement> {
   ref?: Ref<HTMLDivElement>;
@@ -27,13 +27,13 @@ const Card = ({ className, ref, ...props }: CardProps) => (
   <div
     ref={ref}
     className={cn(
-      "rounded-lg border bg-card text-card-foreground shadow-sm",
+      'rounded-lg border bg-card text-card-foreground shadow-sm',
       className,
     )}
     {...props}
   />
 );
-Card.displayName = "Card";
+Card.displayName = 'Card';
 
 interface CardHeaderProps extends HTMLAttributes<HTMLDivElement> {
   ref?: Ref<HTMLDivElement>;
@@ -42,11 +42,11 @@ interface CardHeaderProps extends HTMLAttributes<HTMLDivElement> {
 const CardHeader = ({ className, ref, ...props }: CardHeaderProps) => (
   <div
     ref={ref}
-    className={cn("flex flex-col space-y-1.5 p-6", className)}
+    className={cn('flex flex-col space-y-1.5 p-6', className)}
     {...props}
   />
 );
-CardHeader.displayName = "CardHeader";
+CardHeader.displayName = 'CardHeader';
 
 interface CardTitleProps extends HTMLAttributes<HTMLHeadingElement> {
   ref?: Ref<HTMLHeadingElement>;
@@ -56,13 +56,13 @@ const CardTitle = ({ className, ref, ...props }: CardTitleProps) => (
   <h3
     ref={ref}
     className={cn(
-      "text-2xl font-semibold leading-none tracking-tight",
+      'font-semibold text-2xl leading-none tracking-tight',
       className,
     )}
     {...props}
   />
 );
-CardTitle.displayName = "CardTitle";
+CardTitle.displayName = 'CardTitle';
 
 interface CardDescriptionProps extends HTMLAttributes<HTMLParagraphElement> {
   ref?: Ref<HTMLParagraphElement>;
@@ -75,20 +75,20 @@ const CardDescription = ({
 }: CardDescriptionProps) => (
   <p
     ref={ref}
-    className={cn("text-sm text-muted-foreground", className)}
+    className={cn('text-muted-foreground text-sm', className)}
     {...props}
   />
 );
-CardDescription.displayName = "CardDescription";
+CardDescription.displayName = 'CardDescription';
 
 interface CardContentProps extends HTMLAttributes<HTMLDivElement> {
   ref?: Ref<HTMLDivElement>;
 }
 
 const CardContent = ({ className, ref, ...props }: CardContentProps) => (
-  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
+  <div ref={ref} className={cn('p-6 pt-0', className)} {...props} />
 );
-CardContent.displayName = "CardContent";
+CardContent.displayName = 'CardContent';
 
 interface CardFooterProps extends HTMLAttributes<HTMLDivElement> {
   ref?: Ref<HTMLDivElement>;
@@ -97,11 +97,11 @@ interface CardFooterProps extends HTMLAttributes<HTMLDivElement> {
 const CardFooter = ({ className, ref, ...props }: CardFooterProps) => (
   <div
     ref={ref}
-    className={cn("flex items-center p-6 pt-0", className)}
+    className={cn('flex items-center p-6 pt-0', className)}
     {...props}
   />
 );
-CardFooter.displayName = "CardFooter";
+CardFooter.displayName = 'CardFooter';
 
 export {
   Card,

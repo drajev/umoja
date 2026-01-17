@@ -7,15 +7,15 @@
  *   <YourContent />
  * </Layout>
  */
-import type { ReactNode } from "react";
+import type { ReactNode } from 'react';
 
-import { Header } from "@/components/Header";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Toaster } from "@/components/ui/sonner";
-import { Text } from "@/components/ui/typography";
-import { useUIStore } from "@/stores";
-import styles from "@/styles/modules/layout.module.css";
+import { Header } from '@/components/Header';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Toaster } from '@/components/ui/sonner';
+import { Text } from '@/components/ui/typography';
+import { useUIStore } from '@/stores';
+import styles from '@/styles/modules/layout.module.css';
 
 interface LayoutProps {
   children: ReactNode;
@@ -37,7 +37,7 @@ export const Layout = ({ children }: LayoutProps) => {
             <Card>
               <CardContent className="pt-6">
                 <Text variant="small" className="text-muted-foreground">
-                  Sidebar is {sidebarOpen ? "open" : "closed"}
+                  Sidebar is {sidebarOpen ? 'open' : 'closed'}
                 </Text>
                 <nav className={styles.sidebarNav}>
                   <Button

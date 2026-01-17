@@ -1,19 +1,18 @@
+import useEmblaCarousel, {
+  type UseEmblaCarouselType,
+} from 'embla-carousel-react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 import {
+  type ComponentPropsWithRef,
   createContext,
+  type KeyboardEvent,
   useCallback,
   useContext,
   useEffect,
   useState,
-  type ComponentPropsWithRef,
-  type KeyboardEvent,
-} from "react";
-import useEmblaCarousel, {
-  type UseEmblaCarouselType,
-} from "embla-carousel-react";
-import { ArrowLeft, ArrowRight } from "lucide-react";
-
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+} from 'react';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 type CarouselApi = UseEmblaCarouselType[1];
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;
@@ -23,7 +22,7 @@ type CarouselPlugin = UseCarouselParameters[1];
 type CarouselProps = {
   opts?: CarouselOptions;
   plugins?: CarouselPlugin;
-  orientation?: "horizontal" | "vertical";
+  orientation?: 'horizontal' | 'vertical';
   setApi?: (api: CarouselApi) => void;
 };
 
@@ -42,16 +41,16 @@ function useCarousel() {
   const context = useContext(CarouselContext);
 
   if (!context) {
-    throw new Error("useCarousel must be used within a <Carousel />");
+    throw new Error('useCarousel must be used within a <Carousel />');
   }
 
   return context;
 }
 
-type CarouselRootProps = ComponentPropsWithRef<"div"> & CarouselProps;
+type CarouselRootProps = ComponentPropsWithRef<'div'> & CarouselProps;
 
 const Carousel = ({
-  orientation = "horizontal",
+  orientation = 'horizontal',
   opts,
   setApi,
   plugins,
@@ -63,7 +62,7 @@ const Carousel = ({
   const [carouselRef, api] = useEmblaCarousel(
     {
       ...opts,
-      axis: orientation === "horizontal" ? "x" : "y",
+      axis: orientation === 'horizontal' ? 'x' : 'y',
     },
     plugins,
   );
@@ -89,10 +88,10 @@ const Carousel = ({
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent<HTMLDivElement>) => {
-      if (event.key === "ArrowLeft") {
+      if (event.key === 'ArrowLeft') {
         event.preventDefault();
         scrollPrev();
-      } else if (event.key === "ArrowRight") {
+      } else if (event.key === 'ArrowRight') {
         event.preventDefault();
         scrollNext();
       }
@@ -114,11 +113,11 @@ const Carousel = ({
     }
 
     onSelect(api);
-    api.on("reInit", onSelect);
-    api.on("select", onSelect);
+    api.on('reInit', onSelect);
+    api.on('select', onSelect);
 
     return () => {
-      api?.off("select", onSelect);
+      api?.off('select', onSelect);
     };
   }, [api, onSelect]);
 
@@ -129,7 +128,7 @@ const Carousel = ({
         api: api,
         opts,
         orientation:
-          orientation || (opts?.axis === "y" ? "vertical" : "horizontal"),
+          orientation || (opts?.axis === 'y' ? 'vertical' : 'horizontal'),
         scrollPrev,
         scrollNext,
         canScrollPrev,
@@ -139,9 +138,10 @@ const Carousel = ({
       <div
         ref={ref}
         onKeyDownCapture={handleKeyDown}
-        className={cn("relative", className)}
+        className={cn('relative', className)}
         role="region"
         aria-roledescription="carousel"
+        aria-label="Carousel"
         {...props}
       >
         {children}
@@ -149,9 +149,9 @@ const Carousel = ({
     </CarouselContext.Provider>
   );
 };
-Carousel.displayName = "Carousel";
+Carousel.displayName = 'Carousel';
 
-type CarouselContentProps = ComponentPropsWithRef<"div">;
+type CarouselContentProps = ComponentPropsWithRef<'div'>;
 
 const CarouselContent = ({
   className,
@@ -165,8 +165,8 @@ const CarouselContent = ({
       <div
         ref={ref}
         className={cn(
-          "flex",
-          orientation === "horizontal" ? "-ml-4" : "-mt-4 flex-col",
+          'flex',
+          orientation === 'horizontal' ? '-ml-4' : '-mt-4 flex-col',
           className,
         )}
         {...props}
@@ -174,9 +174,9 @@ const CarouselContent = ({
     </div>
   );
 };
-CarouselContent.displayName = "CarouselContent";
+CarouselContent.displayName = 'CarouselContent';
 
-type CarouselItemProps = ComponentPropsWithRef<"div">;
+type CarouselItemProps = ComponentPropsWithRef<'div'>;
 
 const CarouselItem = ({ className, ref, ...props }: CarouselItemProps) => {
   const { orientation } = useCarousel();
@@ -187,22 +187,22 @@ const CarouselItem = ({ className, ref, ...props }: CarouselItemProps) => {
       role="group"
       aria-roledescription="slide"
       className={cn(
-        "min-w-0 shrink-0 grow-0 basis-full",
-        orientation === "horizontal" ? "pl-4" : "pt-4",
+        'min-w-0 shrink-0 grow-0 basis-full',
+        orientation === 'horizontal' ? 'pl-4' : 'pt-4',
         className,
       )}
       {...props}
     />
   );
 };
-CarouselItem.displayName = "CarouselItem";
+CarouselItem.displayName = 'CarouselItem';
 
 type CarouselButtonProps = ComponentPropsWithRef<typeof Button>;
 
 const CarouselPrevious = ({
   className,
-  variant = "outline",
-  size = "icon",
+  variant = 'outline',
+  size = 'icon',
   ref,
   ...props
 }: CarouselButtonProps) => {
@@ -214,10 +214,10 @@ const CarouselPrevious = ({
       variant={variant}
       size={size}
       className={cn(
-        "absolute h-8 w-8 rounded-full",
-        orientation === "horizontal"
-          ? "-left-12 top-1/2 -translate-y-1/2 md:-left-12"
-          : "-top-12 left-1/2 -translate-x-1/2 rotate-90",
+        'absolute h-8 w-8 rounded-full',
+        orientation === 'horizontal'
+          ? 'top-1/2 -left-12 -translate-y-1/2 md:-left-12'
+          : '-top-12 left-1/2 -translate-x-1/2 rotate-90',
         className,
       )}
       disabled={!canScrollPrev}
@@ -229,12 +229,12 @@ const CarouselPrevious = ({
     </Button>
   );
 };
-CarouselPrevious.displayName = "CarouselPrevious";
+CarouselPrevious.displayName = 'CarouselPrevious';
 
 const CarouselNext = ({
   className,
-  variant = "outline",
-  size = "icon",
+  variant = 'outline',
+  size = 'icon',
   ref,
   ...props
 }: CarouselButtonProps) => {
@@ -246,10 +246,10 @@ const CarouselNext = ({
       variant={variant}
       size={size}
       className={cn(
-        "absolute h-8 w-8 rounded-full",
-        orientation === "horizontal"
-          ? "-right-12 top-1/2 -translate-y-1/2 md:-right-12"
-          : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",
+        'absolute h-8 w-8 rounded-full',
+        orientation === 'horizontal'
+          ? 'top-1/2 -right-12 -translate-y-1/2 md:-right-12'
+          : '-bottom-12 left-1/2 -translate-x-1/2 rotate-90',
         className,
       )}
       disabled={!canScrollNext}
@@ -261,7 +261,7 @@ const CarouselNext = ({
     </Button>
   );
 };
-CarouselNext.displayName = "CarouselNext";
+CarouselNext.displayName = 'CarouselNext';
 
 export {
   type CarouselApi,

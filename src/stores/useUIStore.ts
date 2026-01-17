@@ -1,15 +1,15 @@
-import type { ReactNode } from "react";
-import { create } from "zustand";
-import { devtools, persist } from "zustand/middleware";
+import type { ReactNode } from 'react';
+import { create } from 'zustand';
+import { devtools, persist } from 'zustand/middleware';
 
-import { createSelectors } from "./createSelectors";
+import { createSelectors } from './createSelectors';
 
 /**
  * UI state interface - data only, no methods
  */
 interface UIState {
   sidebarOpen: boolean;
-  theme: "light" | "dark";
+  theme: 'light' | 'dark';
   popupContent: ReactNode | null;
 }
 
@@ -19,7 +19,7 @@ interface UIState {
 interface UIActions {
   toggleSidebar: () => void;
   setSidebarOpen: (open: boolean) => void;
-  setTheme: (theme: "light" | "dark") => void;
+  setTheme: (theme: 'light' | 'dark') => void;
   toggleTheme: () => void;
   setPopup: (content: ReactNode) => void;
   clearPopup: () => void;
@@ -38,7 +38,7 @@ interface UIStore extends UIState {
  */
 const initialState: UIState = {
   sidebarOpen: false,
-  theme: "light",
+  theme: 'light',
   popupContent: null,
 };
 
@@ -48,31 +48,31 @@ const initialState: UIState = {
 const baseStore = create<UIStore>()(
   devtools(
     persist(
-      (set) => ({
+      set => ({
         ...initialState,
 
         actions: {
           toggleSidebar: () =>
-            set((state) => ({ sidebarOpen: !state.sidebarOpen })),
+            set(state => ({ sidebarOpen: !state.sidebarOpen })),
 
-          setSidebarOpen: (open) => set({ sidebarOpen: open }),
+          setSidebarOpen: open => set({ sidebarOpen: open }),
 
-          setTheme: (theme) => {
-            document.documentElement.classList.toggle("dark", theme === "dark");
+          setTheme: theme => {
+            document.documentElement.classList.toggle('dark', theme === 'dark');
             set({ theme });
           },
 
           toggleTheme: () =>
-            set((state) => {
-              const newTheme = state.theme === "light" ? "dark" : "light";
+            set(state => {
+              const newTheme = state.theme === 'light' ? 'dark' : 'light';
               document.documentElement.classList.toggle(
-                "dark",
-                newTheme === "dark",
+                'dark',
+                newTheme === 'dark',
               );
               return { theme: newTheme };
             }),
 
-          setPopup: (content) => set({ popupContent: content }),
+          setPopup: content => set({ popupContent: content }),
 
           clearPopup: () => set({ popupContent: null }),
 
@@ -80,23 +80,23 @@ const baseStore = create<UIStore>()(
         },
       }),
       {
-        name: "ui-storage",
-        partialize: (state) => ({
+        name: 'ui-storage',
+        partialize: state => ({
           sidebarOpen: state.sidebarOpen,
           theme: state.theme,
         }),
-        onRehydrateStorage: () => (state) => {
+        onRehydrateStorage: () => state => {
           // Apply theme on rehydration
           if (state?.theme) {
             document.documentElement.classList.toggle(
-              "dark",
-              state.theme === "dark",
+              'dark',
+              state.theme === 'dark',
             );
           }
         },
       },
     ),
-    { name: "UIStore" },
+    { name: 'UIStore' },
   ),
 );
 

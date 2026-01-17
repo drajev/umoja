@@ -11,27 +11,27 @@
 
 /** Checks if value is a boolean */
 export const isBoolean = (value: unknown): value is boolean => {
-  return typeof value === "boolean";
+  return typeof value === 'boolean';
 };
 
 /** Checks if value is a number (excludes NaN) */
 export const isNumber = (value: unknown): value is number => {
-  return typeof value === "number" && !Number.isNaN(value);
+  return typeof value === 'number' && !Number.isNaN(value);
 };
 
 /** Checks if value is a string */
 export const isString = (value: unknown): value is string => {
-  return typeof value === "string";
+  return typeof value === 'string';
 };
 
 /** Checks if value is a function */
 export const isFunction = (value: unknown): value is CallableFunction => {
-  return typeof value === "function";
+  return typeof value === 'function';
 };
 
 /** Checks if value is an object (excludes null and arrays) */
 export const isObject = (value: unknown): value is Record<string, unknown> => {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
 };
 
 /** Checks if value is an array */

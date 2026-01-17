@@ -1,5 +1,5 @@
-import { useCallback, useRef, useEffect, useEffectEvent } from "react";
-import { debounce } from "@/utils/debounce";
+import { useCallback, useEffect, useEffectEvent, useRef } from 'react';
+import { debounce } from '@/utils/debounce';
 
 interface UseDebounceProps<T extends (...args: never[]) => unknown> {
   callback: T;
@@ -43,7 +43,7 @@ export const useDebounce = <T extends (...args: never[]) => unknown>({
         debouncedFnRef.current.cancel?.();
       }
     };
-  }, [delay, stableCallback]);
+  }, [delay]);
 
   const debouncedCallback = useCallback((...args: Parameters<T>) => {
     debouncedFnRef.current?.(...args);

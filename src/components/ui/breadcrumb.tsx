@@ -1,44 +1,44 @@
-import type { ComponentProps, ComponentPropsWithRef, ReactNode } from "react";
-import { Slot } from "@radix-ui/react-slot";
-import { ChevronRight, MoreHorizontal } from "lucide-react";
+import { Slot } from '@radix-ui/react-slot';
+import { ChevronRight, MoreHorizontal } from 'lucide-react';
+import type { ComponentProps, ComponentPropsWithRef, ReactNode } from 'react';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
-type BreadcrumbProps = ComponentPropsWithRef<"nav"> & {
+type BreadcrumbProps = ComponentPropsWithRef<'nav'> & {
   separator?: ReactNode;
 };
 
 const Breadcrumb = ({ ref, ...props }: BreadcrumbProps) => (
   <nav ref={ref} aria-label="breadcrumb" {...props} />
 );
-Breadcrumb.displayName = "Breadcrumb";
+Breadcrumb.displayName = 'Breadcrumb';
 
-type BreadcrumbListProps = ComponentPropsWithRef<"ol">;
+type BreadcrumbListProps = ComponentPropsWithRef<'ol'>;
 
 const BreadcrumbList = ({ className, ref, ...props }: BreadcrumbListProps) => (
   <ol
     ref={ref}
     className={cn(
-      "flex flex-wrap items-center gap-1.5 break-words text-sm text-muted-foreground sm:gap-2.5",
+      'flex flex-wrap items-center gap-1.5 break-words text-muted-foreground text-sm sm:gap-2.5',
       className,
     )}
     {...props}
   />
 );
-BreadcrumbList.displayName = "BreadcrumbList";
+BreadcrumbList.displayName = 'BreadcrumbList';
 
-type BreadcrumbItemProps = ComponentPropsWithRef<"li">;
+type BreadcrumbItemProps = ComponentPropsWithRef<'li'>;
 
 const BreadcrumbItem = ({ className, ref, ...props }: BreadcrumbItemProps) => (
   <li
     ref={ref}
-    className={cn("inline-flex items-center gap-1.5", className)}
+    className={cn('inline-flex items-center gap-1.5', className)}
     {...props}
   />
 );
-BreadcrumbItem.displayName = "BreadcrumbItem";
+BreadcrumbItem.displayName = 'BreadcrumbItem';
 
-type BreadcrumbLinkProps = ComponentPropsWithRef<"a"> & {
+type BreadcrumbLinkProps = ComponentPropsWithRef<'a'> & {
   asChild?: boolean;
 };
 
@@ -48,63 +48,61 @@ const BreadcrumbLink = ({
   ref,
   ...props
 }: BreadcrumbLinkProps) => {
-  const Comp = asChild ? Slot : "a";
+  const Comp = asChild ? Slot : 'a';
 
   return (
     <Comp
       ref={ref}
-      className={cn("transition-colors hover:text-foreground", className)}
+      className={cn('transition-colors hover:text-foreground', className)}
       {...props}
     />
   );
 };
-BreadcrumbLink.displayName = "BreadcrumbLink";
+BreadcrumbLink.displayName = 'BreadcrumbLink';
 
-type BreadcrumbPageProps = ComponentPropsWithRef<"span">;
+type BreadcrumbPageProps = ComponentPropsWithRef<'span'>;
 
 const BreadcrumbPage = ({ className, ref, ...props }: BreadcrumbPageProps) => (
   <span
     ref={ref}
-    role="link"
-    aria-disabled="true"
     aria-current="page"
-    className={cn("font-normal text-foreground", className)}
+    className={cn('font-normal text-foreground', className)}
     {...props}
   />
 );
-BreadcrumbPage.displayName = "BreadcrumbPage";
+BreadcrumbPage.displayName = 'BreadcrumbPage';
 
 const BreadcrumbSeparator = ({
   children,
   className,
   ...props
-}: ComponentProps<"li">) => (
+}: ComponentProps<'li'>) => (
   <li
     role="presentation"
     aria-hidden="true"
-    className={cn("[&>svg]:w-3.5 [&>svg]:h-3.5", className)}
+    className={cn('[&>svg]:h-3.5 [&>svg]:w-3.5', className)}
     {...props}
   >
     {children ?? <ChevronRight />}
   </li>
 );
-BreadcrumbSeparator.displayName = "BreadcrumbSeparator";
+BreadcrumbSeparator.displayName = 'BreadcrumbSeparator';
 
 const BreadcrumbEllipsis = ({
   className,
   ...props
-}: ComponentProps<"span">) => (
+}: ComponentProps<'span'>) => (
   <span
     role="presentation"
     aria-hidden="true"
-    className={cn("flex h-9 w-9 items-center justify-center", className)}
+    className={cn('flex h-9 w-9 items-center justify-center', className)}
     {...props}
   >
     <MoreHorizontal className="h-4 w-4" />
     <span className="sr-only">More</span>
   </span>
 );
-BreadcrumbEllipsis.displayName = "BreadcrumbElipssis";
+BreadcrumbEllipsis.displayName = 'BreadcrumbElipssis';
 
 export {
   Breadcrumb,

@@ -2,8 +2,9 @@
  * Test file for command component.
  * Basic rendering and interaction tests.
  */
-import { describe, it, expect } from 'vitest';
+
 import { render } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
 import { Command } from './command';
 
 describe('Command', () => {

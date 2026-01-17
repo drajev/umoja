@@ -1,7 +1,7 @@
-import { describe, it, expect, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import { Button } from "@/components/ui/button";
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { describe, expect, it, vi } from 'vitest';
+import { Button } from '@/components/ui/button';
 
 /**
  * Example component test for Button.
@@ -12,47 +12,47 @@ import { Button } from "@/components/ui/button";
  * - Test user interactions
  * - Test accessibility
  */
-describe("Button", () => {
-  it("renders with text", () => {
+describe('Button', () => {
+  it('renders with text', () => {
     render(<Button>Click me</Button>);
-    expect(screen.getByText("Click me")).toBeInTheDocument();
+    expect(screen.getByText('Click me')).toBeInTheDocument();
   });
 
-  it("applies default variant styles", () => {
+  it('applies default variant styles', () => {
     const { container } = render(<Button>Test</Button>);
-    const button = container.querySelector("button");
-    expect(button).toHaveClass("bg-primary");
+    const button = container.querySelector('button');
+    expect(button).toHaveClass('bg-primary');
   });
 
-  it("applies custom variant styles", () => {
+  it('applies custom variant styles', () => {
     const { container } = render(<Button variant="destructive">Delete</Button>);
-    const button = container.querySelector("button");
-    expect(button).toHaveClass("bg-destructive");
+    const button = container.querySelector('button');
+    expect(button).toHaveClass('bg-destructive');
   });
 
-  it("handles click events", async () => {
+  it('handles click events', async () => {
     const handleClick = vi.fn();
     const user = userEvent.setup();
 
     render(<Button onClick={handleClick}>Click me</Button>);
 
-    const button = screen.getByText("Click me");
+    const button = screen.getByText('Click me');
     await user.click(button);
 
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
-  it("can be disabled", () => {
+  it('can be disabled', () => {
     const { container } = render(<Button disabled>Disabled</Button>);
-    const button = container.querySelector("button");
+    const button = container.querySelector('button');
     expect(button).toBeDisabled();
   });
 
-  it("renders different sizes", () => {
+  it('renders different sizes', () => {
     const { container: small } = render(<Button size="sm">Small</Button>);
     const { container: large } = render(<Button size="lg">Large</Button>);
 
-    expect(small.querySelector("button")).toHaveClass("h-9");
-    expect(large.querySelector("button")).toHaveClass("h-11");
+    expect(small.querySelector('button')).toHaveClass('h-9');
+    expect(large.querySelector('button')).toHaveClass('h-11');
   });
 });

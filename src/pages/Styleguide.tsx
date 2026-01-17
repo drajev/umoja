@@ -1,21 +1,13 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Heading, Text } from "@/components/ui/typography";
-import { StrategyForm } from "@/components/forms/StrategyForm";
+import { useState } from 'react';
+import { HiOutlineClipboardDocument } from 'react-icons/hi2';
+import { StrategyForm } from '@/components/forms/StrategyForm';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+} from '@/components/ui/accordion';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -26,10 +18,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
+} from '@/components/ui/alert-dialog';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -37,21 +29,29 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Calendar } from "@/components/ui/calendar";
+} from '@/components/ui/breadcrumb';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@/components/ui/carousel";
-import { Checkbox } from "@/components/ui/checkbox";
+} from '@/components/ui/carousel';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+} from '@/components/ui/collapsible';
 import {
   Command,
   CommandEmpty,
@@ -59,13 +59,13 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command";
+} from '@/components/ui/command';
 import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuTrigger,
-} from "@/components/ui/context-menu";
+} from '@/components/ui/context-menu';
 import {
   Dialog,
   DialogContent,
@@ -73,7 +73,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 import {
   Drawer,
   DrawerClose,
@@ -83,7 +83,7 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/components/ui/drawer";
+} from '@/components/ui/drawer';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -91,19 +91,19 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu';
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from "@/components/ui/hover-card";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/hover-card';
+import { Input } from '@/components/ui/input';
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
-} from "@/components/ui/input-otp";
-import { Label } from "@/components/ui/label";
+} from '@/components/ui/input-otp';
+import { Label } from '@/components/ui/label';
 import {
   Menubar,
   MenubarContent,
@@ -111,7 +111,7 @@ import {
   MenubarMenu,
   MenubarSeparator,
   MenubarTrigger,
-} from "@/components/ui/menubar";
+} from '@/components/ui/menubar';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -119,7 +119,7 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
+} from '@/components/ui/navigation-menu';
 import {
   Pagination,
   PaginationContent,
@@ -128,28 +128,28 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination";
+} from '@/components/ui/pagination';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { Progress } from "@/components/ui/progress";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+} from '@/components/ui/popover';
+import { Progress } from '@/components/ui/progress';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
-} from "@/components/ui/resizable";
-import { ScrollArea } from "@/components/ui/scroll-area";
+} from '@/components/ui/resizable';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
+} from '@/components/ui/select';
+import { Separator } from '@/components/ui/separator';
 import {
   Sheet,
   SheetContent,
@@ -157,10 +157,10 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Slider } from "@/components/ui/slider";
-import { Switch } from "@/components/ui/switch";
+} from '@/components/ui/sheet';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Slider } from '@/components/ui/slider';
+import { Switch } from '@/components/ui/switch';
 import {
   Table,
   TableBody,
@@ -169,18 +169,18 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Textarea } from "@/components/ui/textarea";
-import { Toggle } from "@/components/ui/toggle";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+} from '@/components/ui/table';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Textarea } from '@/components/ui/textarea';
+import { Toggle } from '@/components/ui/toggle';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { HiOutlineClipboardDocument } from "react-icons/hi2";
+} from '@/components/ui/tooltip';
+import { Heading, Text } from '@/components/ui/typography';
 
 /**
  * Styleguide page showcasing all shadcn/ui components and design tokens.
@@ -543,8 +543,8 @@ export const Styleguide = () => {
             </CardHeader>
             <CardContent>
               <StrategyForm
-                onSubmit={async (data) => {
-                  console.log("Form submitted:", data);
+                onSubmit={async data => {
+                  console.log('Form submitted:', data);
                 }}
               />
             </CardContent>
@@ -564,7 +564,7 @@ export const Styleguide = () => {
                   <AvatarFallback>VC</AvatarFallback>
                 </Avatar>
                 <div className="space-y-1">
-                  <Text className="text-sm font-semibold">@hovercard</Text>
+                  <Text className="font-semibold text-sm">@hovercard</Text>
                   <Text variant="small" className="text-muted-foreground">
                     The React Framework
                   </Text>
@@ -740,7 +740,7 @@ export const Styleguide = () => {
           <Heading level={2}>Scroll Area</Heading>
           <ScrollArea className="h-32 w-48 rounded-md border p-4">
             <div className="space-y-2">
-              {Array.from({ length: 20 }).map((_, i) => (
+              {Array.from({ length: 20 }, (_, i) => (
                 <Text key={i} variant="small">
                   Item {i + 1}
                 </Text>
@@ -769,7 +769,7 @@ export const Styleguide = () => {
           <Heading level={2}>Separator</Heading>
           <div>
             <div className="space-y-1">
-              <Text className="text-sm font-medium">Radix Primitives</Text>
+              <Text className="font-medium text-sm">Radix Primitives</Text>
               <Text variant="small" className="text-muted-foreground">
                 An open-source UI component library.
               </Text>
@@ -961,14 +961,14 @@ export const Styleguide = () => {
         <section className="space-y-4">
           <Heading level={2}>Carousel</Heading>
           <div className="w-full overflow-hidden px-4 md:px-0">
-            <Carousel className="w-full max-w-xs mx-auto">
+            <Carousel className="mx-auto w-full max-w-xs">
               <CarouselContent className="-ml-2 md:-ml-4">
-                {Array.from({ length: 5 }).map((_, index) => (
+                {Array.from({ length: 5 }, (_, index) => (
                   <CarouselItem key={index} className="pl-2 md:pl-4">
                     <div className="p-1">
                       <Card>
                         <CardContent className="flex aspect-square items-center justify-center p-4 md:p-6">
-                          <Text className="text-xl md:text-2xl font-semibold">
+                          <Text className="font-semibold text-xl md:text-2xl">
                             {index + 1}
                           </Text>
                         </CardContent>
@@ -987,7 +987,7 @@ export const Styleguide = () => {
         <section className="space-y-4">
           <Heading level={2}>Aspect Ratio</Heading>
           <AspectRatio ratio={16 / 9} className="bg-muted">
-            <div className="flex items-center justify-center h-full">
+            <div className="flex h-full items-center justify-center">
               <Text>16:9 Aspect Ratio</Text>
             </div>
           </AspectRatio>

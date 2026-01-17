@@ -2,7 +2,7 @@
  * Login page component.
  * Allows users to authenticate with email and password.
  */
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
 import {
   Breadcrumb,
@@ -11,8 +11,8 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/breadcrumb';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -20,7 +20,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/card';
 import {
   Form,
   FormControl,
@@ -28,20 +28,20 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useCreateForm } from "@/lib/forms/createForm";
-import { useLoginHandler } from "@/queries/auth/auth";
-import { routes } from "@/routes";
-import { loginSchema, type LoginFormData } from "@/schemas/authSchemas";
-import styles from "@/styles/modules/auth.module.css";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { useCreateForm } from '@/lib/forms/createForm';
+import { useLoginHandler } from '@/queries/auth/auth';
+import { routes } from '@/routes';
+import { type LoginFormData, loginSchema } from '@/schemas/authSchemas';
+import styles from '@/styles/modules/auth.module.css';
 
 export const Login = () => {
   const { handleLogin } = useLoginHandler();
   const form = useCreateForm(loginSchema, {
     defaultValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
   });
 
@@ -126,7 +126,7 @@ export const Login = () => {
                   className={styles.submitButton}
                   disabled={form.formState.isSubmitting}
                 >
-                  {form.formState.isSubmitting ? "Validating..." : "Login"}
+                  {form.formState.isSubmitting ? 'Validating...' : 'Login'}
                 </Button>
               </form>
             </Form>
@@ -134,7 +134,7 @@ export const Login = () => {
 
           <CardFooter className={styles.footer}>
             <div className={styles.footerText}>
-              Don't have an account?{" "}
+              Don't have an account?{' '}
               <Link to={routes.register} className={styles.primaryLink}>
                 Sign up
               </Link>

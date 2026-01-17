@@ -4,4 +4,4 @@
  *
  * @deprecated Import from '@/utils' instead
  */
-export { cn } from "@/utils/helpers";
+export { cn } from '@/utils/helpers';

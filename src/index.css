@@ -85,8 +85,7 @@
 /* Respect user's motion preference */
 @media (prefers-reduced-motion: reduce) {
   *,
-  &
-  *::before,
+  & *::before,
   *::after {
     animation-duration: 0.01ms;
     animation-iteration-count: 1;

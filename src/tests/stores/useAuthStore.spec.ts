@@ -1,19 +1,19 @@
-import { act, renderHook } from "@testing-library/react";
-import { beforeEach, describe, expect, it } from "vitest";
+import { act, renderHook } from '@testing-library/react';
+import { beforeEach, describe, expect, it } from 'vitest';
 
-import { useAuthStore, type User } from "@/stores";
+import { type User, useAuthStore } from '@/stores';
 
 /**
  * Tests for useAuthStore.
  * Tests state management with the new actions pattern.
  */
-describe("useAuthStore", () => {
+describe('useAuthStore', () => {
   beforeEach(() => {
     // Reset store to initial state before each test
     useAuthStore.getState().actions.resetStore();
   });
 
-  it("initializes with empty state", () => {
+  it('initializes with empty state', () => {
     const { result } = renderHook(() => useAuthStore());
     expect(result.current.user).toBeNull();
     expect(result.current.token).toBeNull();
@@ -21,12 +21,12 @@ describe("useAuthStore", () => {
     expect(result.current.error).toBeNull();
   });
 
-  it("sets user correctly", () => {
+  it('sets user correctly', () => {
     const { result } = renderHook(() => useAuthStore());
     const mockUser: User = {
-      id: "1",
-      email: "test@example.com",
-      name: "Test User",
+      id: '1',
+      email: 'test@example.com',
+      name: 'Test User',
     };
 
     act(() => {
@@ -37,9 +37,9 @@ describe("useAuthStore", () => {
     expect(result.current.isAuthenticated).toBe(true);
   });
 
-  it("sets token correctly", () => {
+  it('sets token correctly', () => {
     const { result } = renderHook(() => useAuthStore());
-    const mockToken = "test-token-123";
+    const mockToken = 'test-token-123';
 
     act(() => {
       result.current.actions.setToken(mockToken);
@@ -48,14 +48,14 @@ describe("useAuthStore", () => {
     expect(result.current.token).toBe(mockToken);
   });
 
-  it("sets credentials correctly", () => {
+  it('sets credentials correctly', () => {
     const { result } = renderHook(() => useAuthStore());
     const mockUser: User = {
-      id: "1",
-      email: "test@example.com",
-      name: "Test User",
+      id: '1',
+      email: 'test@example.com',
+      name: 'Test User',
     };
-    const mockToken = "test-token-123";
+    const mockToken = 'test-token-123';
 
     act(() => {
       result.current.actions.setCredentials(mockUser, mockToken);
@@ -67,9 +67,9 @@ describe("useAuthStore", () => {
     expect(result.current.error).toBeNull();
   });
 
-  it("sets error correctly", () => {
+  it('sets error correctly', () => {
     const { result } = renderHook(() => useAuthStore());
-    const errorMessage = "Test error";
+    const errorMessage = 'Test error';
 
     act(() => {
       result.current.actions.setError(errorMessage);
@@ -78,28 +78,28 @@ describe("useAuthStore", () => {
     expect(result.current.error).toBe(errorMessage);
   });
 
-  it("clears error correctly", () => {
+  it('clears error correctly', () => {
     const { result } = renderHook(() => useAuthStore());
 
     act(() => {
-      result.current.actions.setError("Test error");
+      result.current.actions.setError('Test error');
       result.current.actions.clearError();
     });
 
     expect(result.current.error).toBeNull();
   });
 
-  it("logout clears all state", () => {
+  it('logout clears all state', () => {
     const { result } = renderHook(() => useAuthStore());
     const mockUser: User = {
-      id: "1",
-      email: "test@example.com",
-      name: "Test User",
+      id: '1',
+      email: 'test@example.com',
+      name: 'Test User',
     };
 
     act(() => {
-      result.current.actions.setCredentials(mockUser, "test-token");
-      result.current.actions.setError("Some error");
+      result.current.actions.setCredentials(mockUser, 'test-token');
+      result.current.actions.setError('Some error');
     });
 
     expect(result.current.user).not.toBeNull();
@@ -116,15 +116,15 @@ describe("useAuthStore", () => {
     expect(result.current.error).toBeNull();
   });
 
-  it("uses auto-generated selectors correctly", () => {
+  it('uses auto-generated selectors correctly', () => {
     const mockUser: User = {
-      id: "1",
-      email: "test@example.com",
-      name: "Test User",
+      id: '1',
+      email: 'test@example.com',
+      name: 'Test User',
     };
 
     act(() => {
-      useAuthStore.getState().actions.setCredentials(mockUser, "test-token");
+      useAuthStore.getState().actions.setCredentials(mockUser, 'test-token');
     });
 
     // Test individual selectors
@@ -135,7 +135,7 @@ describe("useAuthStore", () => {
     );
 
     expect(userResult.current).toEqual(mockUser);
-    expect(tokenResult.current).toBe("test-token");
+    expect(tokenResult.current).toBe('test-token');
     expect(authResult.current).toBe(true);
   });
 });
