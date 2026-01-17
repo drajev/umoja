@@ -37,7 +37,7 @@ import { type RegisterFormData, registerSchema } from '@/schemas/authSchemas';
 import styles from '@/styles/modules/auth.module.css';
 
 export const Register = () => {
-  const { handleRegister } = useRegisterHandler();
+  const { handleRegister, isLoading } = useRegisterHandler();
   const form = useCreateForm(registerSchema, {
     defaultValues: {
       name: '',
@@ -54,6 +54,8 @@ export const Register = () => {
       name: data.name,
     });
   });
+
+  const isSubmitting = form.formState.isSubmitting || isLoading;
 
   return (
     <div className={styles.page}>
@@ -156,11 +158,9 @@ export const Register = () => {
                 <Button
                   type="submit"
                   className={styles.submitButton}
-                  disabled={form.formState.isSubmitting}
+                  disabled={isSubmitting}
                 >
-                  {form.formState.isSubmitting
-                    ? 'Validating...'
-                    : 'Create Account'}
+                  {isSubmitting ? 'Creating account...' : 'Create Account'}
                 </Button>
               </form>
             </Form>

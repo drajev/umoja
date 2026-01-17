@@ -37,7 +37,7 @@ import { type LoginFormData, loginSchema } from '@/schemas/authSchemas';
 import styles from '@/styles/modules/auth.module.css';
 
 export const Login = () => {
-  const { handleLogin } = useLoginHandler();
+  const { handleLogin, isLoading } = useLoginHandler();
   const form = useCreateForm(loginSchema, {
     defaultValues: {
       email: '',
@@ -48,6 +48,8 @@ export const Login = () => {
   const handleSubmit = form.handleSubmit(async (data: LoginFormData) => {
     await handleLogin(data);
   });
+
+  const isSubmitting = form.formState.isSubmitting || isLoading;
 
   return (
     <div className={styles.page}>
@@ -124,9 +126,9 @@ export const Login = () => {
                 <Button
                   type="submit"
                   className={styles.submitButton}
-                  disabled={form.formState.isSubmitting}
+                  disabled={isSubmitting}
                 >
-                  {form.formState.isSubmitting ? 'Validating...' : 'Login'}
+                  {isSubmitting ? 'Signing in...' : 'Login'}
                 </Button>
               </form>
             </Form>

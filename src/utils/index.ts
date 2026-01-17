@@ -3,8 +3,24 @@
  * Import utils from '@/utils' for cleaner imports.
  *
  * @example
- * import { cn, isString, preventDefault, debounce } from '@/utils';
+ * import { cn, isString, preventDefault, debounce, getErrorMessage } from '@/utils';
  */
+
+// API helpers
+export {
+  type ApiError,
+  type ApiResponse,
+  getErrorMessage,
+  getErrorStatusCode,
+  hasApiErrorResponse,
+  isAxiosError,
+  isConflictError,
+  isForbiddenError,
+  isNotFoundError,
+  isStatusError,
+  isUnauthorizedError,
+  isValidationError,
+} from './api';
 
 // Type guards and assertions
 export {

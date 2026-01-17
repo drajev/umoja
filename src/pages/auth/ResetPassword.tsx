@@ -2,7 +2,7 @@
  * Reset Password page component.
  * Allows users to reset their password using a reset token.
  */
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -45,9 +45,8 @@ export const ResetPassword = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [isSuccess, setIsSuccess] = useState(false);
-  const redirectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const token = searchParams.get('token') || '';
-  const { handleResetPassword } = useResetPasswordHandler();
+  const { handleResetPassword, isLoading } = useResetPasswordHandler();
 
   const form = useCreateForm(resetPasswordSchema, {
     defaultValues: {
@@ -62,35 +61,21 @@ export const ResetPassword = () => {
     }
   }, [token, navigate]);
 
-  // Cleanup timeout on unmount
-  useEffect(() => {
-    return () => {
-      if (redirectTimeoutRef.current) {
-        clearTimeout(redirectTimeoutRef.current);
-      }
-    };
-  }, []);
-
   const handleSubmit = form.handleSubmit(
     async (data: ResetPasswordFormData) => {
-      await handleResetPassword({
+      const success = await handleResetPassword({
         token,
         password: data.password,
       });
-      setIsSuccess(true);
-      form.reset();
 
-      // Clear any existing timeout
-      if (redirectTimeoutRef.current) {
-        clearTimeout(redirectTimeoutRef.current);
+      if (success) {
+        setIsSuccess(true);
+        form.reset();
       }
-
-      // Redirect after success
-      redirectTimeoutRef.current = setTimeout(() => {
-        navigate(routes.login);
-      }, 2000);
     },
   );
+
+  const isSubmitting = form.formState.isSubmitting || isLoading;
 
   const breadcrumb = (
     <div className={styles.breadcrumbContainer}>
@@ -198,11 +183,9 @@ export const ResetPassword = () => {
                 <Button
                   type="submit"
                   className={styles.submitButton}
-                  disabled={form.formState.isSubmitting || !token}
+                  disabled={isSubmitting || !token}
                 >
-                  {form.formState.isSubmitting
-                    ? 'Validating...'
-                    : 'Reset Password'}
+                  {isSubmitting ? 'Resetting...' : 'Reset Password'}
                 </Button>
               </form>
             </Form>

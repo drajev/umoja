@@ -2,7 +2,6 @@
  * Forgot Password page component.
  * Allows users to request a password reset email.
  */
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import {
@@ -42,8 +41,8 @@ import {
 import styles from '@/styles/modules/auth.module.css';
 
 export const ForgotPassword = () => {
-  const [isSuccess, setIsSuccess] = useState(false);
-  const { handleForgotPassword } = useForgotPasswordHandler();
+  const { handleForgotPassword, isLoading, isSuccess } =
+    useForgotPasswordHandler();
   const form = useCreateForm(forgotPasswordSchema, {
     defaultValues: {
       email: '',
@@ -53,10 +52,11 @@ export const ForgotPassword = () => {
   const handleSubmit = form.handleSubmit(
     async (data: ForgotPasswordFormData) => {
       await handleForgotPassword({ email: data.email });
-      setIsSuccess(true);
       form.reset();
     },
   );
+
+  const isSubmitting = form.formState.isSubmitting || isLoading;
 
   const breadcrumb = (
     <div className={styles.breadcrumbContainer}>
@@ -151,11 +151,9 @@ export const ForgotPassword = () => {
                 <Button
                   type="submit"
                   className={styles.submitButton}
-                  disabled={form.formState.isSubmitting}
+                  disabled={isSubmitting}
                 >
-                  {form.formState.isSubmitting
-                    ? 'Validating...'
-                    : 'Send Reset Link'}
+                  {isSubmitting ? 'Sending...' : 'Send Reset Link'}
                 </Button>
               </form>
             </Form>

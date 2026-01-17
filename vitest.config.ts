@@ -17,5 +17,10 @@ export default defineConfig({
     css: true,
     root: './src',
     include: ['**/*.{test,spec}.{ts,tsx}'],
+    // Use forks pool to avoid tinypool stack overflow with Bun
+    pool: 'forks',
+    // Limit concurrency to avoid worker crashes
+    maxConcurrency: 5,
+    fileParallelism: false,
   },
 });
