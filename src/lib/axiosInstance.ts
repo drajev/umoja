@@ -16,7 +16,8 @@ import axios, {
   type AxiosResponse,
   type InternalAxiosRequestConfig,
 } from 'axios';
-import { useAuthStore } from '@/stores';
+import { routes } from '@/routes';
+import { useAuthStore, useToastStore } from '@/stores';
 
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL || '',
@@ -24,6 +25,13 @@ const axiosInstance = axios.create({
     'Content-Type': 'application/json',
   },
 });
+
+// Navigate ref for 401 redirect; set by AxiosNavigateSetter inside Router
+let navigateRef: ((to: string) => void) | null = null;
+
+export function setAxiosNavigate(fn: ((to: string) => void) | null): void {
+  navigateRef = fn;
+}
 
 // Request interceptor
 axiosInstance.interceptors.request.use(
@@ -35,20 +43,23 @@ axiosInstance.interceptors.request.use(
     }
     return config;
   },
-  (error: AxiosError) => {
-    return Promise.reject(error);
-  },
+  (err: AxiosError) => Promise.reject(err),
 );
 
 // Response interceptor
 axiosInstance.interceptors.response.use(
-  (response: AxiosResponse) => {
-    return response;
-  },
+  (response: AxiosResponse) => response,
   async (error: AxiosError) => {
-    // Handle 401 errors - logout user if unauthorized
     if (error.response?.status === 401) {
       useAuthStore.getState().actions.logout();
+      useToastStore
+        .getState()
+        .actions.info('Session expired. Please log in again.');
+      if (navigateRef) {
+        navigateRef(routes.login);
+      } else {
+        window.location.href = routes.login;
+      }
     }
     return Promise.reject(error);
   },

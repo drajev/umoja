@@ -7,8 +7,10 @@
  * - Add navigation components (header, sidebar, etc.)
  * - Add global providers (theme, query client, etc.)
  */
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { useEffect } from 'react';
+import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
 import { Layout } from '@/components/Layout';
+import { setAxiosNavigate } from '@/lib/axiosInstance';
 import { ForgotPassword } from '@/pages/auth/ForgotPassword';
 import { Login } from '@/pages/auth/Login';
 import { Register } from '@/pages/auth/Register';
@@ -17,9 +19,19 @@ import { Home } from '@/pages/Home';
 import { Styleguide } from '@/pages/Styleguide';
 import { routes } from '@/routes';
 
+function AxiosNavigateSetter() {
+  const navigate = useNavigate();
+  useEffect(() => {
+    setAxiosNavigate(navigate);
+    return () => setAxiosNavigate(null);
+  }, [navigate]);
+  return null;
+}
+
 export const App = () => {
   return (
     <BrowserRouter>
+      <AxiosNavigateSetter />
       <Routes>
         {/* Auth routes without layout */}
         <Route path={routes.login} element={<Login />} />
