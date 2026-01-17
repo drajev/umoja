@@ -4,16 +4,8 @@
  */
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-
+import { AuthBreadcrumb } from '@/components/auth/AuthBreadcrumb';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -77,34 +69,10 @@ export const ResetPassword = () => {
 
   const isSubmitting = form.formState.isSubmitting || isLoading;
 
-  const breadcrumb = (
-    <div className={styles.breadcrumbContainer}>
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link to={routes.home}>Home</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link to={routes.login}>Login</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>Reset Password</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
-    </div>
-  );
-
   if (isSuccess) {
     return (
       <div className={styles.page}>
-        {breadcrumb}
+        <AuthBreadcrumb currentPage="Reset Password" showLoginLink />
         <div className={styles.content}>
           <Card className={styles.card}>
             <CardHeader className={styles.cardHeader}>
@@ -133,7 +101,7 @@ export const ResetPassword = () => {
 
   return (
     <div className={styles.page}>
-      {breadcrumb}
+      <AuthBreadcrumb currentPage="Reset Password" showLoginLink />
       <div className={styles.content}>
         <Card className={styles.card}>
           <CardHeader className={styles.cardHeader}>

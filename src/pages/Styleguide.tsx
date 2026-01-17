@@ -181,6 +181,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { Heading, Text } from '@/components/ui/typography';
+import { useToastStore } from '@/stores';
 
 /**
  * Styleguide page showcasing all shadcn/ui components and design tokens.
@@ -189,6 +190,7 @@ import { Heading, Text } from '@/components/ui/typography';
 export const Styleguide = () => {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [sliderValue, setSliderValue] = useState([50]);
+  const { success, warning, info, error } = useToastStore.use.actions();
 
   return (
     <div className="space-y-8 md:space-y-12">
@@ -327,6 +329,44 @@ export const Styleguide = () => {
               </AlertDescription>
             </Alert>
           </div>
+        </section>
+
+        {/* Toast (Sonner) */}
+        <section className="space-y-4">
+          <Heading level={2}>Toast (Sonner)</Heading>
+          <Card>
+            <CardHeader>
+              <CardTitle>Toast variants</CardTitle>
+              <CardDescription>
+                Trigger success, warning, info, and error toasts.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="flex flex-wrap gap-2">
+              <Button
+                onClick={() => success('Operation completed successfully.')}
+              >
+                Success
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => warning('Please review this.')}
+              >
+                Warning
+              </Button>
+              <Button
+                variant="secondary"
+                onClick={() => info('Here is some information.')}
+              >
+                Info
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={() => error('Something went wrong.')}
+              >
+                Error
+              </Button>
+            </CardContent>
+          </Card>
         </section>
 
         {/* Alert Dialog */}

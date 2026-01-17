@@ -9,7 +9,7 @@ type ToasterProps = ComponentProps<typeof Sonner>;
  * Wrapper around sonner library for toast notifications.
  */
 const Toaster = ({ ...props }: ToasterProps) => {
-  const theme = useUIStore(state => state.theme);
+  const theme = useUIStore.use.theme();
 
   return (
     <Sonner
@@ -20,8 +20,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
       closeButton
       toastOptions={{
         classNames: {
-          toast:
-            'group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg',
+          toast: 'group toast group-[.toaster]:shadow-lg',
           description: 'group-[.toast]:text-muted-foreground',
           actionButton:
             'group-[.toast]:bg-primary group-[.toast]:text-primary-foreground',

@@ -4,14 +4,7 @@
  */
 import { Link } from 'react-router-dom';
 
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
+import { AuthBreadcrumb } from '@/components/auth/AuthBreadcrumb';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -58,34 +51,10 @@ export const ForgotPassword = () => {
 
   const isSubmitting = form.formState.isSubmitting || isLoading;
 
-  const breadcrumb = (
-    <div className={styles.breadcrumbContainer}>
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link to={routes.home}>Home</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link to={routes.login}>Login</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>Forgot Password</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
-    </div>
-  );
-
   if (isSuccess) {
     return (
       <div className={styles.page}>
-        {breadcrumb}
+        <AuthBreadcrumb currentPage="Forgot Password" showLoginLink />
         <div className={styles.content}>
           <Card className={styles.card}>
             <CardHeader className={styles.cardHeader}>
@@ -117,7 +86,7 @@ export const ForgotPassword = () => {
 
   return (
     <div className={styles.page}>
-      {breadcrumb}
+      <AuthBreadcrumb currentPage="Forgot Password" showLoginLink />
       <div className={styles.content}>
         <Card className={styles.card}>
           <CardHeader className={styles.cardHeader}>

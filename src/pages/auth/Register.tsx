@@ -4,14 +4,7 @@
  */
 import { Link } from 'react-router-dom';
 
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
+import { AuthBreadcrumb } from '@/components/auth/AuthBreadcrumb';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -59,21 +52,7 @@ export const Register = () => {
 
   return (
     <div className={styles.page}>
-      <div className={styles.breadcrumbContainer}>
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link to={routes.home}>Home</Link>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>Register</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-      </div>
+      <AuthBreadcrumb currentPage="Register" />
 
       <div className={styles.content}>
         <Card className={styles.card}>
