@@ -44,7 +44,7 @@ export const LoadingWrapper = ({
       return (
         <div className={cn('space-y-2', className)}>
           {Array.from({ length: skeletonCount }, (_, i) => (
-            <Skeleton key={i} className="h-4 w-full" />
+            <Skeleton key={`skeleton-${i}`} className="h-4 w-full" />
           ))}
         </div>
       );

@@ -781,7 +781,7 @@ export const Styleguide = () => {
           <ScrollArea className="h-32 w-48 rounded-md border p-4">
             <div className="space-y-2">
               {Array.from({ length: 20 }, (_, i) => (
-                <Text key={i} variant="small">
+                <Text key={`scroll-item-${i}`} variant="small">
                   Item {i + 1}
                 </Text>
               ))}
@@ -1004,7 +1004,10 @@ export const Styleguide = () => {
             <Carousel className="mx-auto w-full max-w-xs">
               <CarouselContent className="-ml-2 md:-ml-4">
                 {Array.from({ length: 5 }, (_, index) => (
-                  <CarouselItem key={index} className="pl-2 md:pl-4">
+                  <CarouselItem
+                    key={`carousel-${index}`}
+                    className="pl-2 md:pl-4"
+                  >
                     <div className="p-1">
                       <Card>
                         <CardContent className="flex aspect-square items-center justify-center p-4 md:p-6">

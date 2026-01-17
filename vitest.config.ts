@@ -17,9 +17,9 @@ export default defineConfig({
     css: true,
     root: './src',
     include: ['**/*.{test,spec}.{ts,tsx}'],
-    // Use forks pool to avoid tinypool stack overflow with Bun
+    // Compatibility workarounds for tinypool/Bun (worker crashes, stack overflow).
+    // Re-test with future Vitest/Bun versions and remove if no longer needed.
     pool: 'forks',
-    // Limit concurrency to avoid worker crashes
     maxConcurrency: 5,
     fileParallelism: false,
   },
