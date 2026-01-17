@@ -51,6 +51,12 @@ const baseStore = create<LanguageStore>()(
       }),
       {
         name: 'language-storage',
+        partialize: state => ({ language: state.language }),
+        merge: (persisted, current) => ({
+          ...current,
+          ...(persisted as Partial<LanguageState>),
+          actions: current.actions,
+        }),
       },
     ),
     { name: 'LanguageStore' },

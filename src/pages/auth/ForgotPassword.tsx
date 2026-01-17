@@ -2,17 +2,9 @@
  * Forgot Password page component.
  * Allows users to request a password reset email.
  */
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
+import { AuthBreadcrumb } from '@/components/auth/AuthBreadcrumb';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -42,8 +34,8 @@ import {
 import styles from '@/styles/modules/auth.module.css';
 
 export const ForgotPassword = () => {
-  const [isSuccess, setIsSuccess] = useState(false);
-  const { handleForgotPassword } = useForgotPasswordHandler();
+  const { handleForgotPassword, isLoading, isSuccess } =
+    useForgotPasswordHandler();
   const form = useCreateForm(forgotPasswordSchema, {
     defaultValues: {
       email: '',
@@ -53,39 +45,16 @@ export const ForgotPassword = () => {
   const handleSubmit = form.handleSubmit(
     async (data: ForgotPasswordFormData) => {
       await handleForgotPassword({ email: data.email });
-      setIsSuccess(true);
       form.reset();
     },
   );
 
-  const breadcrumb = (
-    <div className={styles.breadcrumbContainer}>
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link to={routes.home}>Home</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link to={routes.login}>Login</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>Forgot Password</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
-    </div>
-  );
+  const isSubmitting = form.formState.isSubmitting || isLoading;
 
   if (isSuccess) {
     return (
       <div className={styles.page}>
-        {breadcrumb}
+        <AuthBreadcrumb currentPage="Forgot Password" showLoginLink />
         <div className={styles.content}>
           <Card className={styles.card}>
             <CardHeader className={styles.cardHeader}>
@@ -117,7 +86,7 @@ export const ForgotPassword = () => {
 
   return (
     <div className={styles.page}>
-      {breadcrumb}
+      <AuthBreadcrumb currentPage="Forgot Password" showLoginLink />
       <div className={styles.content}>
         <Card className={styles.card}>
           <CardHeader className={styles.cardHeader}>
@@ -151,11 +120,9 @@ export const ForgotPassword = () => {
                 <Button
                   type="submit"
                   className={styles.submitButton}
-                  disabled={form.formState.isSubmitting}
+                  disabled={isSubmitting}
                 >
-                  {form.formState.isSubmitting
-                    ? 'Validating...'
-                    : 'Send Reset Link'}
+                  {isSubmitting ? 'Sending...' : 'Send Reset Link'}
                 </Button>
               </form>
             </Form>

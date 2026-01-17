@@ -17,5 +17,10 @@ export default defineConfig({
     css: true,
     root: './src',
     include: ['**/*.{test,spec}.{ts,tsx}'],
+    // Compatibility workarounds for tinypool/Bun (worker crashes, stack overflow).
+    // Re-test with future Vitest/Bun versions and remove if no longer needed.
+    pool: 'forks',
+    maxConcurrency: 5,
+    fileParallelism: false,
   },
 });

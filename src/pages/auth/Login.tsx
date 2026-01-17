@@ -4,14 +4,7 @@
  */
 import { Link } from 'react-router-dom';
 
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
+import { AuthBreadcrumb } from '@/components/auth/AuthBreadcrumb';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -37,7 +30,7 @@ import { type LoginFormData, loginSchema } from '@/schemas/authSchemas';
 import styles from '@/styles/modules/auth.module.css';
 
 export const Login = () => {
-  const { handleLogin } = useLoginHandler();
+  const { handleLogin, isLoading } = useLoginHandler();
   const form = useCreateForm(loginSchema, {
     defaultValues: {
       email: '',
@@ -49,23 +42,11 @@ export const Login = () => {
     await handleLogin(data);
   });
 
+  const isSubmitting = form.formState.isSubmitting || isLoading;
+
   return (
     <div className={styles.page}>
-      <div className={styles.breadcrumbContainer}>
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link to={routes.home}>Home</Link>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>Login</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-      </div>
+      <AuthBreadcrumb currentPage="Login" />
 
       <div className={styles.content}>
         <Card className={styles.card}>
@@ -124,9 +105,9 @@ export const Login = () => {
                 <Button
                   type="submit"
                   className={styles.submitButton}
-                  disabled={form.formState.isSubmitting}
+                  disabled={isSubmitting}
                 >
-                  {form.formState.isSubmitting ? 'Validating...' : 'Login'}
+                  {isSubmitting ? 'Signing in...' : 'Login'}
                 </Button>
               </form>
             </Form>

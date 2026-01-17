@@ -344,6 +344,10 @@ bun run test:ui           # Interactive UI
 bun run test:coverage     # Coverage report
 ```
 
+### Vitest/Bun compatibility
+
+`vitest.config.ts` uses `pool: 'forks'`, `maxConcurrency: 5`, and `fileParallelism: false` as workarounds for tinypool/Bun issues (worker crashes, stack overflow). Re-test with future Vitest and Bun versions and remove or relax these if they are no longer needed.
+
 ## Environment Variables
 
 ### Required

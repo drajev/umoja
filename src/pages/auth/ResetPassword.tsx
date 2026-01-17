@@ -2,18 +2,10 @@
  * Reset Password page component.
  * Allows users to reset their password using a reset token.
  */
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-
+import { AuthBreadcrumb } from '@/components/auth/AuthBreadcrumb';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -45,9 +37,8 @@ export const ResetPassword = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [isSuccess, setIsSuccess] = useState(false);
-  const redirectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const token = searchParams.get('token') || '';
-  const { handleResetPassword } = useResetPasswordHandler();
+  const { handleResetPassword, isLoading } = useResetPasswordHandler();
 
   const form = useCreateForm(resetPasswordSchema, {
     defaultValues: {
@@ -62,64 +53,26 @@ export const ResetPassword = () => {
     }
   }, [token, navigate]);
 
-  // Cleanup timeout on unmount
-  useEffect(() => {
-    return () => {
-      if (redirectTimeoutRef.current) {
-        clearTimeout(redirectTimeoutRef.current);
-      }
-    };
-  }, []);
-
   const handleSubmit = form.handleSubmit(
     async (data: ResetPasswordFormData) => {
-      await handleResetPassword({
+      const success = await handleResetPassword({
         token,
         password: data.password,
       });
-      setIsSuccess(true);
-      form.reset();
 
-      // Clear any existing timeout
-      if (redirectTimeoutRef.current) {
-        clearTimeout(redirectTimeoutRef.current);
+      if (success) {
+        setIsSuccess(true);
+        form.reset();
       }
-
-      // Redirect after success
-      redirectTimeoutRef.current = setTimeout(() => {
-        navigate(routes.login);
-      }, 2000);
     },
   );
 
-  const breadcrumb = (
-    <div className={styles.breadcrumbContainer}>
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link to={routes.home}>Home</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link to={routes.login}>Login</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>Reset Password</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
-    </div>
-  );
+  const isSubmitting = form.formState.isSubmitting || isLoading;
 
   if (isSuccess) {
     return (
       <div className={styles.page}>
-        {breadcrumb}
+        <AuthBreadcrumb currentPage="Reset Password" showLoginLink />
         <div className={styles.content}>
           <Card className={styles.card}>
             <CardHeader className={styles.cardHeader}>
@@ -148,7 +101,7 @@ export const ResetPassword = () => {
 
   return (
     <div className={styles.page}>
-      {breadcrumb}
+      <AuthBreadcrumb currentPage="Reset Password" showLoginLink />
       <div className={styles.content}>
         <Card className={styles.card}>
           <CardHeader className={styles.cardHeader}>
@@ -198,11 +151,9 @@ export const ResetPassword = () => {
                 <Button
                   type="submit"
                   className={styles.submitButton}
-                  disabled={form.formState.isSubmitting || !token}
+                  disabled={isSubmitting || !token}
                 >
-                  {form.formState.isSubmitting
-                    ? 'Validating...'
-                    : 'Reset Password'}
+                  {isSubmitting ? 'Resetting...' : 'Reset Password'}
                 </Button>
               </form>
             </Form>

@@ -32,8 +32,7 @@ import {
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { cn } from '@/lib/utils';
 
-const SIDEBAR_COOKIE_NAME = 'sidebar_state';
-const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
+const SIDEBAR_STORAGE_KEY = 'sidebar_state';
 const SIDEBAR_WIDTH = '16rem';
 const SIDEBAR_WIDTH_MOBILE = '18rem';
 const SIDEBAR_WIDTH_ICON = '3rem';
@@ -81,7 +80,18 @@ const SidebarProvider = ({
 
   // This is the internal state of the sidebar.
   // We use openProp and setOpenProp for control from outside the component.
-  const [_open, _setOpen] = useState(defaultOpen);
+  // Hydrate from localStorage (avoids document.cookie; Cookie Store API has limited support).
+  const [_open, _setOpen] = useState(() => {
+    if (typeof window === 'undefined') return defaultOpen;
+    try {
+      const v = localStorage.getItem(SIDEBAR_STORAGE_KEY);
+      if (v === 'true') return true;
+      if (v === 'false') return false;
+    } catch {
+      /* ignore */
+    }
+    return defaultOpen;
+  });
   const open = openProp ?? _open;
   const setOpen = useCallback(
     (value: boolean | ((value: boolean) => boolean)) => {
@@ -91,9 +101,13 @@ const SidebarProvider = ({
       } else {
         _setOpen(openState);
       }
-
-      // This sets the cookie to keep the sidebar state.
-      document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
+      try {
+        if (typeof window !== 'undefined') {
+          localStorage.setItem(SIDEBAR_STORAGE_KEY, String(openState));
+        }
+      } catch {
+        /* ignore */
+      }
     },
     [setOpenProp, open],
   );

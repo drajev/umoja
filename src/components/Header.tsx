@@ -11,7 +11,7 @@ import {
   HiOutlineSun,
   HiOutlineUser,
 } from 'react-icons/hi2';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import LogoIcon from '@/assets/logo.svg?react';
 import { ConnectWallet } from '@/components/ConnectWallet';
@@ -38,34 +38,31 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { Text } from '@/components/ui/typography';
 import type { Language } from '@/constants/languages';
 import { useIsMobile, useLanguage } from '@/hooks';
+import { useLogoutHandler } from '@/queries/auth/auth';
 import { routes } from '@/routes';
 import { useAuthStore, useLanguageStore, useUIStore } from '@/stores';
 import styles from '@/styles/modules/header.module.css';
 
 export const Header = () => {
-  const navigate = useNavigate();
   const isMobile = useIsMobile();
 
-  // Auth store
+  // Auth
   const user = useAuthStore.use.user();
   const isAuthenticated = useAuthStore.use.isAuthenticated();
-  const { logout } = useAuthStore.use.actions();
+  const { handleLogout } = useLogoutHandler();
 
   // UI store
   const theme = useUIStore.use.theme();
   const sidebarOpen = useUIStore.use.sidebarOpen();
   const { toggleTheme, toggleSidebar } = useUIStore.use.actions();
 
-  // Language store
+  // Language store - use getState().actions.setLanguage so we always get the
+  // latest from the store at call time (avoids rehydration timing issues)
   const language = useLanguageStore.use.language();
-  const { setLanguage } = useLanguageStore.use.actions();
+  const setLanguage = (lang: Language) =>
+    useLanguageStore.getState().actions.setLanguage(lang);
 
   const { t } = useLanguage();
-
-  const handleLogout = () => {
-    logout();
-    navigate(routes.home);
-  };
 
   const getInitials = (name: string) => {
     return name

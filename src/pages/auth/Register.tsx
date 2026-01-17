@@ -4,14 +4,7 @@
  */
 import { Link } from 'react-router-dom';
 
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
+import { AuthBreadcrumb } from '@/components/auth/AuthBreadcrumb';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -37,7 +30,7 @@ import { type RegisterFormData, registerSchema } from '@/schemas/authSchemas';
 import styles from '@/styles/modules/auth.module.css';
 
 export const Register = () => {
-  const { handleRegister } = useRegisterHandler();
+  const { handleRegister, isLoading } = useRegisterHandler();
   const form = useCreateForm(registerSchema, {
     defaultValues: {
       name: '',
@@ -55,23 +48,11 @@ export const Register = () => {
     });
   });
 
+  const isSubmitting = form.formState.isSubmitting || isLoading;
+
   return (
     <div className={styles.page}>
-      <div className={styles.breadcrumbContainer}>
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link to={routes.home}>Home</Link>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>Register</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-      </div>
+      <AuthBreadcrumb currentPage="Register" />
 
       <div className={styles.content}>
         <Card className={styles.card}>
@@ -156,11 +137,9 @@ export const Register = () => {
                 <Button
                   type="submit"
                   className={styles.submitButton}
-                  disabled={form.formState.isSubmitting}
+                  disabled={isSubmitting}
                 >
-                  {form.formState.isSubmitting
-                    ? 'Validating...'
-                    : 'Create Account'}
+                  {isSubmitting ? 'Creating account...' : 'Create Account'}
                 </Button>
               </form>
             </Form>
