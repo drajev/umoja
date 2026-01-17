@@ -1,12 +1,11 @@
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+/**
+ * Reset Password page component.
+ * Allows users to reset their password using a reset token.
+ */
 import { useEffect, useRef, useState } from "react";
-import { useCreateForm } from "@/lib/forms/createForm";
-import {
-  resetPasswordSchema,
-  type ResetPasswordFormData,
-} from "@/schemas/authSchemas";
-import { useResetPasswordHandler } from "@/queries/auth/auth";
-import { Button } from "@/components/ui/button";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -15,6 +14,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -32,13 +32,15 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useCreateForm } from "@/lib/forms/createForm";
+import { useResetPasswordHandler } from "@/queries/auth/auth";
 import { routes } from "@/routes";
+import {
+  resetPasswordSchema,
+  type ResetPasswordFormData,
+} from "@/schemas/authSchemas";
+import styles from "@/styles/modules/auth.module.css";
 
-/**
- * Reset Password page component.
- * Allows users to reset their password using a reset token.
- */
 export const ResetPassword = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -46,6 +48,7 @@ export const ResetPassword = () => {
   const redirectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const token = searchParams.get("token") || "";
   const { handleResetPassword } = useResetPasswordHandler();
+
   const form = useCreateForm(resetPasswordSchema, {
     defaultValues: {
       password: "",
@@ -59,23 +62,7 @@ export const ResetPassword = () => {
     }
   }, [token, navigate]);
 
-  const handleSubmit = form.handleSubmit(
-    async (data: ResetPasswordFormData) => {
-      await handleResetPassword({
-        token,
-        password: data.password,
-      });
-      setIsSuccess(true);
-      form.reset();
-      if (redirectTimeoutRef.current) {
-        clearTimeout(redirectTimeoutRef.current);
-      }
-      redirectTimeoutRef.current = setTimeout(() => {
-        navigate(routes.login);
-      }, 2000);
-    },
-  );
-
+  // Cleanup timeout on unmount
   useEffect(() => {
     return () => {
       if (redirectTimeoutRef.current) {
@@ -84,8 +71,29 @@ export const ResetPassword = () => {
     };
   }, []);
 
+  const handleSubmit = form.handleSubmit(
+    async (data: ResetPasswordFormData) => {
+      await handleResetPassword({
+        token,
+        password: data.password,
+      });
+      setIsSuccess(true);
+      form.reset();
+
+      // Clear any existing timeout
+      if (redirectTimeoutRef.current) {
+        clearTimeout(redirectTimeoutRef.current);
+      }
+
+      // Redirect after success
+      redirectTimeoutRef.current = setTimeout(() => {
+        navigate(routes.login);
+      }, 2000);
+    },
+  );
+
   const breadcrumb = (
-    <div className="container mx-auto mb-6">
+    <div className={styles.breadcrumbContainer}>
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -110,18 +118,18 @@ export const ResetPassword = () => {
 
   if (isSuccess) {
     return (
-      <div className="flex min-h-screen flex-col p-4">
+      <div className={styles.page}>
         {breadcrumb}
-        <div className="flex flex-1 items-center justify-center">
-          <Card className="w-full max-w-md">
-            <CardHeader className="space-y-1">
-              <CardTitle className="text-2xl">Password Reset</CardTitle>
+        <div className={styles.content}>
+          <Card className={styles.card}>
+            <CardHeader className={styles.cardHeader}>
+              <CardTitle className={styles.cardTitle}>Password Reset</CardTitle>
               <CardDescription>
                 Your password has been reset successfully
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Alert>
+              <Alert className={styles.successAlert}>
                 <AlertDescription>
                   You will be redirected to the login page shortly.
                 </AlertDescription>
@@ -139,17 +147,18 @@ export const ResetPassword = () => {
   }
 
   return (
-    <div className="flex min-h-screen flex-col p-4">
+    <div className={styles.page}>
       {breadcrumb}
-      <div className="flex flex-1 items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl">Reset Password</CardTitle>
+      <div className={styles.content}>
+        <Card className={styles.card}>
+          <CardHeader className={styles.cardHeader}>
+            <CardTitle className={styles.cardTitle}>Reset Password</CardTitle>
             <CardDescription>Enter your new password below</CardDescription>
           </CardHeader>
+
           <CardContent>
             <Form {...form}>
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form onSubmit={handleSubmit} className={styles.form}>
                 <FormField
                   control={form.control}
                   name="password"
@@ -188,7 +197,7 @@ export const ResetPassword = () => {
 
                 <Button
                   type="submit"
-                  className="w-full"
+                  className={styles.submitButton}
                   disabled={form.formState.isSubmitting || !token}
                 >
                   {form.formState.isSubmitting
@@ -198,11 +207,9 @@ export const ResetPassword = () => {
               </form>
             </Form>
           </CardContent>
-          <CardFooter className="flex flex-col space-y-4">
-            <Link
-              to={routes.login}
-              className="text-sm text-center text-muted-foreground hover:text-primary underline-offset-4 hover:underline"
-            >
+
+          <CardFooter className={styles.footer}>
+            <Link to={routes.login} className={styles.link}>
               Back to Login
             </Link>
           </CardFooter>

@@ -1,12 +1,12 @@
-import { useToastStore } from "@/stores/useToastStore";
+import { useToastStore } from "@/stores";
 
 /**
  * Authentication form handlers.
  * Handles form validation only - API calls will be implemented when backend is ready.
  *
- * Usage:
- *   const { handleLogin } = useLoginHandler();
- *   await handleLogin({ email, password });
+ * @example
+ * const { handleLogin } = useLoginHandler();
+ * await handleLogin({ email, password });
  */
 export interface LoginRequest {
   email: string;
@@ -28,58 +28,60 @@ export interface ResetPasswordRequest {
   password: string;
 }
 
-// Simple handlers that just validate and show success messages
-// API calls will be added when backend is ready
+/**
+ * Login form handler.
+ * TODO: Add API call when backend is ready.
+ */
 export const useLoginHandler = () => {
-  const { notifications } = useToastStore();
+  const { info } = useToastStore.use.actions();
 
   const handleLogin = async (data: LoginRequest) => {
-    // TODO: Add API call when backend is ready
-    notifications.info(
-      "Form validated successfully. Backend integration pending.",
-    );
+    info("Form validated successfully. Backend integration pending.");
     console.log("Login data:", data);
   };
 
   return { handleLogin };
 };
 
+/**
+ * Register form handler.
+ * TODO: Add API call when backend is ready.
+ */
 export const useRegisterHandler = () => {
-  const { notifications } = useToastStore();
+  const { info } = useToastStore.use.actions();
 
   const handleRegister = async (data: RegisterRequest) => {
-    // TODO: Add API call when backend is ready
-    notifications.info(
-      "Form validated successfully. Backend integration pending.",
-    );
+    info("Form validated successfully. Backend integration pending.");
     console.log("Register data:", data);
   };
 
   return { handleRegister };
 };
 
+/**
+ * Forgot password form handler.
+ * TODO: Add API call when backend is ready.
+ */
 export const useForgotPasswordHandler = () => {
-  const { notifications } = useToastStore();
+  const { info } = useToastStore.use.actions();
 
   const handleForgotPassword = async (data: ForgotPasswordRequest) => {
-    // TODO: Add API call when backend is ready
-    notifications.info(
-      "Form validated successfully. Backend integration pending.",
-    );
+    info("Form validated successfully. Backend integration pending.");
     console.log("Forgot password data:", data);
   };
 
   return { handleForgotPassword };
 };
 
+/**
+ * Reset password form handler.
+ * TODO: Add API call when backend is ready.
+ */
 export const useResetPasswordHandler = () => {
-  const { notifications } = useToastStore();
+  const { info } = useToastStore.use.actions();
 
   const handleResetPassword = async (data: ResetPasswordRequest) => {
-    // TODO: Add API call when backend is ready
-    notifications.info(
-      "Form validated successfully. Backend integration pending.",
-    );
+    info("Form validated successfully. Backend integration pending.");
     console.log("Reset password data:", data);
   };
 

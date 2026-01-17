@@ -1,20 +1,30 @@
 /**
  * Wagmi configuration for wallet connectivity.
- * Uses RainbowKit's getDefaultConfig for simplified setup with MetaMask and WalletConnect.
+ * Uses RainbowKit for wallet connection UI with custom wallet configuration.
  *
  * Why wagmi + RainbowKit:
  * - wagmi: React hooks for Ethereum, providing type-safe access to wallet state and actions
  * - RainbowKit: Beautiful, accessible wallet connection UI that works with multiple wallets
  * - Together: Best-in-class DX with minimal configuration and excellent TypeScript support
  *
+ * Note: Coinbase Wallet is excluded to avoid analytics SDK errors from ad blockers.
+ * If you need Coinbase Wallet, use getDefaultConfig() instead which includes it by default.
+ *
  * To customize:
  * - Add more chains in the chains array
  * - Configure custom RPC endpoints via environment variables
- * - Add additional wallet connectors if needed
+ * - Add/remove wallet connectors as needed
  */
-import { getDefaultConfig } from "@rainbow-me/rainbowkit";
-import { mainnet, sepolia, polygon, arbitrum, optimism } from "wagmi/chains";
-import { http } from "wagmi";
+import { connectorsForWallets } from "@rainbow-me/rainbowkit";
+import {
+  injectedWallet,
+  metaMaskWallet,
+  walletConnectWallet,
+  rainbowWallet,
+  trustWallet,
+} from "@rainbow-me/rainbowkit/wallets";
+import { createConfig, http } from "wagmi";
+import { arbitrum, mainnet, optimism, polygon, sepolia } from "wagmi/chains";
 
 // Supported chains configuration
 const chains = [mainnet, sepolia, polygon, arbitrum, optimism] as const;
@@ -33,22 +43,44 @@ const transports = {
   [polygon.id]: http(getRpcUrl(polygon.id, "https://polygon.llamarpc.com")),
   [arbitrum.id]: http(getRpcUrl(arbitrum.id, "https://arb1.arbitrum.io/rpc")),
   [optimism.id]: http(getRpcUrl(optimism.id, "https://mainnet.optimism.io")),
-} as const;
+};
 
 // Get WalletConnect Project ID from environment
-const projectId = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID;
+const projectId =
+  import.meta.env.VITE_WALLETCONNECT_PROJECT_ID || "YOUR_PROJECT_ID";
 
-if (!projectId) {
+if (!import.meta.env.VITE_WALLETCONNECT_PROJECT_ID) {
   console.warn(
     "VITE_WALLETCONNECT_PROJECT_ID is not set. WalletConnect may not work properly. " +
-      "Get a project ID at https://cloud.walletconnect.com/"
+      "Get a project ID at https://cloud.walletconnect.com/",
   );
 }
 
-export const wagmiConfig = getDefaultConfig({
-  appName: "umoja",
-  projectId: projectId || "YOUR_PROJECT_ID",
+// Custom wallet list WITHOUT Coinbase (to avoid analytics SDK errors)
+const connectors = connectorsForWallets(
+  [
+    {
+      groupName: "Popular",
+      wallets: [
+        metaMaskWallet,
+        walletConnectWallet,
+        rainbowWallet,
+        trustWallet,
+        injectedWallet,
+      ],
+    },
+  ],
+  {
+    appName: "umoja",
+    projectId,
+  },
+);
+
+export const wagmiConfig = createConfig({
+  connectors,
   chains,
   transports,
-  ssr: true, // Enable SSR support for Next.js compatibility
 });
+
+// Export chains for RainbowKitProvider
+export { chains };
