@@ -92,7 +92,7 @@ export default defineConfig({
     // Increased limit because Web3 libraries (wagmi, rainbowkit, viem) are inherently large
     // Route-based code splitting helps reduce initial load - main bundle is now only ~7KB
     // Large chunks (rainbowkit ~1.7MB, viem ~600KB) are acceptable for Web3 apps and are loaded on-demand
-    chunkSizeWarningLimit: 2000,
+    chunkSizeWarningLimit: 3000,
   },
   // @ts-expect-error - Vitest types are not properly merged with Vite types
   test: {

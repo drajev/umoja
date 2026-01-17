@@ -11,13 +11,17 @@
  * - Add request/response transformations
  * - Add error handling logic
  */
-import axios, { type InternalAxiosRequestConfig, type AxiosResponse, type AxiosError } from 'axios';
-import { useAuthStore } from '@/stores/useAuthStore';
+import axios, {
+  type InternalAxiosRequestConfig,
+  type AxiosResponse,
+  type AxiosError,
+} from "axios";
+import { useAuthStore } from "@/stores";
 
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '',
+  baseURL: import.meta.env.VITE_API_URL || "",
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
@@ -44,7 +48,7 @@ axiosInstance.interceptors.response.use(
   async (error: AxiosError) => {
     // Handle 401 errors - logout user if unauthorized
     if (error.response?.status === 401) {
-      useAuthStore.getState().logout();
+      useAuthStore.getState().actions.logout();
     }
     return Promise.reject(error);
   },
