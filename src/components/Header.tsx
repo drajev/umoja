@@ -56,9 +56,11 @@ export const Header = () => {
   const sidebarOpen = useUIStore.use.sidebarOpen();
   const { toggleTheme, toggleSidebar } = useUIStore.use.actions();
 
-  // Language store
+  // Language store - use getState().actions.setLanguage so we always get the
+  // latest from the store at call time (avoids rehydration timing issues)
   const language = useLanguageStore.use.language();
-  const { setLanguage } = useLanguageStore.use.actions();
+  const setLanguage = (lang: Language) =>
+    useLanguageStore.getState().actions.setLanguage(lang);
 
   const { t } = useLanguage();
 
