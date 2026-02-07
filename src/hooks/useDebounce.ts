@@ -6,21 +6,6 @@ interface UseDebounceProps<T extends (...args: never[]) => unknown> {
   delay?: number;
 }
 
-/**
- * React hook for debouncing function calls.
- * Wraps the debounce utility for use in React components.
- *
- * Usage:
- *   const { debouncedCallback } = useDebounce({
- *     callback: (value: string) => console.log(value),
- *     delay: 300,
- *   });
- *   debouncedCallback('test');
- *
- * @param callback - Function to debounce
- * @param delay - Delay in milliseconds (default: 300)
- * @returns Object with debouncedCallback function
- */
 export const useDebounce = <T extends (...args: never[]) => unknown>({
   callback,
   delay = 300,

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { HiOutlineClipboardDocument } from 'react-icons/hi2';
-import { StrategyForm } from '@/components/forms/StrategyForm';
+import { StrategyForm } from '@/components/features/strategies';
 import {
   Accordion,
   AccordionContent,
@@ -583,8 +583,8 @@ export const Styleguide = () => {
             </CardHeader>
             <CardContent>
               <StrategyForm
-                onSubmit={async data => {
-                  console.log('Form submitted:', data);
+                onSubmit={async () => {
+                  success('Form submitted successfully');
                 }}
               />
             </CardContent>

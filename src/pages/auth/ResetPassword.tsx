@@ -4,7 +4,7 @@
  */
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { AuthBreadcrumb } from '@/components/auth/AuthBreadcrumb';
+import { AuthBreadcrumb } from '@/components/features/auth';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import {

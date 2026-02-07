@@ -1,15 +1,24 @@
 /**
  * Test file for carousel component.
  * Basic rendering and interaction tests.
- * Note: Carousel requires embla-carousel which needs proper DOM setup.
- * Skipping full render test due to embla-carousel dependency requirements.
  */
+import { render } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from '@/components/ui/carousel';
 
 describe('Carousel', () => {
-  it.skip('renders without crashing - requires embla-carousel DOM setup', () => {
-    // This test is skipped because carousel requires embla-carousel
-    // which needs proper DOM container setup that's complex to mock
-    expect(true).toBe(true);
+  it('renders without crashing', () => {
+    const { container } = render(
+      <Carousel>
+        <CarouselContent>
+          <CarouselItem>Slide 1</CarouselItem>
+        </CarouselContent>
+      </Carousel>,
+    );
+    expect(container).toBeTruthy();
   });
 });

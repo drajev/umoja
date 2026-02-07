@@ -1,19 +1,23 @@
 /**
  * React Query configuration.
- * Centralized QueryClient setup with default options.
- *
- * Usage:
- *   import { queryClient } from '@/lib/reactQuery';
- *   <QueryClientProvider client={queryClient}>
- *
- * To customize:
- * - Adjust default query options
- * - Add global error handling
- * - Configure cache settings
+ * Centralized QueryClient setup with default options and global error handling.
  */
-import { QueryClient } from '@tanstack/react-query';
+import { QueryCache, QueryClient } from '@tanstack/react-query';
+import { useToastStore } from '@/stores';
+import { getErrorMessage, isUnauthorizedError } from '@/utils';
+
+const queryCache = new QueryCache({
+  onError: (error, query) => {
+    if (query.meta?.skipGlobalErrorHandler) return;
+    // 401 already handled by axios interceptor (logout + redirect + toast)
+    if (isUnauthorizedError(error)) return;
+    const message = getErrorMessage(error);
+    useToastStore.getState().actions.error(message);
+  },
+});
 
 export const queryClient = new QueryClient({
+  queryCache,
   defaultOptions: {
     queries: {
       staleTime: 5 * 60 * 1000, // 5 minutes

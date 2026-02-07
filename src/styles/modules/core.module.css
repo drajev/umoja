@@ -1,0 +1,18 @@
+/**
+ * Core component styles (ErrorBoundary, ConfirmDeleteDialog, etc.).
+ * Uses @apply for Tailwind classes to keep JSX clean.
+ */
+
+/* Error boundary fallback */
+.errorFallback {
+  @apply flex min-h-[200px] flex-col items-center justify-center gap-4 p-8 text-center;
+}
+
+.errorReloadButton {
+  @apply rounded-md bg-primary px-4 py-2 font-medium text-primary-foreground text-sm hover:bg-primary/90;
+}
+
+/* Confirm delete destructive action button */
+.confirmDeleteButton {
+  @apply bg-destructive text-destructive-foreground hover:bg-destructive/90;
+}

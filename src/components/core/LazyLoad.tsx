@@ -1,7 +1,7 @@
 import type { ReactNode, RefObject } from 'react';
 import { Activity } from '@/components/core/Activity';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import { useIntersectionObserver } from '@/hooks';
 
 interface LazyLoadProps {
   children: ReactNode;
@@ -13,15 +13,6 @@ interface LazyLoadProps {
   preserveState?: boolean;
 }
 
-/**
- * Lazy load component that uses Intersection Observer to load content when it enters viewport.
- * Useful for lazy loading images, heavy components, or content below the fold.
- *
- * Usage:
- *   <LazyLoad fallback={<Skeleton />}>
- *     <HeavyComponent />
- *   </LazyLoad>
- */
 export const LazyLoad = ({
   children,
   fallback = <Skeleton className="h-32 w-full" />,

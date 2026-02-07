@@ -12,6 +12,12 @@
  */
 export const routes = {
   home: '/',
+  dashboard: '/dashboard',
+  accounts: '/accounts',
+  transactions: '/transactions',
+  strategies: '/strategies',
+  profile: '/profile',
+  settings: '/settings',
   styleguide: '/styleguide',
   login: '/login',
   register: '/register',

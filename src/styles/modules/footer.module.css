@@ -1,0 +1,11 @@
+/**
+ * Footer styles.
+ */
+
+.footer {
+  @apply border-t bg-muted/30 py-4;
+}
+
+.copyright {
+  @apply text-center text-muted-foreground;
+}
