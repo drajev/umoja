@@ -1,6 +1,10 @@
 const API_PREFIX = '/api';
 
 export const api = {
+  users: {
+    me: `${API_PREFIX}/users/me`,
+    wallet: `${API_PREFIX}/users/me/wallet`,
+  },
   auth: {
     login: `${API_PREFIX}/auth/login`,
     register: `${API_PREFIX}/auth/register`,

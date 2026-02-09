@@ -9,19 +9,21 @@ import {
 } from '@/components/features/dashboard';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Heading, Text } from '@/components/ui/typography';
+import { useLanguage } from '@/hooks';
 import { useAccounts } from '@/queries/accounts/accounts';
 import { useDashboardSummary } from '@/queries/dashboard/dashboard';
 
 export const Dashboard = () => {
+  const { t } = useLanguage();
   const { data: summary, isLoading } = useDashboardSummary();
   const { data: accounts } = useAccounts();
 
   return (
     <div className="space-y-8">
       <div>
-        <Heading level={1}>Dashboard</Heading>
+        <Heading level={1}>{t('dashboard.title')}</Heading>
         <Text variant="lead" className="text-muted-foreground">
-          Overview of your finances and investment strategies
+          {t('dashboard.description')}
         </Text>
       </div>
 

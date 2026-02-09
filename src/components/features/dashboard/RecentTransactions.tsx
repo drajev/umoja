@@ -24,7 +24,7 @@ import { useLanguage } from '@/hooks';
 import { routes } from '@/routes';
 import styles from '@/styles/modules/transactions.module.css';
 import type { Account, Transaction } from '@/types/api';
-import { formatPrice } from '@/utils';
+import { formatDateOnly, formatPrice } from '@/utils';
 
 interface RecentTransactionsProps {
   transactions: Transaction[];
@@ -82,9 +82,11 @@ export const RecentTransactions = memo(
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Description</TableHead>
-                  <TableHead className="text-right">Amount</TableHead>
+                  <TableHead>{t('dashboard.tableDate')}</TableHead>
+                  <TableHead>{t('dashboard.tableDescription')}</TableHead>
+                  <TableHead className="text-right">
+                    {t('dashboard.tableAmount')}
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -93,7 +95,9 @@ export const RecentTransactions = memo(
                   const isIncome = amount >= 0;
                   return (
                     <TableRow key={tx.id}>
-                      <TableCell className="text-sm">{tx.date}</TableCell>
+                      <TableCell className="text-sm">
+                        {formatDateOnly(tx.date)}
+                      </TableCell>
                       <TableCell className="text-sm">
                         {tx.description}
                         {accounts.length > 0 && (

@@ -67,7 +67,9 @@ const deleteTransaction = async (id: string): Promise<void> => {
 export const transactionKeys = {
   all: ['transactions'] as const,
   list: (params?: TransactionsQueryParams) =>
-    [...transactionKeys.all, 'list', params] as const,
+    params === undefined
+      ? (['transactions', 'list'] as const)
+      : ([...transactionKeys.all, 'list', params] as const),
   detail: (id: string) => [...transactionKeys.all, 'detail', id] as const,
 };
 
@@ -96,10 +98,12 @@ export const useCreateTransaction = () => {
 
   return useMutation({
     mutationFn: createTransaction,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: transactionKeys.all });
-      queryClient.invalidateQueries({ queryKey: ['accounts'] });
-      queryClient.invalidateQueries({ queryKey: ['dashboard'] });
+    onSuccess: data => {
+      queryClient.setQueryData<Transaction[]>(transactionKeys.list(), prev =>
+        prev ? [...prev, data] : [data],
+      );
+      void queryClient.invalidateQueries({ queryKey: ['accounts'] });
+      void queryClient.invalidateQueries({ queryKey: ['dashboard'] });
       success('Transaction created');
     },
     onError: err => {
@@ -135,10 +139,12 @@ export const useDeleteTransaction = () => {
 
   return useMutation({
     mutationFn: deleteTransaction,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: transactionKeys.all });
-      queryClient.invalidateQueries({ queryKey: ['accounts'] });
-      queryClient.invalidateQueries({ queryKey: ['dashboard'] });
+    onSuccess: (_, id) => {
+      queryClient.setQueryData<Transaction[]>(transactionKeys.list(), prev =>
+        prev ? prev.filter(t => t.id !== id) : [],
+      );
+      void queryClient.invalidateQueries({ queryKey: ['accounts'] });
+      void queryClient.invalidateQueries({ queryKey: ['dashboard'] });
       success('Transaction deleted');
     },
     onError: err => {

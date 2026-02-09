@@ -3,6 +3,7 @@
  */
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/constants/api';
+import { useLanguage } from '@/hooks';
 import axiosInstance from '@/lib/axiosInstance';
 import { useToastStore } from '@/stores';
 import type { Account, CreateAccountDto, UpdateAccountDto } from '@/types/api';
@@ -73,14 +74,17 @@ export const useAccount = (id: string | null) => {
 
 export const useCreateAccount = () => {
   const queryClient = useQueryClient();
+  const { t } = useLanguage();
   const { success, error: showError } = useToastStore.use.actions();
 
   return useMutation({
     mutationFn: createAccount,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: accountKeys.all });
-      queryClient.invalidateQueries({ queryKey: ['dashboard'] });
-      success('Account created');
+    onSuccess: data => {
+      queryClient.setQueryData<Account[]>(accountKeys.list(), prev =>
+        prev ? [...prev, data] : [data],
+      );
+      void queryClient.invalidateQueries({ queryKey: ['dashboard'] });
+      success(t('accounts.accountCreated'));
     },
     onError: err => {
       showError(getErrorMessage(err));
@@ -90,17 +94,18 @@ export const useCreateAccount = () => {
 
 export const useUpdateAccount = () => {
   const queryClient = useQueryClient();
+  const { t } = useLanguage();
   const { success, error: showError } = useToastStore.use.actions();
 
   return useMutation({
     mutationFn: updateAccount,
-    onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: accountKeys.all });
-      queryClient.invalidateQueries({
+    onSuccess: async (_, variables) => {
+      await queryClient.invalidateQueries({ queryKey: accountKeys.all });
+      await queryClient.invalidateQueries({
         queryKey: accountKeys.detail(variables.id),
       });
-      queryClient.invalidateQueries({ queryKey: ['dashboard'] });
-      success('Account updated');
+      await queryClient.invalidateQueries({ queryKey: ['dashboard'] });
+      success(t('accounts.accountUpdated'));
     },
     onError: err => {
       showError(getErrorMessage(err));
@@ -110,15 +115,18 @@ export const useUpdateAccount = () => {
 
 export const useDeleteAccount = () => {
   const queryClient = useQueryClient();
+  const { t } = useLanguage();
   const { success, error: showError } = useToastStore.use.actions();
 
   return useMutation({
     mutationFn: deleteAccount,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: accountKeys.all });
-      queryClient.invalidateQueries({ queryKey: ['transactions'] });
-      queryClient.invalidateQueries({ queryKey: ['dashboard'] });
-      success('Account deleted');
+    onSuccess: (_, id) => {
+      queryClient.setQueryData<Account[]>(accountKeys.list(), prev =>
+        prev ? prev.filter(a => a.id !== id) : [],
+      );
+      void queryClient.invalidateQueries({ queryKey: ['transactions'] });
+      void queryClient.invalidateQueries({ queryKey: ['dashboard'] });
+      success(t('accounts.accountDeleted'));
     },
     onError: err => {
       showError(getErrorMessage(err));

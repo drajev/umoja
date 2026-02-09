@@ -46,7 +46,9 @@ export {
 } from './callbacks';
 export { debounce } from './debounce';
 export {
+  dateToLocalISO,
   formatAddress,
+  formatDateOnly,
   formatNumber,
   formatPrice,
   truncateDescription,

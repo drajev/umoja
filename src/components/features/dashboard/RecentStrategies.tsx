@@ -76,10 +76,12 @@ export const RecentStrategies = memo(
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Risk</TableHead>
-                  <TableHead className="text-right">Amount</TableHead>
-                  <TableHead>Status</TableHead>
+                  <TableHead>{t('dashboard.tableName')}</TableHead>
+                  <TableHead>{t('dashboard.tableRisk')}</TableHead>
+                  <TableHead className="text-right">
+                    {t('dashboard.tableAmount')}
+                  </TableHead>
+                  <TableHead>{t('dashboard.tableStatus')}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -89,13 +91,17 @@ export const RecentStrategies = memo(
                       {strategy.name}
                     </TableCell>
                     <TableCell>
-                      <Badge variant="secondary">{strategy.riskLevel}</Badge>
+                      <Badge variant="secondary">
+                        {t(`strategies.${strategy.riskLevel}`)}
+                      </Badge>
                     </TableCell>
                     <TableCell className="text-right">
                       {formatPrice(Number(strategy.amount))}
                     </TableCell>
                     <TableCell>
-                      <Badge variant="outline">{strategy.status}</Badge>
+                      <Badge variant="outline">
+                        {t(`strategies.${strategy.status}`)}
+                      </Badge>
                     </TableCell>
                   </TableRow>
                 ))}

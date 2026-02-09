@@ -1,5 +1,8 @@
+import { useState } from 'react';
+import { HiOutlineCalendar, HiOutlineInformationCircle } from 'react-icons/hi2';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import {
   Card,
   CardContent,
@@ -10,7 +13,6 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -18,24 +20,36 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Spinner } from '@/components/ui/spinner';
 import { Textarea } from '@/components/ui/textarea';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { useLanguage } from '@/hooks';
 import { useCreateForm } from '@/lib/forms/createForm';
 import {
   createStrategySchema,
   type StrategyFormData,
 } from '@/schemas/createStrategySchema';
+import styles from '@/styles/modules/core.module.css';
+import { dateToLocalISO, formatDateOnly } from '@/utils/format';
 
 interface StrategyFormProps {
   onSubmit: (data: StrategyFormData) => void | Promise<void>;
   defaultValues?: Partial<StrategyFormData>;
-  /** When false, renders form without Card wrapper (e.g. for Dialog) */
   showCard?: boolean;
   title?: string;
   submitLabel?: string;
@@ -53,6 +67,7 @@ export const StrategyForm = ({
   const { t } = useLanguage();
   const schema = createStrategySchema();
   const form = useCreateForm(schema, { defaultValues });
+  const [datePickerOpen, setDatePickerOpen] = useState(false);
 
   const handleSubmit = form.handleSubmit(async data => {
     await onSubmit(data);
@@ -66,11 +81,12 @@ export const StrategyForm = ({
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('strategies.strategyName')}</FormLabel>
+              <FormLabel>{t('strategies.strategyName')}*</FormLabel>
               <FormControl>
                 <Input
                   placeholder={t('strategies.strategyNamePlaceholder')}
                   {...field}
+                  value={field.value ?? ''}
                 />
               </FormControl>
               <FormMessage />
@@ -83,18 +99,37 @@ export const StrategyForm = ({
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('strategies.descriptionOptional')}</FormLabel>
+              <div className="flex items-center gap-1.5">
+                <FormLabel>{t('strategies.descriptionLabel')}</FormLabel>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className={styles.infoIconButton}
+                      aria-label={t('common.moreInfo')}
+                    >
+                      <HiOutlineInformationCircle className="size-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent
+                    side="top"
+                    align="start"
+                    className="z-[100] max-w-[200px]"
+                  >
+                    {t('strategies.descriptionHint')}
+                  </TooltipContent>
+                </Tooltip>
+              </div>
               <FormControl>
                 <Textarea
                   placeholder={t('strategies.descriptionPlaceholder')}
                   rows={4}
                   {...field}
-                  value={field.value || ''}
+                  value={field.value ?? ''}
                 />
               </FormControl>
-              <FormDescription>
-                {t('strategies.optionalDescription')}
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -105,16 +140,38 @@ export const StrategyForm = ({
           name="amount"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('strategies.amount')}</FormLabel>
+              <div className="flex items-center gap-1.5">
+                <FormLabel>{t('strategies.amount')}*</FormLabel>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className={styles.infoIconButton}
+                      aria-label={t('common.moreInfo')}
+                    >
+                      <HiOutlineInformationCircle className="size-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent
+                    side="top"
+                    align="start"
+                    className="z-[100] max-w-[200px]"
+                  >
+                    {t('strategies.enterAmount')}
+                  </TooltipContent>
+                </Tooltip>
+              </div>
               <FormControl>
                 <Input
                   type="text"
                   inputMode="decimal"
                   placeholder="0.00"
                   {...field}
+                  value={field.value ?? ''}
                 />
               </FormControl>
-              <FormDescription>{t('strategies.enterAmount')}</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -125,7 +182,29 @@ export const StrategyForm = ({
           name="riskLevel"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('strategies.riskLevel')}</FormLabel>
+              <div className="flex items-center gap-1.5">
+                <FormLabel>{t('strategies.riskLevel')}*</FormLabel>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className={styles.infoIconButton}
+                      aria-label={t('common.moreInfo')}
+                    >
+                      <HiOutlineInformationCircle className="size-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent
+                    side="top"
+                    align="start"
+                    className="z-[100] max-w-[200px]"
+                  >
+                    {t('strategies.chooseRiskLevel')}
+                  </TooltipContent>
+                </Tooltip>
+              </div>
               <Select onValueChange={field.onChange} value={field.value}>
                 <FormControl>
                   <SelectTrigger>
@@ -142,9 +221,6 @@ export const StrategyForm = ({
                   <SelectItem value="high">{t('strategies.high')}</SelectItem>
                 </SelectContent>
               </Select>
-              <FormDescription>
-                {t('strategies.chooseRiskLevel')}
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -155,13 +231,59 @@ export const StrategyForm = ({
           name="startDate"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('strategies.startDate')}</FormLabel>
+              <div className="flex items-center gap-1.5">
+                <FormLabel>{t('strategies.startDate')}*</FormLabel>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className={styles.infoIconButton}
+                      aria-label={t('common.moreInfo')}
+                    >
+                      <HiOutlineInformationCircle className="size-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent
+                    side="top"
+                    align="start"
+                    className="z-[100] max-w-[200px]"
+                  >
+                    {t('strategies.selectStartDate')}
+                  </TooltipContent>
+                </Tooltip>
+              </div>
               <FormControl>
-                <Input type="date" {...field} value={field.value || ''} />
+                <Popover open={datePickerOpen} onOpenChange={setDatePickerOpen}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="h-10 w-full justify-between font-normal"
+                    >
+                      <span className="text-muted-foreground">
+                        {formatDateOnly(field.value) ||
+                          t('strategies.startDatePlaceholder')}
+                      </span>
+                      <HiOutlineCalendar className="ml-2 size-4 shrink-0 text-muted-foreground" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent align="start" className="w-auto p-0">
+                    <Calendar
+                      mode="single"
+                      selected={
+                        field.value
+                          ? new Date(`${formatDateOnly(field.value)}T12:00:00`)
+                          : undefined
+                      }
+                      onSelect={date => {
+                        field.onChange(date ? dateToLocalISO(date) : '');
+                        setDatePickerOpen(false);
+                      }}
+                    />
+                  </PopoverContent>
+                </Popover>
               </FormControl>
-              <FormDescription>
-                {t('strategies.selectStartDate')}
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -178,9 +300,11 @@ export const StrategyForm = ({
             type="submit"
             disabled={form.formState.isSubmitting || isSubmitting}
           >
-            {form.formState.isSubmitting || isSubmitting
-              ? t('common.submitting')
-              : (submitLabel ?? t('strategies.createStrategy'))}
+            {form.formState.isSubmitting || isSubmitting ? (
+              <Spinner className="size-4" />
+            ) : (
+              (submitLabel ?? t('strategies.createStrategy'))
+            )}
           </Button>
           <Button
             type="button"

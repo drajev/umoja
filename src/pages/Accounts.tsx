@@ -1,19 +1,8 @@
 import { useCallback, useState } from 'react';
-import { useAccount, useBalance } from 'wagmi';
 import { ConfirmDeleteDialog } from '@/components/core/ConfirmDeleteDialog';
-import {
-  AccountForm,
-  AccountTable,
-  ConnectWallet,
-} from '@/components/features';
+import { PageLoadingOverlay } from '@/components/core/PageLoadingOverlay';
+import { AccountForm, AccountTable } from '@/components/features';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
 import {
   Dialog,
   DialogContent,
@@ -33,7 +22,6 @@ import {
 import type { AccountFormData } from '@/schemas/accountSchema';
 import styles from '@/styles/modules/pages.module.css';
 import type { Account } from '@/types/api';
-import { formatAddress } from '@/utils';
 
 export const Accounts = () => {
   const { t } = useLanguage();
@@ -82,22 +70,11 @@ export const Accounts = () => {
     setDeletingAccount(null);
   }, [deletingAccount, deleteMutation]);
 
-  const { address, isConnected } = useAccount();
-  const { data: walletBalance } = useBalance({ address });
-
-  const handleAddWalletAccount = useCallback(async () => {
-    if (!address) return;
-    const balance = Number(walletBalance?.formatted ?? 0);
-    await createMutation.mutateAsync({
-      name: `Wallet (${formatAddress(address)})`,
-      type: 'investment',
-      balance,
-      currency: walletBalance?.symbol ?? 'ETH',
-    });
-  }, [address, walletBalance, createMutation]);
+  const isMutating = createMutation.isPending || deleteMutation.isPending;
 
   return (
-    <div className="space-y-8">
+    <div className="relative space-y-8">
+      <PageLoadingOverlay show={isMutating} />
       <div className={styles.pageHeader}>
         <div>
           <Heading level={1}>{t('accounts.title')}</Heading>
@@ -124,34 +101,6 @@ export const Accounts = () => {
           </DialogContent>
         </Dialog>
       </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>{t('accounts.web3Wallet')}</CardTitle>
-          <CardDescription>
-            {t('accounts.web3WalletDescription')}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ConnectWallet
-            additionalActions={
-              isConnected &&
-              address && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleAddWalletAccount}
-                  disabled={createMutation.isPending}
-                >
-                  {createMutation.isPending
-                    ? t('accounts.adding')
-                    : t('accounts.addWalletAsAccount')}
-                </Button>
-              )
-            }
-          />
-        </CardContent>
-      </Card>
 
       <AccountTable
         accounts={accounts}

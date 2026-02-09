@@ -19,7 +19,7 @@ import { SKELETON_ROW_COUNT } from '@/constants/layout';
 import { useLanguage } from '@/hooks';
 import styles from '@/styles/modules/transactions.module.css';
 import type { Account, Transaction } from '@/types/api';
-import { formatPrice } from '@/utils';
+import { formatDateOnly, formatPrice } from '@/utils';
 
 interface TransactionTableProps {
   transactions: Transaction[];
@@ -88,12 +88,16 @@ export const TransactionTable = memo(
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Date</TableHead>
-              <TableHead>Description</TableHead>
-              <TableHead>Account</TableHead>
-              <TableHead className="text-right">Amount</TableHead>
-              <TableHead>Category</TableHead>
-              <TableHead className="w-[100px]">Actions</TableHead>
+              <TableHead>{t('transactions.date')}</TableHead>
+              <TableHead>{t('transactions.descriptionLabel')}</TableHead>
+              <TableHead>{t('transactions.account')}</TableHead>
+              <TableHead className="text-right">
+                {t('transactions.amount')}
+              </TableHead>
+              <TableHead>{t('transactions.category')}</TableHead>
+              <TableHead className="w-[100px]">
+                {t('accounts.actions')}
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -102,7 +106,7 @@ export const TransactionTable = memo(
               const isIncome = amount >= 0;
               return (
                 <TableRow key={tx.id}>
-                  <TableCell>{tx.date}</TableCell>
+                  <TableCell>{formatDateOnly(tx.date)}</TableCell>
                   <TableCell className="font-medium">
                     {tx.description}
                   </TableCell>

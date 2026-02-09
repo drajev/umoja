@@ -11,8 +11,7 @@ export const createTransactionSchema = () =>
       .min(1, 'Amount is required')
       .refine(val => !Number.isNaN(Number(val)), {
         message: 'Amount must be a number',
-      })
-      .transform(val => Number(val)),
+      }),
     description: z
       .string()
       .min(1, 'Description is required')

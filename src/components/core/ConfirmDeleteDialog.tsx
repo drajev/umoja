@@ -8,6 +8,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import { Spinner } from '@/components/ui/spinner';
 import { useLanguage } from '@/hooks';
 import styles from '@/styles/modules/core.module.css';
 
@@ -50,9 +51,11 @@ export const ConfirmDeleteDialog = ({
             disabled={isDeleting}
             className={styles.confirmDeleteButton}
           >
-            {isDeleting
-              ? t('common.deleting')
-              : (confirmLabel ?? t('common.delete'))}
+            {isDeleting ? (
+              <Spinner className="size-4" />
+            ) : (
+              (confirmLabel ?? t('common.delete'))
+            )}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

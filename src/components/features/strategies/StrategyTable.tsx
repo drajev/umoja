@@ -19,7 +19,7 @@ import {
 import { SKELETON_ROW_COUNT } from '@/constants/layout';
 import { useLanguage } from '@/hooks';
 import type { Strategy } from '@/types/api';
-import { formatPrice } from '@/utils';
+import { formatDateOnly, formatPrice } from '@/utils';
 
 interface StrategyTableProps {
   strategies: Strategy[];
@@ -52,13 +52,13 @@ export const StrategyTable = memo(
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>{t('accounts.name')}</TableHead>
-                <TableHead>{t('strategies.riskLevel')}</TableHead>
+                <TableHead>{t('dashboard.tableName')}</TableHead>
+                <TableHead>{t('dashboard.tableRisk')}</TableHead>
                 <TableHead className="text-right">
-                  {t('strategies.amount')}
+                  {t('dashboard.tableAmount')}
                 </TableHead>
                 <TableHead>{t('strategies.startDate')}</TableHead>
-                <TableHead>{t('strategies.status')}</TableHead>
+                <TableHead>{t('dashboard.tableStatus')}</TableHead>
                 <TableHead className="w-[100px]">
                   {t('accounts.actions')}
                 </TableHead>
@@ -91,12 +91,16 @@ export const StrategyTable = memo(
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Risk</TableHead>
-              <TableHead className="text-right">Amount</TableHead>
-              <TableHead>Start Date</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="w-[100px]">Actions</TableHead>
+              <TableHead>{t('dashboard.tableName')}</TableHead>
+              <TableHead>{t('dashboard.tableRisk')}</TableHead>
+              <TableHead className="text-right">
+                {t('dashboard.tableAmount')}
+              </TableHead>
+              <TableHead>{t('strategies.startDate')}</TableHead>
+              <TableHead>{t('dashboard.tableStatus')}</TableHead>
+              <TableHead className="w-[100px]">
+                {t('accounts.actions')}
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -118,16 +122,16 @@ export const StrategyTable = memo(
                       riskLevelVariants[strategy.riskLevel] ?? 'secondary'
                     }
                   >
-                    {strategy.riskLevel}
+                    {t(`strategies.${strategy.riskLevel}`)}
                   </Badge>
                 </TableCell>
                 <TableCell className="text-right">
                   {formatPrice(Number(strategy.amount))}
                 </TableCell>
-                <TableCell>{strategy.startDate}</TableCell>
+                <TableCell>{formatDateOnly(strategy.startDate)}</TableCell>
                 <TableCell>
                   <Badge variant={statusVariants[strategy.status] ?? 'outline'}>
-                    {strategy.status}
+                    {t(`strategies.${strategy.status}`)}
                   </Badge>
                 </TableCell>
                 <TableCell>

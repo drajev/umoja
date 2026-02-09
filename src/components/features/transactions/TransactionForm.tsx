@@ -1,8 +1,10 @@
+import { useState } from 'react';
+import { HiOutlineCalendar, HiOutlineInformationCircle } from 'react-icons/hi2';
 import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -10,19 +12,32 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Spinner } from '@/components/ui/spinner';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { useLanguage } from '@/hooks';
 import { useCreateForm } from '@/lib/forms/createForm';
 import {
   createTransactionSchema,
   type TransactionFormData,
 } from '@/schemas/transactionSchema';
+import styles from '@/styles/modules/core.module.css';
 import type { Account, Transaction } from '@/types/api';
+import { dateToLocalISO, formatDateOnly } from '@/utils/format';
 
 interface TransactionFormProps {
   onSubmit: (data: TransactionFormData) => void | Promise<void>;
@@ -44,14 +59,16 @@ export const TransactionForm = ({
   const { t } = useLanguage();
   const schema = createTransactionSchema();
   const form = useCreateForm(schema, {
-    defaultValues: defaultValues ?? {
+    defaultValues: (defaultValues ?? {
       accountId: transaction?.accountId ?? '',
-      amount: transaction?.amount ? Number(transaction.amount) : 0,
+      amount: transaction?.amount != null ? String(transaction.amount) : '',
       description: transaction?.description ?? '',
-      date: transaction?.date ?? new Date().toISOString().slice(0, 10),
+      date: formatDateOnly(transaction?.date) || dateToLocalISO(new Date()),
       category: transaction?.category ?? undefined,
-    },
+    }) as Partial<TransactionFormData>,
   });
+
+  const [datePickerOpen, setDatePickerOpen] = useState(false);
 
   const handleSubmit = form.handleSubmit(async data => {
     await onSubmit(data);
@@ -65,7 +82,7 @@ export const TransactionForm = ({
           name="accountId"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('transactions.account')}</FormLabel>
+              <FormLabel>{t('transactions.account')}*</FormLabel>
               <Select
                 onValueChange={field.onChange}
                 value={field.value}
@@ -96,24 +113,38 @@ export const TransactionForm = ({
           name="amount"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('transactions.amount')}</FormLabel>
+              <div className="flex items-center gap-1.5">
+                <FormLabel>{t('transactions.amount')}*</FormLabel>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className={styles.infoIconButton}
+                      aria-label={t('common.moreInfo')}
+                    >
+                      <HiOutlineInformationCircle className="size-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent
+                    side="top"
+                    align="start"
+                    className="z-[100] max-w-[200px]"
+                  >
+                    {t('transactions.amountHint')}
+                  </TooltipContent>
+                </Tooltip>
+              </div>
               <FormControl>
                 <Input
                   type="text"
                   inputMode="decimal"
                   placeholder={t('transactions.amountPlaceholder')}
-                  value={
-                    field.value !== undefined && field.value !== null
-                      ? String(field.value)
-                      : ''
-                  }
-                  onChange={e => {
-                    const val = e.target.value;
-                    field.onChange(val === '' ? 0 : Number(val) || 0);
-                  }}
+                  value={field.value ?? ''}
+                  onChange={e => field.onChange(e.target.value)}
                 />
               </FormControl>
-              <FormDescription>{t('transactions.amountHint')}</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -124,11 +155,12 @@ export const TransactionForm = ({
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('transactions.descriptionLabel')}</FormLabel>
+              <FormLabel>{t('transactions.descriptionLabel')}*</FormLabel>
               <FormControl>
                 <Input
                   placeholder={t('transactions.descriptionPlaceholder')}
                   {...field}
+                  value={field.value ?? ''}
                 />
               </FormControl>
               <FormMessage />
@@ -141,9 +173,36 @@ export const TransactionForm = ({
           name="date"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('transactions.date')}</FormLabel>
+              <FormLabel>{t('transactions.date')}*</FormLabel>
               <FormControl>
-                <Input type="date" {...field} />
+                <Popover open={datePickerOpen} onOpenChange={setDatePickerOpen}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="h-10 w-full justify-between font-normal"
+                    >
+                      <span className="text-muted-foreground">
+                        {formatDateOnly(field.value) ||
+                          t('transactions.selectDate')}
+                      </span>
+                      <HiOutlineCalendar className="ml-2 size-4 shrink-0 text-muted-foreground" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent align="start" className="w-auto p-0">
+                    <Calendar
+                      mode="single"
+                      selected={
+                        field.value
+                          ? new Date(`${formatDateOnly(field.value)}T12:00:00`)
+                          : undefined
+                      }
+                      onSelect={date => {
+                        field.onChange(date ? dateToLocalISO(date) : '');
+                        setDatePickerOpen(false);
+                      }}
+                    />
+                  </PopoverContent>
+                </Popover>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -155,7 +214,7 @@ export const TransactionForm = ({
           name="category"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('transactions.categoryOptional')}</FormLabel>
+              <FormLabel>{t('transactions.category')}</FormLabel>
               <FormControl>
                 <Input
                   placeholder={t('transactions.categoryPlaceholder')}
@@ -170,9 +229,11 @@ export const TransactionForm = ({
 
         <div className="flex gap-2">
           <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting
-              ? t('common.saving')
-              : (submitLabel ?? t('transactions.createTransaction'))}
+            {isSubmitting ? (
+              <Spinner className="size-4" />
+            ) : (
+              (submitLabel ?? t('transactions.createTransaction'))
+            )}
           </Button>
           <Button
             type="button"

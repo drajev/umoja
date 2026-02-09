@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 import { ConfirmDeleteDialog } from '@/components/core/ConfirmDeleteDialog';
+import { PageLoadingOverlay } from '@/components/core/PageLoadingOverlay';
 import {
   TransactionForm,
   TransactionTable,
@@ -42,7 +43,10 @@ export const Transactions = () => {
 
   const handleCreate = useCallback(
     async (data: TransactionFormData) => {
-      await createMutation.mutateAsync(data);
+      await createMutation.mutateAsync({
+        ...data,
+        amount: Number(data.amount),
+      });
       setDialogOpen(false);
     },
     [createMutation],
@@ -53,7 +57,10 @@ export const Transactions = () => {
       if (!editingTransaction) return;
       await updateMutation.mutateAsync({
         id: editingTransaction.id,
-        dto: data,
+        dto: {
+          ...data,
+          amount: Number(data.amount),
+        },
       });
       setEditingTransaction(null);
     },
@@ -66,8 +73,11 @@ export const Transactions = () => {
     setDeletingTransaction(null);
   }, [deletingTransaction, deleteMutation]);
 
+  const isMutating = createMutation.isPending || deleteMutation.isPending;
+
   return (
-    <div className="space-y-8">
+    <div className="relative space-y-8">
+      <PageLoadingOverlay show={isMutating} />
       <div className={styles.pageHeader}>
         <div>
           <Heading level={1}>{t('transactions.title')}</Heading>

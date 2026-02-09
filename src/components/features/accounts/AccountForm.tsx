@@ -15,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Spinner } from '@/components/ui/spinner';
 import { useLanguage } from '@/hooks';
 import { useCreateForm } from '@/lib/forms/createForm';
 import {
@@ -61,11 +62,12 @@ export const AccountForm = ({
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('accounts.accountName')}</FormLabel>
+              <FormLabel>{t('accounts.accountName')}*</FormLabel>
               <FormControl>
                 <Input
                   placeholder={t('accounts.accountNamePlaceholder')}
                   {...field}
+                  value={field.value ?? ''}
                 />
               </FormControl>
               <FormMessage />
@@ -78,7 +80,7 @@ export const AccountForm = ({
           name="type"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('accounts.type')}</FormLabel>
+              <FormLabel>{t('accounts.type')}*</FormLabel>
               <Select
                 onValueChange={field.onChange}
                 value={field.value}
@@ -111,7 +113,7 @@ export const AccountForm = ({
           name="balance"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('accounts.initialBalanceOptional')}</FormLabel>
+              <FormLabel>{t('accounts.initialBalance')}</FormLabel>
               <FormControl>
                 <Input
                   type="text"
@@ -141,7 +143,12 @@ export const AccountForm = ({
             <FormItem>
               <FormLabel>{t('accounts.currency')}</FormLabel>
               <FormControl>
-                <Input placeholder="USD" {...field} maxLength={3} />
+                <Input
+                  placeholder="EUR"
+                  {...field}
+                  value={field.value ?? ''}
+                  maxLength={3}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -150,9 +157,11 @@ export const AccountForm = ({
 
         <div className="flex gap-2">
           <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting
-              ? t('common.saving')
-              : (submitLabel ?? t('accounts.createAccount'))}
+            {isSubmitting ? (
+              <Spinner className="size-4" />
+            ) : (
+              (submitLabel ?? t('accounts.createAccount'))
+            )}
           </Button>
           <Button
             type="button"

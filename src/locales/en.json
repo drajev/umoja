@@ -18,7 +18,8 @@
     "reset": "Reset",
     "saving": "Saving...",
     "submitting": "Submitting...",
-    "deleting": "Deleting..."
+    "deleting": "Deleting...",
+    "moreInfo": "More information"
   },
   "wallet": {
     "connect": "Connect Wallet",
@@ -75,6 +76,8 @@
     "toggleSidebar": "Toggle navigation menu"
   },
   "dashboard": {
+    "title": "Dashboard",
+    "description": "Overview of your finances and investment strategies",
     "recentTransactions": "Recent Transactions",
     "recentTransactionsDesc": "Your latest transactions",
     "recentStrategies": "Recent Strategies",
@@ -84,7 +87,13 @@
     "totalBalance": "Total Balance",
     "accounts": "Accounts",
     "transactions": "Transactions",
-    "strategies": "Strategies"
+    "strategies": "Strategies",
+    "tableDate": "Date",
+    "tableDescription": "Description",
+    "tableAmount": "Amount",
+    "tableName": "Name",
+    "tableRisk": "Risk",
+    "tableStatus": "Status"
   },
   "footer": {
     "copyright": "© {year} Umoja. All rights reserved."
@@ -122,6 +131,9 @@
     "updateAccountDescription": "Update your account details.",
     "deleteAccount": "Delete Account",
     "deleteAccountDescription": "Are you sure you want to delete \"{name}\"? This will also delete all transactions linked to this account.",
+    "accountCreated": "Account created",
+    "accountUpdated": "Account updated",
+    "accountDeleted": "Account deleted",
     "web3Wallet": "Web3 Wallet",
     "web3WalletDescription": "Connect MetaMask or WalletConnect to add your Sepolia wallet as an account for demo",
     "addWalletAsAccount": "Add wallet as account",
@@ -138,7 +150,7 @@
     "accountName": "Account Name",
     "accountNamePlaceholder": "e.g. Main Checking",
     "selectType": "Select type",
-    "initialBalanceOptional": "Initial Balance (Optional)",
+    "initialBalance": "Initial Balance",
     "editAccountAria": "Edit account",
     "deleteAccountAria": "Delete account"
   },
@@ -155,9 +167,9 @@
     "noStrategiesYet": "No strategies yet. Create your first investment strategy to get started.",
     "strategyName": "Strategy Name",
     "strategyNamePlaceholder": "Enter strategy name",
-    "descriptionOptional": "Description (Optional)",
+    "descriptionLabel": "Description",
     "descriptionPlaceholder": "Enter strategy description",
-    "optionalDescription": "Optional description for your strategy",
+    "descriptionHint": "Optional description for your strategy",
     "amount": "Amount",
     "enterAmount": "Enter the investment amount",
     "riskLevel": "Risk Level",
@@ -167,6 +179,7 @@
     "medium": "Medium",
     "high": "High",
     "startDate": "Start Date",
+    "startDatePlaceholder": "Select start date",
     "selectStartDate": "Select the start date for this strategy",
     "status": "Status",
     "active": "active",
@@ -195,10 +208,10 @@
     "amount": "Amount",
     "category": "Category",
     "selectAccount": "Select account",
-    "amountPlaceholder": "-50.25 (negative for expense)",
+    "selectDate": "Select date",
+    "amountPlaceholder": "e.g. 50.00 or -25.50",
     "amountHint": "Positive for income, negative for expense",
     "descriptionPlaceholder": "e.g. Grocery store",
-    "categoryOptional": "Category (Optional)",
     "categoryPlaceholder": "e.g. Food",
     "editTransactionAria": "Edit transaction",
     "deleteTransactionAria": "Delete transaction"
@@ -218,7 +231,12 @@
     "profilePictureUpdated": "Profile picture updated",
     "avatarFormatError": "Please use JPEG, PNG, or WebP format",
     "avatarSizeError": "Image must be under 2MB",
-    "avatarUpdateFailed": "Failed to update profile picture"
+    "avatarUpdateFailed": "Failed to update profile picture",
+    "walletAdded": "Wallet address added to your profile",
+    "addWalletToProfile": "Add to profile",
+    "linkedWallet": "Linked wallet",
+    "web3Wallet": "Web3 Wallet",
+    "web3WalletDescription": "Connect MetaMask or WalletConnect to link your wallet address to your profile"
   },
   "settings": {
     "title": "Settings",

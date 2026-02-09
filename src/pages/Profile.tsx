@@ -1,8 +1,11 @@
 /**
  * Profile page - displays user account information.
  */
+import { useCallback } from 'react';
 import { Link } from 'react-router-dom';
+import { useAccount } from 'wagmi';
 import { ProfileAvatarUpload } from '@/components/features/auth';
+import { ConnectWallet } from '@/components/features/wallet';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -14,12 +17,21 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { Heading, Text } from '@/components/ui/typography';
 import { useLanguage } from '@/hooks';
+import { useAddWalletToProfile } from '@/queries/profile/profile';
 import { routes } from '@/routes';
 import { useAuthStore } from '@/stores';
+import { formatAddress } from '@/utils';
 
 export const Profile = () => {
   const { t } = useLanguage();
   const user = useAuthStore.use.user();
+  const { address, isConnected } = useAccount();
+  const addWalletMutation = useAddWalletToProfile();
+
+  const handleAddWalletToProfile = useCallback(() => {
+    if (!address) return;
+    addWalletMutation.mutate(address);
+  }, [address, addWalletMutation]);
 
   if (!user) {
     return (
@@ -79,7 +91,49 @@ export const Profile = () => {
               </Text>
               <Text className="font-medium">{user.email}</Text>
             </div>
+            {user.walletAddress && (
+              <div>
+                <Text variant="small" className="text-muted-foreground">
+                  {t('profile.linkedWallet')}
+                </Text>
+                <Text className="font-mono text-sm">
+                  {formatAddress(user.walletAddress)}
+                </Text>
+              </div>
+            )}
           </div>
+
+          <Separator />
+
+          <Card>
+            <CardHeader>
+              <CardTitle>{t('profile.web3Wallet')}</CardTitle>
+              <CardDescription>
+                {t('profile.web3WalletDescription')}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ConnectWallet
+                additionalActions={
+                  isConnected &&
+                  address &&
+                  address.toLowerCase() !==
+                    user.walletAddress?.toLowerCase() && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleAddWalletToProfile}
+                      disabled={addWalletMutation.isPending}
+                    >
+                      {addWalletMutation.isPending
+                        ? t('accounts.adding')
+                        : t('profile.addWalletToProfile')}
+                    </Button>
+                  )
+                }
+              />
+            </CardContent>
+          </Card>
 
           <div className="pt-4">
             <Button variant="outline" asChild>

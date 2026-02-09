@@ -81,9 +81,11 @@ export const useCreateStrategy = () => {
 
   return useMutation({
     mutationFn: createStrategy,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: strategyKeys.all });
-      queryClient.invalidateQueries({ queryKey: ['dashboard'] });
+    onSuccess: data => {
+      queryClient.setQueryData<Strategy[]>(strategyKeys.list(), prev =>
+        prev ? [...prev, data] : [data],
+      );
+      void queryClient.invalidateQueries({ queryKey: ['dashboard'] });
       success('Strategy created');
     },
     onError: err => {
@@ -98,12 +100,12 @@ export const useUpdateStrategy = () => {
 
   return useMutation({
     mutationFn: updateStrategy,
-    onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: strategyKeys.all });
-      queryClient.invalidateQueries({
+    onSuccess: async (_, variables) => {
+      await queryClient.invalidateQueries({ queryKey: strategyKeys.all });
+      await queryClient.invalidateQueries({
         queryKey: strategyKeys.detail(variables.id),
       });
-      queryClient.invalidateQueries({ queryKey: ['dashboard'] });
+      await queryClient.invalidateQueries({ queryKey: ['dashboard'] });
       success('Strategy updated');
     },
     onError: err => {
@@ -118,9 +120,11 @@ export const useDeleteStrategy = () => {
 
   return useMutation({
     mutationFn: deleteStrategy,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: strategyKeys.all });
-      queryClient.invalidateQueries({ queryKey: ['dashboard'] });
+    onSuccess: (_, id) => {
+      queryClient.setQueryData<Strategy[]>(strategyKeys.list(), prev =>
+        prev ? prev.filter(s => s.id !== id) : [],
+      );
+      void queryClient.invalidateQueries({ queryKey: ['dashboard'] });
       success('Strategy deleted');
     },
     onError: err => {

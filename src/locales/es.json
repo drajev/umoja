@@ -18,7 +18,8 @@
     "reset": "Restablecer",
     "saving": "Guardando...",
     "submitting": "Enviando...",
-    "deleting": "Eliminando..."
+    "deleting": "Eliminando...",
+    "moreInfo": "Más información"
   },
   "wallet": {
     "connect": "Conectar Billetera",
@@ -75,6 +76,8 @@
     "toggleSidebar": "Alternar menú de navegación"
   },
   "dashboard": {
+    "title": "Panel",
+    "description": "Resumen de tus finanzas y estrategias de inversión",
     "recentTransactions": "Transacciones Recientes",
     "recentTransactionsDesc": "Tus últimas transacciones",
     "recentStrategies": "Estrategias Recientes",
@@ -84,7 +87,13 @@
     "totalBalance": "Balance Total",
     "accounts": "Cuentas",
     "transactions": "Transacciones",
-    "strategies": "Estrategias"
+    "strategies": "Estrategias",
+    "tableDate": "Fecha",
+    "tableDescription": "Descripción",
+    "tableAmount": "Monto",
+    "tableName": "Nombre",
+    "tableRisk": "Riesgo",
+    "tableStatus": "Estado"
   },
   "footer": {
     "copyright": "© {year} Umoja. Todos los derechos reservados."
@@ -122,6 +131,9 @@
     "updateAccountDescription": "Actualiza los detalles de tu cuenta.",
     "deleteAccount": "Eliminar Cuenta",
     "deleteAccountDescription": "¿Estás seguro de que quieres eliminar \"{name}\"? Esto también eliminará todas las transacciones vinculadas a esta cuenta.",
+    "accountCreated": "Cuenta creada",
+    "accountUpdated": "Cuenta actualizada",
+    "accountDeleted": "Cuenta eliminada",
     "web3Wallet": "Billetera Web3",
     "web3WalletDescription": "Conecta MetaMask o WalletConnect para añadir tu billetera Sepolia como cuenta de demostración",
     "addWalletAsAccount": "Añadir billetera como cuenta",
@@ -138,7 +150,7 @@
     "accountName": "Nombre de la cuenta",
     "accountNamePlaceholder": "ej. Cuenta principal",
     "selectType": "Seleccionar tipo",
-    "initialBalanceOptional": "Balance inicial (Opcional)",
+    "initialBalance": "Balance inicial",
     "editAccountAria": "Editar cuenta",
     "deleteAccountAria": "Eliminar cuenta"
   },
@@ -155,9 +167,9 @@
     "noStrategiesYet": "Aún no hay estrategias. Crea tu primera estrategia de inversión para comenzar.",
     "strategyName": "Nombre de la estrategia",
     "strategyNamePlaceholder": "Ingresa el nombre de la estrategia",
-    "descriptionOptional": "Descripción (Opcional)",
+    "descriptionLabel": "Descripción",
     "descriptionPlaceholder": "Ingresa la descripción de la estrategia",
-    "optionalDescription": "Descripción opcional para tu estrategia",
+    "descriptionHint": "Descripción opcional para tu estrategia",
     "amount": "Monto",
     "enterAmount": "Ingresa el monto de inversión",
     "riskLevel": "Nivel de riesgo",
@@ -167,6 +179,7 @@
     "medium": "Medio",
     "high": "Alto",
     "startDate": "Fecha de inicio",
+    "startDatePlaceholder": "Seleccionar fecha",
     "selectStartDate": "Selecciona la fecha de inicio para esta estrategia",
     "status": "Estado",
     "active": "activo",
@@ -195,10 +208,10 @@
     "amount": "Monto",
     "category": "Categoría",
     "selectAccount": "Seleccionar cuenta",
-    "amountPlaceholder": "-50.25 (negativo para gasto)",
+    "selectDate": "Seleccionar fecha",
+    "amountPlaceholder": "ej. 50.00 o -25.50",
     "amountHint": "Positivo para ingreso, negativo para gasto",
     "descriptionPlaceholder": "ej. Supermercado",
-    "categoryOptional": "Categoría (Opcional)",
     "categoryPlaceholder": "ej. Alimentación",
     "editTransactionAria": "Editar transacción",
     "deleteTransactionAria": "Eliminar transacción"
@@ -218,7 +231,12 @@
     "profilePictureUpdated": "Foto de perfil actualizada",
     "avatarFormatError": "Por favor usa formato JPEG, PNG o WebP",
     "avatarSizeError": "La imagen debe ser menor a 2MB",
-    "avatarUpdateFailed": "Error al actualizar la foto de perfil"
+    "avatarUpdateFailed": "Error al actualizar la foto de perfil",
+    "walletAdded": "Dirección de billetera añadida a tu perfil",
+    "addWalletToProfile": "Añadir al perfil",
+    "linkedWallet": "Billetera vinculada",
+    "web3Wallet": "Billetera Web3",
+    "web3WalletDescription": "Conecta MetaMask o WalletConnect para vincular tu dirección de billetera a tu perfil"
   },
   "settings": {
     "title": "Configuración",

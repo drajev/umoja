@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 import { ConfirmDeleteDialog } from '@/components/core/ConfirmDeleteDialog';
+import { PageLoadingOverlay } from '@/components/core/PageLoadingOverlay';
 import { StrategyForm, StrategyTable } from '@/components/features/strategies';
 import { Button } from '@/components/ui/button';
 import {
@@ -21,6 +22,7 @@ import {
 import type { StrategyFormData } from '@/schemas/createStrategySchema';
 import styles from '@/styles/modules/pages.module.css';
 import type { Strategy } from '@/types/api';
+import { formatDateOnly } from '@/utils/format';
 
 export const Strategies = () => {
   const { t } = useLanguage();
@@ -73,8 +75,11 @@ export const Strategies = () => {
     setDeletingStrategy(null);
   }, [deletingStrategy, deleteMutation]);
 
+  const isMutating = createMutation.isPending || deleteMutation.isPending;
+
   return (
-    <div className="space-y-8">
+    <div className="relative space-y-8">
+      <PageLoadingOverlay show={isMutating} />
       <div className={styles.pageHeader}>
         <div>
           <Heading level={1}>{t('strategies.title')}</Heading>
@@ -86,7 +91,7 @@ export const Strategies = () => {
           <DialogTrigger asChild>
             <Button>{t('strategies.addStrategy')}</Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className="max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>{t('strategies.createStrategy')}</DialogTitle>
               <DialogDescription>
@@ -114,7 +119,7 @@ export const Strategies = () => {
         open={!!editingStrategy}
         onOpenChange={open => !open && setEditingStrategy(null)}
       >
-        <DialogContent>
+        <DialogContent className="max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{t('strategies.editStrategy')}</DialogTitle>
             <DialogDescription>
@@ -130,7 +135,7 @@ export const Strategies = () => {
                 description: editingStrategy.description ?? '',
                 amount: editingStrategy.amount,
                 riskLevel: editingStrategy.riskLevel,
-                startDate: editingStrategy.startDate,
+                startDate: formatDateOnly(editingStrategy.startDate),
               }}
               onSubmit={handleUpdate}
               isSubmitting={updateMutation.isPending}

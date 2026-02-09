@@ -14,5 +14,15 @@
 
 /* Confirm delete destructive action button */
 .confirmDeleteButton {
-  @apply bg-destructive text-destructive-foreground hover:bg-destructive/90;
+  @apply inline-flex min-w-[5rem] items-center justify-center bg-destructive text-destructive-foreground hover:bg-destructive/90;
+}
+
+/* Full-page loading overlay */
+.loadingOverlay {
+  @apply fixed inset-0 z-[100] flex items-center justify-center bg-background/80 backdrop-blur-sm;
+}
+
+/* Info icon button for form label tooltips */
+.infoIconButton {
+  @apply size-4 shrink-0 rounded-full text-muted-foreground hover:text-foreground;
 }
