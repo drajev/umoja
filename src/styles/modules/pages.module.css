@@ -1,0 +1,14 @@
+/**
+ * Shared page layout styles (accounts, strategies, transactions).
+ * Uses @apply for Tailwind classes to keep JSX clean.
+ */
+
+.pageHeader {
+  @apply flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between;
+}
+
+.warningBanner {
+  @apply rounded-md border p-4 text-foreground;
+  border-color: hsl(var(--warning) / 0.5);
+  background-color: hsl(var(--warning) / 0.1);
+}

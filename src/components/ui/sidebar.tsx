@@ -29,7 +29,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { useIsMobile } from '@/hooks/useIsMobile';
+import { useIsMobile } from '@/hooks';
 import { cn } from '@/lib/utils';
 
 const SIDEBAR_STORAGE_KEY = 'sidebar_state';

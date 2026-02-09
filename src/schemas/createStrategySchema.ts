@@ -21,9 +21,9 @@ export const createStrategySchema = () =>
       .max(100, 'Name must be less than 100 characters'),
     description: z
       .string()
-      .min(10, 'Description must be at least 10 characters')
-      .max(500, 'Description must be less than 500 characters')
-      .optional(),
+      .max(500)
+      .optional()
+      .transform(v => (v && v.trim().length >= 10 ? v.trim() : undefined)),
     amount: z
       .string()
       .min(1, 'Amount is required')

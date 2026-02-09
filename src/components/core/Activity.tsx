@@ -4,10 +4,6 @@ import {
   type ReactNode,
 } from 'react';
 
-/**
- * Activity wrapper.
- * Falls back to rendering children directly if Activity is unavailable.
- */
 export type ActivityMode = 'visible' | 'hidden';
 
 export interface ActivityProps {

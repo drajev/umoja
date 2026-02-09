@@ -6,7 +6,6 @@
  * import { useDebounce, useIsMobile, useMergedRefs } from '@/hooks';
  */
 
-export { useComponentVisible } from './useComponentVisible';
 export { useCopyToClipboard } from './useCopyToClipboard';
 export { useDebounce } from './useDebounce';
 export { useIntersectionObserver } from './useIntersectionObserver';

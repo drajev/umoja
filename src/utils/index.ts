@@ -1,11 +1,3 @@
-/**
- * Barrel export for all utility functions.
- * Import utils from '@/utils' for cleaner imports.
- *
- * @example
- * import { cn, isString, preventDefault, debounce, getErrorMessage } from '@/utils';
- */
-
 // API helpers
 export {
   type ApiError,
@@ -52,10 +44,11 @@ export {
   stopPropagation,
   stopPropagationOnEscape,
 } from './callbacks';
-// Legacy exports (for backwards compatibility)
 export { debounce } from './debounce';
 export {
+  dateToLocalISO,
   formatAddress,
+  formatDateOnly,
   formatNumber,
   formatPrice,
   truncateDescription,

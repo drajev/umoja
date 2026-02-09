@@ -41,3 +41,18 @@ export const formatNumber = (num: number | string): string => {
   if (Number.isNaN(n)) return '0';
   return n.toLocaleString('en-US');
 };
+
+/** Converts a Date to YYYY-MM-DD using local time (avoids timezone off-by-one errors). */
+export const dateToLocalISO = (date: Date): string => {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+};
+
+/** Normalizes a date string (YYYY-MM-DD or ISO) to YYYY-MM-DD for display and form use. */
+export const formatDateOnly = (value: string | null | undefined): string => {
+  if (!value) return '';
+  if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return value;
+  return value.slice(0, 10);
+};

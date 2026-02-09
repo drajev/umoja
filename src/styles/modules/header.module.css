@@ -20,10 +20,6 @@
   @apply flex items-center gap-4;
 }
 
-.mobileMenuButton {
-  @apply md:hidden;
-}
-
 .logo {
   @apply flex items-center gap-2;
 }
@@ -70,10 +66,6 @@
 }
 
 /* Mobile sheet menu */
-.sheetNav {
-  @apply mt-6 flex flex-col space-y-4;
-}
-
 .sheetActions {
   @apply mt-6 space-y-4;
 }

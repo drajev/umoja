@@ -1,0 +1,22 @@
+/**
+ * Transaction-related component styles (amount colors, etc.).
+ * Uses @apply for Tailwind classes to keep JSX clean.
+ */
+
+.amountIncome {
+  @apply text-right font-medium;
+  color: hsl(var(--success));
+}
+
+.amountExpense {
+  @apply text-right font-medium text-destructive;
+}
+
+.amountIncomeSmall {
+  @apply text-right font-medium text-sm;
+  color: hsl(var(--success));
+}
+
+.amountExpenseSmall {
+  @apply text-right font-medium text-destructive text-sm;
+}

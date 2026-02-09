@@ -4,7 +4,7 @@
  * Note: These tests use vi.mock() which must be called before imports.
  * The mocks are hoisted by Vitest automatically.
  */
-import { renderHook, waitFor } from '@testing-library/react';
+import { act, renderHook, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Create mock functions
@@ -55,7 +55,20 @@ vi.mock('@/stores', () => {
   };
 });
 
-// Import hooks after mock setup
+vi.mock('@/hooks', async importOriginal => {
+  const actual = await importOriginal<typeof import('@/hooks')>();
+  return {
+    ...actual,
+    useLanguage: () => ({
+      t: (key: string) => key,
+      language: 'en',
+      setLanguage: () => {},
+    }),
+  };
+});
+
+// Import after mock setup
+import { api } from '@/constants/api';
 import {
   useForgotPasswordHandler,
   useLoginHandler,
@@ -93,19 +106,21 @@ describe('Auth Hooks', () => {
 
       expect(result.current.isLoading).toBe(false);
 
-      await result.current.handleLogin(mockLoginData);
+      await act(async () => {
+        await result.current.handleLogin(mockLoginData);
+      });
 
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
 
-      expect(mockPost).toHaveBeenCalledWith('/api/auth/login', mockLoginData);
+      expect(mockPost).toHaveBeenCalledWith(api.auth.login, mockLoginData);
       expect(mockSetCredentials).toHaveBeenCalledWith(
         mockAuthResponse.data.user,
         mockAuthResponse.data.accessToken,
       );
-      expect(mockSuccess).toHaveBeenCalledWith('Welcome back!');
-      expect(mockNavigate).toHaveBeenCalledWith('/');
+      expect(mockSuccess).toHaveBeenCalledWith('auth.welcomeBack');
+      expect(mockNavigate).toHaveBeenCalledWith('/dashboard');
     });
 
     it('should handle login error and show error toast', async () => {
@@ -117,7 +132,9 @@ describe('Auth Hooks', () => {
 
       const { result } = renderHook(() => useLoginHandler());
 
-      await result.current.handleLogin(mockLoginData);
+      await act(async () => {
+        await result.current.handleLogin(mockLoginData);
+      });
 
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
@@ -133,7 +150,9 @@ describe('Auth Hooks', () => {
 
       const { result } = renderHook(() => useLoginHandler());
 
-      await result.current.handleLogin(mockLoginData);
+      await act(async () => {
+        await result.current.handleLogin(mockLoginData);
+      });
 
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
@@ -166,22 +185,24 @@ describe('Auth Hooks', () => {
 
       const { result } = renderHook(() => useRegisterHandler());
 
-      await result.current.handleRegister(mockRegisterData);
+      await act(async () => {
+        await result.current.handleRegister(mockRegisterData);
+      });
 
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
 
       expect(mockPost).toHaveBeenCalledWith(
-        '/api/auth/register',
+        api.auth.register,
         mockRegisterData,
       );
       expect(mockSetCredentials).toHaveBeenCalledWith(
         mockAuthResponse.data.user,
         mockAuthResponse.data.accessToken,
       );
-      expect(mockSuccess).toHaveBeenCalledWith('Account created successfully!');
-      expect(mockNavigate).toHaveBeenCalledWith('/');
+      expect(mockSuccess).toHaveBeenCalledWith('auth.accountCreated');
+      expect(mockNavigate).toHaveBeenCalledWith('/dashboard');
     });
 
     it('should handle registration error', async () => {
@@ -193,7 +214,9 @@ describe('Auth Hooks', () => {
 
       const { result } = renderHook(() => useRegisterHandler());
 
-      await result.current.handleRegister(mockRegisterData);
+      await act(async () => {
+        await result.current.handleRegister(mockRegisterData);
+      });
 
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
@@ -218,16 +241,18 @@ describe('Auth Hooks', () => {
 
       expect(result.current.isSuccess).toBe(false);
 
-      await result.current.handleForgotPassword(mockEmail);
+      await act(async () => {
+        await result.current.handleForgotPassword(mockEmail);
+      });
 
       await waitFor(() => {
         expect(result.current.isSuccess).toBe(true);
       });
 
-      expect(mockPost).toHaveBeenCalledWith('/api/auth/forgotten-password', {
+      expect(mockPost).toHaveBeenCalledWith(api.auth.forgottenPassword, {
         email: mockEmail.email,
       });
-      expect(mockSuccess).toHaveBeenCalledWith('Password reset email sent');
+      expect(mockSuccess).toHaveBeenCalledWith('auth.passwordResetEmailSent');
     });
 
     it('should show success even on error (security)', async () => {
@@ -235,7 +260,9 @@ describe('Auth Hooks', () => {
 
       const { result } = renderHook(() => useForgotPasswordHandler());
 
-      await result.current.handleForgotPassword(mockEmail);
+      await act(async () => {
+        await result.current.handleForgotPassword(mockEmail);
+      });
 
       // Should still show success for security reasons
       await waitFor(() => {
@@ -243,7 +270,7 @@ describe('Auth Hooks', () => {
       });
 
       expect(mockSuccess).toHaveBeenCalledWith(
-        'If an account exists, a reset email has been sent',
+        'auth.passwordResetEmailSentIfExists',
       );
     });
   });
@@ -264,17 +291,22 @@ describe('Auth Hooks', () => {
 
       const { result } = renderHook(() => useResetPasswordHandler());
 
-      const response = await result.current.handleResetPassword(mockResetData);
+      let response: boolean | undefined;
+      await act(async () => {
+        response = await result.current.handleResetPassword(mockResetData);
+      });
 
-      expect(mockPost).toHaveBeenCalledWith('/api/auth/password-reset', {
+      expect(mockPost).toHaveBeenCalledWith(api.auth.passwordReset, {
         resetToken: mockResetData.token,
         newPassword: mockResetData.password,
       });
-      expect(mockSuccess).toHaveBeenCalledWith('Password reset successful');
+      expect(mockSuccess).toHaveBeenCalledWith('auth.passwordResetSuccess');
       expect(response).toBe(true);
 
       // Fast-forward timer for navigation
-      vi.advanceTimersByTime(1500);
+      await act(async () => {
+        vi.advanceTimersByTime(1500);
+      });
       expect(mockNavigate).toHaveBeenCalledWith('/login');
 
       vi.useRealTimers();
@@ -289,7 +321,10 @@ describe('Auth Hooks', () => {
 
       const { result } = renderHook(() => useResetPasswordHandler());
 
-      const response = await result.current.handleResetPassword(mockResetData);
+      let response: boolean | undefined;
+      await act(async () => {
+        response = await result.current.handleResetPassword(mockResetData);
+      });
 
       expect(mockError).toHaveBeenCalledWith(errorMessage);
       expect(response).toBe(false);
@@ -302,23 +337,25 @@ describe('Auth Hooks', () => {
   // ===========================================================================
 
   describe('useLogoutHandler', () => {
-    it('should call logout endpoint and navigate to home', async () => {
+    it('should call logout endpoint and navigate to login', async () => {
       mockPost.mockResolvedValueOnce({
         data: { message: 'Logout successful' },
       });
 
       const { result } = renderHook(() => useLogoutHandler());
 
-      await result.current.handleLogout();
+      await act(async () => {
+        await result.current.handleLogout();
+      });
 
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
 
-      expect(mockPost).toHaveBeenCalledWith('/api/auth/logout');
+      expect(mockPost).toHaveBeenCalledWith(api.auth.logout);
       expect(mockLogout).toHaveBeenCalled();
-      expect(mockInfo).toHaveBeenCalledWith('You have been logged out');
-      expect(mockNavigate).toHaveBeenCalledWith('/');
+      expect(mockInfo).toHaveBeenCalledWith('auth.loggedOut');
+      expect(mockNavigate).toHaveBeenCalledWith('/login');
     });
 
     it('should still logout locally even if API call fails', async () => {
@@ -326,7 +363,9 @@ describe('Auth Hooks', () => {
 
       const { result } = renderHook(() => useLogoutHandler());
 
-      await result.current.handleLogout();
+      await act(async () => {
+        await result.current.handleLogout();
+      });
 
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
@@ -334,8 +373,8 @@ describe('Auth Hooks', () => {
 
       // Should still clear local state
       expect(mockLogout).toHaveBeenCalled();
-      expect(mockInfo).toHaveBeenCalledWith('You have been logged out');
-      expect(mockNavigate).toHaveBeenCalledWith('/');
+      expect(mockInfo).toHaveBeenCalledWith('auth.loggedOut');
+      expect(mockNavigate).toHaveBeenCalledWith('/login');
     });
   });
 });

@@ -4,18 +4,11 @@
  */
 
 .layout {
-  @apply min-h-screen bg-background;
+  @apply flex min-h-screen flex-col bg-background;
 }
 
 .layoutContent {
-  @apply flex flex-col md:flex-row;
-}
-
-/* Sidebar */
-.sidebar {
-  @apply w-full border-b;
-  @apply md:w-64 md:border-b-0 md:border-r;
-  @apply bg-card p-4 md:flex-shrink-0;
+  @apply flex flex-1 flex-col md:min-h-[calc(100vh-4rem)];
 }
 
 .sidebarNav {
@@ -29,23 +22,4 @@
 /* Main content area */
 .main {
   @apply flex-1 p-4 md:p-8;
-}
-
-/* Popup overlay */
-.popupOverlay {
-  @apply fixed inset-0 z-50;
-  @apply flex items-center justify-center;
-  @apply bg-black/50;
-}
-
-.popupCard {
-  @apply w-full max-w-md;
-}
-
-.popupContent {
-  @apply pt-6;
-}
-
-.popupCloseButton {
-  @apply mt-4 w-full;
 }

@@ -1,7 +1,2 @@
-/**
- * Re-export cn utility for backwards compatibility.
- * New code should import from '@/utils' or '@/utils/helpers'.
- *
- * @deprecated Import from '@/utils' instead
- */
+/** Re-export for shadcn/ui compatibility */
 export { cn } from '@/utils/helpers';

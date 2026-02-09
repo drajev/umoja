@@ -8,6 +8,8 @@
  */
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { api } from '@/constants/api';
+import { useLanguage } from '@/hooks';
 import axiosInstance from '@/lib/axiosInstance';
 import { routes } from '@/routes';
 import { useAuthStore, useToastStore } from '@/stores';
@@ -57,6 +59,7 @@ interface MessageResponse {
  */
 export const useLoginHandler = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [isLoading, setIsLoading] = useState(false);
 
   const { setCredentials, setError: setAuthError } = useAuthStore.use.actions();
@@ -68,14 +71,14 @@ export const useLoginHandler = () => {
 
     try {
       const response = await axiosInstance.post<AuthResponse>(
-        '/api/auth/login',
+        api.auth.login,
         data,
       );
 
       const { accessToken, user } = response.data;
       setCredentials(user, accessToken);
-      success('Welcome back!');
-      navigate(routes.home);
+      success(t('auth.welcomeBack'));
+      navigate(routes.dashboard);
     } catch (err) {
       const message = getErrorMessage(err);
       setAuthError(message);
@@ -94,6 +97,7 @@ export const useLoginHandler = () => {
  */
 export const useRegisterHandler = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [isLoading, setIsLoading] = useState(false);
 
   const { setCredentials, setError: setAuthError } = useAuthStore.use.actions();
@@ -105,14 +109,14 @@ export const useRegisterHandler = () => {
 
     try {
       const response = await axiosInstance.post<AuthResponse>(
-        '/api/auth/register',
+        api.auth.register,
         data,
       );
 
       const { accessToken, user } = response.data;
       setCredentials(user, accessToken);
-      success('Account created successfully!');
-      navigate(routes.home);
+      success(t('auth.accountCreated'));
+      navigate(routes.dashboard);
     } catch (err) {
       const message = getErrorMessage(err);
       setAuthError(message);
@@ -130,6 +134,7 @@ export const useRegisterHandler = () => {
  * Requests password reset email.
  */
 export const useForgotPasswordHandler = () => {
+  const { t } = useLanguage();
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
@@ -140,20 +145,17 @@ export const useForgotPasswordHandler = () => {
     setIsSuccess(false);
 
     try {
-      await axiosInstance.post<MessageResponse>(
-        '/api/auth/forgotten-password',
-        {
-          email: data.email,
-        },
-      );
+      await axiosInstance.post<MessageResponse>(api.auth.forgottenPassword, {
+        email: data.email,
+      });
 
       setIsSuccess(true);
-      success('Password reset email sent');
+      success(t('auth.passwordResetEmailSent'));
     } catch {
       // For security, show success even if email doesn't exist
       // Backend should also return success for non-existent emails
       setIsSuccess(true);
-      success('If an account exists, a reset email has been sent');
+      success(t('auth.passwordResetEmailSentIfExists'));
     } finally {
       setIsLoading(false);
     }
@@ -168,6 +170,7 @@ export const useForgotPasswordHandler = () => {
  */
 export const useResetPasswordHandler = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [isLoading, setIsLoading] = useState(false);
 
   const { success, error: showError } = useToastStore.use.actions();
@@ -176,12 +179,12 @@ export const useResetPasswordHandler = () => {
     setIsLoading(true);
 
     try {
-      await axiosInstance.post<MessageResponse>('/api/auth/password-reset', {
+      await axiosInstance.post<MessageResponse>(api.auth.passwordReset, {
         resetToken: data.token,
         newPassword: data.password,
       });
 
-      success('Password reset successful');
+      success(t('auth.passwordResetSuccess'));
       // Navigate to login after short delay
       setTimeout(() => navigate(routes.login), 1500);
       return true;
@@ -203,6 +206,7 @@ export const useResetPasswordHandler = () => {
  */
 export const useLogoutHandler = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [isLoading, setIsLoading] = useState(false);
   const { logout } = useAuthStore.use.actions();
   const { info } = useToastStore.use.actions();
@@ -212,7 +216,7 @@ export const useLogoutHandler = () => {
 
     try {
       // Call backend to log the logout (validates token)
-      await axiosInstance.post('/api/auth/logout');
+      await axiosInstance.post(api.auth.logout);
     } catch {
       // Continue with client logout even if server call fails
       // (token might already be expired)
@@ -220,8 +224,8 @@ export const useLogoutHandler = () => {
 
     // Always clear local state regardless of API response
     logout();
-    info('You have been logged out');
-    navigate(routes.home);
+    info(t('auth.loggedOut'));
+    navigate(routes.login);
     setIsLoading(false);
   };
 

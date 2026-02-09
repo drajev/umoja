@@ -1,0 +1,16 @@
+/**
+ * Profile page and related component styles.
+ * Uses @apply for Tailwind classes to keep JSX clean.
+ */
+
+.avatarUpload {
+  @apply relative inline-block;
+}
+
+.avatarUploadBadge {
+  @apply absolute right-0 bottom-0 flex size-8 cursor-pointer items-center justify-center rounded-full border-2 border-background bg-secondary text-secondary-foreground shadow-sm transition-opacity hover:bg-secondary/80;
+}
+
+.avatarUploadBadgeLoading {
+  @apply pointer-events-none opacity-50;
+}
